@@ -1,0 +1,23 @@
+Scripts
+=======
+
+Registered in ``api/scripts/registry.py``; each runs on demand via ``POST
+/internal/scripts/{name}/run`` (see :doc:`architecture`), and the two
+scheduled ones also run automatically (``beat``).
+
+- :doc:`update_product` -- pushes one Airtable Model to Shopify (on demand;
+  the only one of the three that writes anything).
+- :doc:`shopify_catalog_reconciliation` -- verifies Shopify reflects the
+  sellable Airtable catalog (hourly; ported from the RewakeMonitor proof of
+  concept). Replaces the older, separate ``verification_shopify`` script,
+  which did the same *kind* of comparison and has been removed.
+- :doc:`airtable_catalog_stats` -- catalog-shape statistics, independent of
+  Shopify (daily, 20:42 Europe/Paris; ported from RewakeMonitor).
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   update_product
+   shopify_catalog_reconciliation
+   airtable_catalog_stats

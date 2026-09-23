@@ -1,0 +1,584 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Routes &mdash; Rewake API  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Authentification" href="authentication.html" />
+    <link rel="prev" title="Rewake API" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Rewake API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Routes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#public">🔍 Public</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#health"><code class="docutils literal notranslate"><span class="pre">/health/</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hellopro">📊 HelloPro</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hellopro-csv"><code class="docutils literal notranslate"><span class="pre">/hellopro/csv</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#machinio">⚙️ Machinio</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#machinio-csv"><code class="docutils literal notranslate"><span class="pre">/machinio/csv</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#interne">🔒 Interne</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#internal-contact-check"><code class="docutils literal notranslate"><span class="pre">/internal/contact/check</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-contact-update-id"><code class="docutils literal notranslate"><span class="pre">/internal/contact/update/{id}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-contact-create"><code class="docutils literal notranslate"><span class="pre">/internal/contact/create</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-backups"><code class="docutils literal notranslate"><span class="pre">/internal/backups/</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-fees-distritec"><code class="docutils literal notranslate"><span class="pre">/internal/fees/distritec</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-logs"><code class="docutils literal notranslate"><span class="pre">/internal/logs/</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-scripts"><code class="docutils literal notranslate"><span class="pre">/internal/scripts/</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-scripts-name-run"><code class="docutils literal notranslate"><span class="pre">/internal/scripts/{name}/run</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-scripts-status-task-id"><code class="docutils literal notranslate"><span class="pre">/internal/scripts/status/{task_id}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-scripts-name-runs"><code class="docutils literal notranslate"><span class="pre">/internal/scripts/{name}/runs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-invoice-analysis"><code class="docutils literal notranslate"><span class="pre">/internal/invoice/analysis</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-invoice-get"><code class="docutils literal notranslate"><span class="pre">/internal/invoice/get</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-airtable-location-get-record-id"><code class="docutils literal notranslate"><span class="pre">/internal/airtable/location/get/&lt;record_id&gt;</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-airtable-location-update-record-id"><code class="docutils literal notranslate"><span class="pre">/internal/airtable/location/update/&lt;record_id&gt;</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#resume-des-regles">Résumé des règles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">Scripts</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Rewake API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Routes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/routes.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="routes">
+<h1>Routes<a class="headerlink" href="#routes" title="Link to this heading"></a></h1>
+<p>Liste complète des endpoints de l’API Rewake avec leurs règles d’accès et exemples de réponses.</p>
+<hr class="docutils" />
+<section id="public">
+<h2>🔍 Public<a class="headerlink" href="#public" title="Link to this heading"></a></h2>
+<section id="health">
+<h3><code class="docutils literal notranslate"><span class="pre">/health/</span></code><a class="headerlink" href="#health" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">GET</span></code></p></li>
+<li><p><strong>Accès</strong> : Public (pas de token requis)</p></li>
+<li><p><strong>Description</strong> : Vérifie que l’API est opérationnelle</p></li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;healthy&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;API is running&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="hellopro">
+<h2>📊 HelloPro<a class="headerlink" href="#hellopro" title="Link to this heading"></a></h2>
+<section id="hellopro-csv">
+<h3><code class="docutils literal notranslate"><span class="pre">/hellopro/csv</span></code><a class="headerlink" href="#hellopro-csv" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">GET</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">HELLOPRO_TOKEN</span></code> (sans vérification d’origine)</p></li>
+<li><p><strong>Description</strong> : Export des données CSV pour HelloPro (format pipe-delimited)</p></li>
+<li><p><strong>Réponse</strong> :</p>
+<ul>
+<li><p>Fichier CSV (download)</p></li>
+<li><p>Content-Type: text/csv</p></li>
+<li><p>Delimiter: <code class="docutils literal notranslate"><span class="pre">|</span></code></p></li>
+<li><p>Nom du fichier: <code class="docutils literal notranslate"><span class="pre">hellopro_export.csv</span></code></p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="machinio">
+<h2>⚙️ Machinio<a class="headerlink" href="#machinio" title="Link to this heading"></a></h2>
+<section id="machinio-csv">
+<h3><code class="docutils literal notranslate"><span class="pre">/machinio/csv</span></code><a class="headerlink" href="#machinio-csv" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">GET</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">MACHINIO_TOKEN</span></code> (sans vérification d’origine)</p></li>
+<li><p><strong>Description</strong> : Export des données CSV pour Machinio (format semicolon-delimited)</p></li>
+<li><p><strong>Réponse</strong> :</p>
+<ul>
+<li><p>Fichier CSV (download)</p></li>
+<li><p>Content-Type: text/csv</p></li>
+<li><p>Delimiter: <code class="docutils literal notranslate"><span class="pre">;</span></code></p></li>
+<li><p>Nom du fichier: <code class="docutils literal notranslate"><span class="pre">machinio_export.csv</span></code></p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="interne">
+<h2>🔒 Interne<a class="headerlink" href="#interne" title="Link to this heading"></a></h2>
+<section id="internal-contact-check">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/contact/check</span></code><a class="headerlink" href="#internal-contact-check" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">GET</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : Recherche les contacts potentiels dans la table “Personne” d’Airtable.</p></li>
+<li><p><strong>Stratégie</strong> :</p>
+<ul class="simple">
+<li><p>Email fourni → recherche par <code class="docutils literal notranslate"><span class="pre">Email</span> <span class="pre">OR</span> <span class="pre">Nom</span></code>, puis bonus prénom +3</p></li>
+<li><p>Pas d’email → recherche par <code class="docutils literal notranslate"><span class="pre">Nom</span> <span class="pre">OR</span> <span class="pre">Prénom</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>Scoring</strong> : Email +15, Nom +10, Prénom +3</p></li>
+<li><p><strong>Note</strong> : <code class="docutils literal notranslate"><span class="pre">best_match</span></code> n’est pas inclus dans <code class="docutils literal notranslate"><span class="pre">potential_contacts</span></code></p></li>
+<li><p><strong>Query Params</strong> (au moins un requis) :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">email</span></code> (string) : Email du contact</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nom</span></code> (string) : Nom du contact</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prenom</span></code> (string) : Prénom du contact</p></li>
+</ul>
+</li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;exists&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;best_match&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;recXXX&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;nom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Dupont&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;prenom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Jean&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jean.dupont@example.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;mobile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;+33612345678&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;poste&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Technicien&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;entreprise&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Acme Corp&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;score&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;potential_matching&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;potential_contacts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;recXXX&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;nom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Dupont&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;prenom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Jean&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jean.dupont@example.com&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;mobile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;+33612345678&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;poste&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Technicien&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;entreprise&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Acme Corp&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;score&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;recYYY&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;nom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Dupont&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;prenom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Marie&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;m.dupont@example.com&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;mobile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;+33698765432&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;poste&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Manager&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;entreprise&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Acme Corp&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;score&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Erreurs</strong> : <code class="docutils literal notranslate"><span class="pre">422</span></code> si aucun paramètre fourni, <code class="docutils literal notranslate"><span class="pre">500</span></code> si erreur Airtable</p></li>
+</ul>
+</section>
+<section id="internal-contact-update-id">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/contact/update/{id}</span></code><a class="headerlink" href="#internal-contact-update-id" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">PATCH</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : Met à jour les champs fournis d’un record dans la table “Personne” d’Airtable.</p></li>
+<li><p><strong>Path Params</strong> : <code class="docutils literal notranslate"><span class="pre">id</span></code> (string, requis) - L’ID du record Airtable</p></li>
+<li><p><strong>Request Body</strong> (au moins un champ requis) :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;nom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Dupont&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;prenom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Jean&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jean.dupont@example.com&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;mobile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;+33612345678&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;poste&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Technicien&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;entreprise&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;recEntreprise1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;recEntreprise2&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{
+  &quot;id&quot;: &quot;recXXX&quot;,
+  &quot;fields&quot;: { ... }
+}
+</pre></div>
+</div>
+</li>
+<li><p><strong>Erreurs</strong> : <code class="docutils literal notranslate"><span class="pre">404</span></code> si contact introuvable, <code class="docutils literal notranslate"><span class="pre">422</span></code> si aucun champ fourni, <code class="docutils literal notranslate"><span class="pre">500</span></code> si erreur Airtable</p></li>
+</ul>
+</section>
+<section id="internal-contact-create">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/contact/create</span></code><a class="headerlink" href="#internal-contact-create" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">POST</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : Crée un nouveau contact dans la table “Personne” d’Airtable.</p></li>
+<li><p><strong>Request Body</strong> (au moins un champ requis) :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;nom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Dupont&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;prenom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Jean&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jean.dupont@example.com&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;mobile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;+33612345678&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;poste&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Technicien&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;entreprise&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;recEntreprise1&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{
+  &quot;id&quot;: &quot;recXXX&quot;,
+  &quot;fields&quot;: { ... }
+}
+</pre></div>
+</div>
+</li>
+<li><p><strong>Erreurs</strong> : <code class="docutils literal notranslate"><span class="pre">422</span></code> si aucun champ fourni, <code class="docutils literal notranslate"><span class="pre">500</span></code> si erreur Airtable</p></li>
+</ul>
+</section>
+<section id="internal-backups">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/backups/</span></code><a class="headerlink" href="#internal-backups" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">GET</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : Liste des backups avec leurs fichiers et contenu (comparison.txt)</p></li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;backups&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-01-15_12-00-00&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/home/rewake/Verification-Shopify-Airtable/backups/2024-01-15_12-00-00&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;files&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;comparison.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;airtable.json&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;shopify.json&quot;</span><span class="p">],</span>
+<span class="w">      </span><span class="nt">&quot;hasComparison&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Contenu de comparison.txt...&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="internal-fees-distritec">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/fees/distritec</span></code><a class="headerlink" href="#internal-fees-distritec" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">POST</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : Calcule les frais de transport Distritec</p></li>
+<li><p><strong>Request Body</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;departureCity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">75</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;arrivalCity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;packages&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pkg001&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;weight&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">10.5</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;portage&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;roulage&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{
+  &quot;success&quot;: true,
+  &quot;total&quot;: 12345,
+  &quot;breakdown&quot;: [...],
+  &quot;warning&quot;: &quot;Possible surcharge de 57.11€ (île ou montagne). Total avec surcharge: XXX€&quot;
+}
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="internal-logs">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/logs/</span></code><a class="headerlink" href="#internal-logs" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">GET</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : Récupère le contenu d’un fichier de log</p></li>
+<li><p><strong>Query Params</strong> : <code class="docutils literal notranslate"><span class="pre">log</span></code> (nom du fichier, défaut: api.log)</p></li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Contenu du log...&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;logName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;api.log&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="internal-scripts">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/scripts/</span></code><a class="headerlink" href="#internal-scripts" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">GET</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : Liste les scripts enregistrés (voir <code class="docutils literal notranslate"><span class="pre">api/scripts/registry.py</span></code>
+et <a class="reference internal" href="architecture.html"><span class="std std-doc">docs/architecture.rst</span></a>)</p></li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{ &quot;scripts&quot;: [&quot;update_product&quot;, &quot;shopify_catalog_reconciliation&quot;, &quot;airtable_catalog_stats&quot;] }
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="internal-scripts-name-run">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/scripts/{name}/run</span></code><a class="headerlink" href="#internal-scripts-name-run" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">POST</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : Met en file d’attente (Celery) une exécution du script <code class="docutils literal notranslate"><span class="pre">name</span></code>.
+<code class="docutils literal notranslate"><span class="pre">record_id</span></code> (query param) est requis pour <code class="docutils literal notranslate"><span class="pre">update_product</span></code>.</p></li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{ &quot;task_id&quot;: &quot;...&quot;, &quot;status&quot;: &quot;queued&quot;, &quot;script&quot;: &quot;update_product&quot; }
+</pre></div>
+</div>
+</li>
+<li><p><strong>Erreurs</strong> : <code class="docutils literal notranslate"><span class="pre">404</span></code> si <code class="docutils literal notranslate"><span class="pre">name</span></code> inconnu, <code class="docutils literal notranslate"><span class="pre">400</span></code> si <code class="docutils literal notranslate"><span class="pre">record_id</span></code> manquant pour <code class="docutils literal notranslate"><span class="pre">update_product</span></code></p></li>
+</ul>
+</section>
+<section id="internal-scripts-status-task-id">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/scripts/status/{task_id}</span></code><a class="headerlink" href="#internal-scripts-status-task-id" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">GET</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : État d’une tâche mise en file par <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/internal/scripts/{name}/run</span></code></p></li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{
+  &quot;task_id&quot;: &quot;...&quot;,
+  &quot;status&quot;: &quot;SUCCESS&quot;,
+  &quot;result&quot;: { &quot;status&quot;: &quot;success&quot;, &quot;details&quot;: { &quot;stdout&quot;: &quot;...&quot;, &quot;stderr&quot;: &quot;&quot; }, &quot;duration_seconds&quot;: 1.2 }
+}
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="internal-scripts-name-runs">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/scripts/{name}/runs</span></code><a class="headerlink" href="#internal-scripts-name-runs" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">GET</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : Historique des dernières exécutions de <code class="docutils literal notranslate"><span class="pre">name</span></code> (100 max, Redis)</p></li>
+<li><p><strong>Query Params</strong> : <code class="docutils literal notranslate"><span class="pre">limit</span></code> (int, défaut 20, max 100)</p></li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{ &quot;script&quot;: &quot;shopify_catalog_reconciliation&quot;, &quot;runs&quot;: [ { &quot;status&quot;: &quot;success&quot;, &quot;...&quot;: &quot;...&quot; } ] }
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="internal-invoice-analysis">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/invoice/analysis</span></code><a class="headerlink" href="#internal-invoice-analysis" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">POST</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : Analyse une facture PDF et extrait les informations selon la source</p></li>
+<li><p><strong>Request Body</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">file</span></code>: Fichier PDF (upload) - <strong>requis</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">source</span></code>: (string) - <strong>requis</strong> - Doit être soit <code class="docutils literal notranslate"><span class="pre">&quot;surplus&quot;</span></code> soit <code class="docutils literal notranslate"><span class="pre">&quot;equipnet&quot;</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{
+  &quot;file_info&quot;: {
+    &quot;filename&quot;: &quot;nom_du_fichier.pdf&quot;,
+    &quot;content_type&quot;: &quot;application/pdf&quot;,
+    &quot;size&quot;: 1024,
+    &quot;source&quot;: &quot;surplus&quot;
+  },
+  &quot;file_location&quot;: &quot;hash_du_fichier&quot;,
+  &quot;equipements&quot;: [...]
+}
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="internal-invoice-get">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/invoice/get</span></code><a class="headerlink" href="#internal-invoice-get" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">GET</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : Récupère une facture PDF sauvegardée par son hash</p></li>
+<li><p><strong>Query Params</strong> : <code class="docutils literal notranslate"><span class="pre">hash</span></code> (string, <strong>requis</strong>) - Le hash du fichier de facture</p></li>
+<li><p><strong>Réponse</strong> :</p>
+<ul>
+<li><p>Fichier PDF (download)</p></li>
+<li><p>Content-Type: application/pdf</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="internal-airtable-location-get-record-id">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/airtable/location/get/&lt;record_id&gt;</span></code><a class="headerlink" href="#internal-airtable-location-get-record-id" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">GET</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : Récupère les informations de localisation d’une unité spécifique dans l’entrepôt</p></li>
+<li><p><strong>Path Params</strong> : <code class="docutils literal notranslate"><span class="pre">record_id</span></code> (string, requis) - L’ID du record Airtable de l’unité</p></li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Nom de l&#39;unité&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;serialNumber&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Numéro de série&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;imageUrls&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;https://url1.jpg&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;https://url2.jpg&quot;</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;currentLocation&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Emplacement actuel&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;possibleLocations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Emplacement 1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Emplacement 2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Emplacement 3&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="internal-airtable-location-update-record-id">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/airtable/location/update/&lt;record_id&gt;</span></code><a class="headerlink" href="#internal-airtable-location-update-record-id" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">POST</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : Mets à jour l’emplacement d’une unité spécifique dans l’entrepôt sur Airtable</p></li>
+<li><p><strong>Path Params</strong> : <code class="docutils literal notranslate"><span class="pre">record_id</span></code> (string, requis) - L’ID du record Airtable de l’unité</p></li>
+<li><p><strong>Request Body</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Nouvel emplacement&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;success&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Location updated from &#39;Ancien emplacement&#39; to &#39;Nouvel emplacement&#39;&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="resume-des-regles">
+<h2>Résumé des règles<a class="headerlink" href="#resume-des-regles" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Route</p></th>
+<th class="head"><p>Token requis</p></th>
+<th class="head"><p>Origin/Referer requis</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/health/</span></code></p></td>
+<td><p>❌ Non</p></td>
+<td><p>❌ Non</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/hellopro/csv</span></code></p></td>
+<td><p>✅ Oui (<code class="docutils literal notranslate"><span class="pre">HELLOPRO_TOKEN</span></code>)</p></td>
+<td><p>❌ Non</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/machinio/csv</span></code></p></td>
+<td><p>✅ Oui (<code class="docutils literal notranslate"><span class="pre">MACHINIO_TOKEN</span></code>)</p></td>
+<td><p>❌ Non</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/internal/*</span></code></p></td>
+<td><p>✅ Oui (<code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code>)</p></td>
+<td><p>✅ Oui</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Rewake API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="authentication.html" class="btn btn-neutral float-right" title="Authentification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Rewake.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

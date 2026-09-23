@@ -1,0 +1,102 @@
+Operations
+==========
+
+Configuration
+--------------
+
+Copy ``.env.example`` to ``.env``. See :doc:`development` for how to obtain
+each credential locally.
+
+- **Tokens** (:doc:`authentication`): ``ADMIN_TOKEN``, ``HELLOPRO_TOKEN``,
+  ``MACHINIO_TOKEN``, ``APP_TOKEN``.
+- **Airtable**: ``AIRTABLE_TOKEN``, ``AIRTABLE_BASE_ID`` -- the real base;
+  there is no separate Airtable sandbox today (see :doc:`development`).
+- **Google**: ``GOOGLE_APPLICATION_CREDENTIALS`` (Gmail draft creation).
+- **Logging**: ``LOG_LEVEL`` (default ``INFO``), ``LOG_FORMAT``
+  (``json``/``console``, default ``json``).
+- **Scripts** (``api/scripts/``, queued via ``api/tasks.py`` -- see
+  :doc:`architecture`): ``UV_BIN``, ``UPDATE_PRODUCT_DIR`` -- the sibling
+  script project ``update_product`` shells out to, plus ``REDIS_URL`` for
+  the Celery broker/backend (defaults to ``redis://localhost:6379/0``,
+  ``redis://redis:6379/0`` under docker compose). ``VERIFICATION_SHOPIFY_DIR``
+  still exists too, but only to locate the legacy
+  ``GET /internal/backups/`` directory (see :doc:`routes`) -- the
+  ``verification_shopify`` script itself has been removed.
+- **Scheduled scripts**: ``SHOPIFY_CATALOG_RECONCILIATION_INTERVAL_SECONDS``
+  (default ``3600``), ``AIRTABLE_CATALOG_STATS_HOUR``/``_MINUTE`` (default
+  ``20``/``42``, interpreted in ``celery_app``'s ``Europe/Paris`` timezone)
+  -- see the ``beat`` service below.
+- **Shopify**: ``SHOPIFY_SHOP_DOMAIN``, ``SHOPIFY_ACCESS_TOKEN``,
+  ``SHOPIFY_API_VERSION`` -- used by ``shopify_catalog_reconciliation``
+  (ported from the RewakeMonitor proof of concept), ahead of the wider Cloud
+  Run migration described in ``PROPOSAL.md``.
+- **Deploy**: ``TAG`` (default ``latest``) -- which
+  ``ghcr.io/rewake-fr/api`` build ``docker-compose.yml`` and
+  ``scripts/deploy/deploy.sh`` run.
+
+Deployment
+----------
+
+Two ways to run this, and only one of them is meant for the real server:
+
+**Building from source** (local dev, or if you'd rather not use the image):
+
+.. code-block:: sh
+
+   git pull
+   docker compose up -d --build
+
+**From the published image** (the real deploy -- no build on the server at
+all):
+
+.. code-block:: sh
+
+   scripts/deploy/deploy.sh          # deploy "latest"
+   scripts/deploy/deploy.sh sha-abc1234  # pin to, or roll back to, one build
+
+``.github/workflows/ci.yml``'s ``image`` job builds and pushes
+``ghcr.io/rewake-fr/api`` on every push to ``main`` (never on a PR, and
+never from any other branch), tagged both ``latest`` and ``sha-<short
+hash>`` -- the latter never moves, so it's always safe to pin or roll back
+to. Since the source repo is private, so is the image; the server needs a
+one-time ``docker login ghcr.io`` (a personal access token with
+``read:packages``, or a fine-grained token scoped to this repo, as the
+password) before its first pull -- never done by the deploy script itself,
+and no credential is ever read or stored by it. ``docker-compose.yml``'s
+``api``/``worker`` services declare both ``image:`` (what a real deploy
+pulls) and ``build: .`` (what local dev still uses via ``--build``), so
+either workflow works from the same file.
+
+``docker-compose.yml`` runs four services from the same image: ``api``
+(port 3002, unchanged), ``redis``, ``worker`` (``celery -A api.celery_app
+worker``), and ``beat`` (``celery -A api.celery_app beat`` -- required once
+any registered script has a real ``schedule``, currently
+``shopify_catalog_reconciliation`` and ``airtable_catalog_stats``). The
+container command uses ``uv run --no-sync``, so nothing tries to reach the
+network at startup -- the image is built once with ``uv sync --frozen
+--no-dev`` and run exactly as built.
+
+Logging
+-------
+
+``structlog`` renders JSON (or ``console`` for local readability) to stdout
+and to a rotating file (``LOG_FILE`` in ``api/constants.py``, currently
+``/home/rewake/logs/api.log``); falls back to stdout-only if the log
+directory isn't writable. A request-id middleware
+(``api/utils/logger.py``) binds ``request_id``/``method``/``path``/
+``client_ip`` to every log line for a request and adds ``X-Request-ID`` to
+the response.
+
+CI/CD
+-----
+
+``.github/workflows/ci.yml``'s ``quality`` job runs on every push and pull
+request: ``ruff check``, ``mypy``, and a Sphinx build. **Tests are
+deliberately not run in CI** -- many hit the real Airtable API (no mock
+layer yet, see :doc:`development`) and need six token/credential secrets to
+even pass, which turned out to be more fragile than valuable as a required
+CI gate; run ``make test`` (or ``uv run pytest``) locally with a real
+``.env`` instead. See :doc:`development` for other known gaps CI surfaces.
+Its ``image`` job (build+push to GHCR) only
+runs after ``quality`` passes, and only on a push to ``main`` -- see
+"Deployment" above.

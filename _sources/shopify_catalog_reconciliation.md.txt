@@ -1,0 +1,147 @@
+# Shopify Catalog Reconciliation
+
+<img src="https://cdn.simpleicons.org/airtable" alt="Airtable" width="28" height="28"> <img src="https://cdn.simpleicons.org/shopify" alt="Shopify" width="28" height="28">
+
+| | |
+| --- | --- |
+| **Module** | `api.scripts.shopify_catalog_reconciliation` |
+| **Schedule** | every hour (`SHOPIFY_CATALOG_RECONCILIATION_INTERVAL_SECONDS`, default `3600`) -- also runnable on demand |
+| **Reads** | Airtable (Model, Variation, Toutes les unités, Annonces Shopify) + Shopify (Products, Variants) |
+| **Writes** | nothing -- strictly read-only |
+| **Origin** | ported from the RewakeMonitor proof of concept, where this logic was developed and validated against real production data |
+
+## What it does
+
+Verifies that Shopify actually reflects what Airtable says should be sellable, in three
+checks, from broad to specific:
+
+1. **Every relevant Model exists as a Shopify product.**
+2. **Every relevant Variation of a Model found in Shopify exists as a Shopify variant.**
+3. **Every "A vendre" unit's Shopify variant has the right inventory quantity.**
+
+"Relevant" always means: flagged `to_sell_on_shopify` **and** currently has at least one
+unit in stock (`Statut commercial = "A vendre"`). A Model or Variation that's the *kind*
+of thing sold online but has zero stock right now is correctly absent from Shopify --
+it is never flagged as "missing".
+
+## Why the matching is value-based, not ID-based
+
+Airtable's `Variation.ShopifyID` field is **not a real variant id** -- confirmed against
+production data, it always duplicates the parent Model's own product id, even across
+Variations that are genuinely different Shopify variants. There is no Airtable field
+holding a real Shopify variant id at all.
+
+Instead, a Shopify variant is identified by its `selectedOptions` **values** (the option
+*names* vary per product type -- a pipette's size option isn't named the same as a
+fridge's -- so matching is name-agnostic, value-only). Those literal value strings do
+match Airtable exactly:
+
+- a Variation's own `Variant_value` (a size/range, e.g. `"5 - 50"`), plus
+- a Unit's own `Etat esthétique` (condition, e.g. `"Très bon"`)
+
+...together pin down exactly one Shopify variant. So **one Airtable Variation
+corresponds to one Shopify variant *per condition it currently has stock in***, not a
+single variant -- and a unit that's "A vendre" through a different channel entirely
+(eBay, an auction, direct sale) is never expected on Shopify in the first place, so it's
+excluded from all three checks.
+
+This was two real, confirmed production bugs (ID-based matching finding 100% of
+variations "missing"; then a scoping bug over-flagging units sold through other
+channels) before this design -- see the RewakeMonitor repo's own copy of this document
+for the full story.
+
+## Data it fetches
+
+```mermaid
+flowchart LR
+    subgraph AT["Airtable"]
+        M["Model<br/>(ShopifyID, to_sell_on_shopify)"]
+        V["Variation<br/>(Variant_value, to_sell_on_shopify)"]
+        U["Toutes les unités<br/>(Statut commercial, Etat esthétique)"]
+        L["Annonces Shopify<br/>(ID_shopify)"]
+    end
+    subgraph SH["Shopify (GraphQL)"]
+        P["Product<br/>(legacyResourceId)"]
+        PV["ProductVariant<br/>(selectedOptions, inventoryQuantity)"]
+    end
+
+    M -- "Variation link" --> V
+    V -- "Toutes les unités link" --> U
+    L -- "Model link" --> M
+    P -- "variants" --> PV
+
+    M -. "ShopifyID / Annonces Shopify.ID_shopify<br/>== Product id" .-> P
+    V -. "Variant_value + Unit's Etat esthétique<br/>== ProductVariant.selectedOptions values" .-> PV
+
+    M --> R[["shopify_catalog_reconciliation"]]
+    V --> R
+    U --> R
+    L --> R
+    P --> R
+    PV --> R
+
+    R --> RUNS[("Redis run history<br/>GET /internal/scripts/shopify_catalog_reconciliation/runs")]
+    R --> SNAP[("Redis snapshot<br/>model/variation ids, for day-over-day diff")]
+    R --> LOG[("structlog (api.tasks)<br/>-> stdout / rotating file")]
+```
+
+## How it works
+
+1. Fetch Models, Variations, Units, and Annonces Shopify listings from Airtable
+   (`api.domain.catalog`, built on this project's own `api.services.airtable`
+   functions).
+2. Fetch every Shopify Product and its Variants in one paginated GraphQL sweep
+   (`api.integrations.shopify.ShopifyCatalog`).
+3. Resolve each Model's Shopify product: prefer the linked Annonces Shopify listing's
+   `ID_shopify`, fall back to the Model's own `ShopifyID`.
+4. **Check 1:** for every Model that's `to_sell_on_shopify` and has current stock, is its
+   resolved product id actually one of the fetched Shopify products?
+5. **Check 2:** for every Variation of a *found* Model that's `to_sell_on_shopify` and has
+   current stock, does that product have any variant whose option values are a superset
+   of the Variation's `Variant_value`?
+6. **Check 3:** group "A vendre" units of Shopify-bound Variations by
+   `(Variation, Etat esthétique)`. For each group, does a variant exist whose option
+   values are a superset of `{Variant_value, condition}`? If not, that's a missing
+   variant; if it exists but its `inventoryQuantity` doesn't match the unit count,
+   that's a quantity mismatch.
+7. Diff the current full set of Model/Variation ids against the previous run's snapshot
+   (stored in Redis, via `api.run_store.RunStore`) to report how many were added since
+   last time.
+
+## Metrics and details
+
+`GET /internal/scripts/shopify_catalog_reconciliation/runs` returns, per run:
+
+| Metric | Meaning |
+| --- | --- |
+| `relevant_models_total` | Models that are `to_sell_on_shopify` and currently in stock |
+| `models_missing_in_shopify` | ...of those, how many have no matching Shopify product |
+| `relevant_variations_total` | Variations of a *found* Model that are `to_sell_on_shopify` and in stock |
+| `variations_missing_in_shopify` | ...of those, how many have no matching Shopify variant (any condition) |
+| `a_vendre_units_total` | Shopify-bound "A vendre" units (excludes other sales channels) |
+| `a_vendre_units_missing_variant` | (Variation, condition) pairs with stock but no matching Shopify variant at all |
+| `a_vendre_quantity_mismatches` | (Variation, condition) pairs where the variant exists but its quantity is wrong |
+| `models_added_since_last_run` / `variations_added_since_last_run` | Catalog growth since the previous run |
+
+`details` in the same response carries the actual named records behind each count above
+(model/variation id + name, capped at 100 each) -- unlike the RewakeMonitor original,
+these aren't yet enriched with a direct Airtable web-UI link; that's a small,
+straightforward follow-up (`api.domain.catalog.record_url` already exists and is used
+elsewhere, just not wired into this script's `details` yet).
+
+## Where to look
+
+- **Trigger/history:** `GET /internal/scripts/` (confirm it's registered), `POST
+  /internal/scripts/shopify_catalog_reconciliation/run` (run it now), `GET
+  /internal/scripts/status/{task_id}` (poll one run), `GET
+  /internal/scripts/shopify_catalog_reconciliation/runs` (history).
+- **Schedule:** `api/celery_app.py`'s `beat_schedule`, driven by the `beat` service in
+  `docker-compose.yml`.
+- **Logs:** `structlog`, logger `api.tasks` (stdout, or the rotating file at
+  `api/constants.py`'s `LOG_FILE`).
+- **Dashboards/alerting:** none yet for this API -- RewakeObserve's Grafana already has
+  the two dashboards this exact logic feeds in RewakeMonitor; wiring a `/metrics`
+  endpoint here so Prometheus can scrape it is a clear, not-yet-done next step (see
+  `docs/development.rst`).
+- **Source:** `api/scripts/shopify_catalog_reconciliation.py`, `api/domain/catalog.py`,
+  `api/integrations/shopify.py`.

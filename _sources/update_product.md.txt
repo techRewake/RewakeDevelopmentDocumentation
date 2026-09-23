@@ -1,0 +1,85 @@
+# Update Product
+
+<img src="https://cdn.simpleicons.org/airtable" alt="Airtable" width="28" height="28"> <img src="https://cdn.simpleicons.org/shopify" alt="Shopify" width="28" height="28">
+
+| | |
+| --- | --- |
+| **Module** | `api.scripts.update_product` |
+| **Schedule** | on-demand only (`schedule = None`) -- requires a `record_id` |
+| **Reads** | Airtable (via the sibling `Update-Product` project) |
+| **Writes** | **Shopify** (via the sibling `Update-Product` project) -- the only script here that writes anything |
+| **Origin** | wraps an existing sibling project, not new logic written for this API |
+
+## What it does
+
+Runs the sibling `Update-Product` project (a separate git repository, path configured
+via `UPDATE_PRODUCT_DIR`) for exactly one Airtable Model record: that project reads the
+Model's current Airtable data and pushes the corresponding create/update to Shopify
+(title, images, variants, inventory, metafields -- whatever `Update-Product`'s own
+`main.py` does; that logic lives in its own repository, not here).
+
+This is **not** read-only, unlike every other script registered in this API --
+`shopify_catalog_reconciliation` and `airtable_catalog_stats` only ever
+compare or report; this one changes the live Shopify catalog.
+
+`app.rewake.fr`'s own `/api/lauch_script/update_shopify` route currently invokes the
+same `Update-Product` project directly (`execAsync` from its own Next.js server),
+entirely bypassing this API. This script is a second, independent way to trigger the
+exact same underlying project -- queued, retried, and with a persisted run history,
+rather than a bare synchronous shell-out -- not (yet) a replacement for that other
+path. See `PROPOSAL.md` in the RewakeMonitor repo for the broader migration this fits
+into.
+
+## Data it touches
+
+```mermaid
+flowchart LR
+    CALLER[["POST /internal/scripts/update_product/run?record_id=..."]]
+    TASK[["api.tasks.run_script<br/>(Celery)"]]
+    SCRIPT[["Update-Product/main.py<br/>(sibling project, subprocess)"]]
+    AT[("Airtable<br/>Model record")]
+    SH[("Shopify<br/>product create/update")]
+
+    CALLER --> TASK --> SCRIPT
+    SCRIPT -- reads --> AT
+    SCRIPT -- writes --> SH
+
+    TASK --> RUNS[("Redis run history<br/>GET /internal/scripts/update_product/runs")]
+    TASK --> LOG[("structlog (api.tasks)<br/>-> stdout / rotating file")]
+```
+
+## How it works
+
+1. `POST /internal/scripts/update_product/run?record_id=recXXXXXXXXXXXXXX` queues a
+   Celery task with that `record_id`; a missing `record_id` is rejected with `400`
+   before anything is queued.
+2. The task runs `uv run <UPDATE_PRODUCT_DIR>/main.py <record_id>` as a subprocess,
+   with `cwd=UPDATE_PRODUCT_DIR`, and captures its stdout/stderr.
+3. Success is `stderr == ""` -- any stderr output at all (not just a non-zero exit
+   code) is treated as a failed run, matching how `Update-Product` itself signals
+   problems.
+4. On a Celery-visible failure (the subprocess itself failing to start, or exiting
+   non-zero), the task retries automatically (`autoretry_for=(Exception,)`, up to 3
+   times with backoff) -- a transient issue (e.g. a slow Airtable/Shopify response
+   inside `Update-Product`) resolves itself without manual intervention; a
+   consistently broken `record_id` will exhaust retries and show as `FAILURE`.
+
+## Details payload
+
+No numeric `metrics` -- `GET /internal/scripts/update_product/runs` returns, per run:
+
+| Key | Meaning |
+| --- | --- |
+| `record_id` | The Model record this run was for |
+| `stdout` / `stderr` | Raw output from `Update-Product/main.py` |
+| `error` | Present on failure: the subprocess's stderr, or a generic message if the process never started |
+
+## Where to look
+
+- **Trigger:** `POST /internal/scripts/update_product/run?record_id=recXXX`.
+- **Status/history:** `GET /internal/scripts/status/{task_id}`, `GET
+  /internal/scripts/update_product/runs`.
+- **Logs:** `structlog`, logger `api.tasks`; `Update-Product`'s own stdout/stderr is
+  captured into the run's `details`, not this API's log files.
+- **Source:** `api/scripts/update_product.py`. The actual update logic is in the
+  `Update-Product` repository, outside this one.

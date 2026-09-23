@@ -1,0 +1,74 @@
+# Authentification
+
+Le système d'authentification de l'API Rewake repose sur des **tokens Bearer** et une vérification optionnelle de l'origine/referer.
+
+---
+
+## Tokens
+
+| Token | Description | Accès |
+|-------|-------------|-------|
+| `ADMIN_TOKEN` | Token administrateur | **Toutes les routes**, contourne la vérification d'origine |
+| `HELLOPRO_TOKEN` | Token dédié HelloPro | Routes `/hellopro/*` uniquement |
+| `APP_TOKEN` | Token dédié à l'app interne | Routes `/internal/*` uniquement |
+
+> [!WARNING] 
+> Les tokens doivent être définis dans `.env` et **ne jamais être commités**.
+
+---
+
+## Origines autorisées
+
+L'API accepte les requêtes provenant des domaines suivants (quand la vérification de domaine est activée) :
+- `https://app.rewake.fr`
+- `https://sav.rewake.fr`
+
+---
+
+## Logique de vérification
+
+### Avec `ADMIN_TOKEN`
+Accès **automatique** à toutes les routes, **sans vérification d'origine/referer**.
+
+### Règles par route
+
+| Route | Vérification d'origine |
+|-------|---------------------|
+| `/hellopro/*` | ❌ Non (seulement `HELLOPRO_TOKEN` requis) |
+| `/internal/*` | ✅ Oui (`APP_TOKEN` **ET** origine/referer valide) |
+
+> [!IMPORTANT] 
+> `ADMIN_TOKEN` contourne toujours la vérification d'origine sur toutes les routes.
+
+---
+
+## Exemples de requêtes
+
+### Token seul (ADMIN_TOKEN)
+```bash
+curl -H "Authorization: Bearer ADMIN_TOKEN" \
+     http://localhost:8000/internal/
+# ✅ 200 - Accès autorisé (contourne l'origine)
+```
+
+### Token + Origin (autres tokens)
+```bash
+curl -H "Authorization: Bearer HELLOPRO_TOKEN" \
+     -H "Origin: https://app.rewake.fr" \
+     http://localhost:8000/hellopro/csv
+# ✅ 200 - Token valide + origine autorisée
+```
+
+### Token sans Origin (autres tokens)
+```bash
+curl -H "Authorization: Bearer HELLOPRO_TOKEN" \
+     http://localhost:8000/hellopro/csv
+# ❌ 403 - Origin manquant
+```
+
+### Origin sans Token
+```bash
+curl -H "Origin: https://app.rewake.fr" \
+     http://localhost:8000/hellopro/csv
+# ❌ 403 - Token manquant
+```

@@ -1,0 +1,223 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Development &mdash; Rewake API  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Scripts" href="scripts.html" />
+    <link rel="prev" title="Operations" href="operations.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Rewake API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="routes.html">Routes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">Operations</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#environment-setup">Environment setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#airtable">Airtable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#shopify-dev-store">Shopify (dev store)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#development-scripts">Development scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#known-gaps-this-tooling-surfaces">Known gaps this tooling surfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">Scripts</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Rewake API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Development</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/development.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="development">
+<h1>Development<a class="headerlink" href="#development" title="Link to this heading"></a></h1>
+<section id="environment-setup">
+<h2>Environment setup<a class="headerlink" href="#environment-setup" title="Link to this heading"></a></h2>
+<p>Requires Python 3.14 and <a class="reference external" href="https://docs.astral.sh/uv/">uv</a>.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>.env.example<span class="w"> </span>.env<span class="w">          </span><span class="c1"># fill in tokens/credentials, see below</span>
+make<span class="w"> </span>install<span class="w">                  </span><span class="c1"># uv sync --group dev --group docs</span>
+make<span class="w"> </span>dev<span class="w">                      </span><span class="c1"># uv run uvicorn api.main:app --reload --port 3002</span>
+make<span class="w"> </span><span class="nb">test</span><span class="w">                     </span><span class="c1"># uv run pytest</span>
+make<span class="w"> </span>check<span class="w">                    </span><span class="c1"># lint + typecheck + test</span>
+make<span class="w"> </span>docs<span class="w">                     </span><span class="c1"># this Sphinx site -&gt; docs/_build/html/index.html</span>
+</pre></div>
+</div>
+<p>Or the equivalent <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span> <span class="pre">...</span></code> commands directly – <code class="docutils literal notranslate"><span class="pre">make</span></code> is a thin
+wrapper (see the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code>), not a requirement.</p>
+<p>To run the full stack, including the new queued-script worker, in Docker
+instead: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">up</span> <span class="pre">-d</span> <span class="pre">--build</span></code> (see <a class="reference internal" href="operations.html"><span class="doc">Operations</span></a>).</p>
+</section>
+<section id="airtable">
+<h2>Airtable<a class="headerlink" href="#airtable" title="Link to this heading"></a></h2>
+<p>There is one Airtable base, and it’s the real one – <code class="docutils literal notranslate"><span class="pre">AIRTABLE_BASE_ID</span></code> in
+<code class="docutils literal notranslate"><span class="pre">.env</span></code> (no separate development/sandbox base exists today). Get a personal
+access token with read/write access to that base, then verify it:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>airtable-check
+<span class="c1"># or: uv run python -m scripts.airtable.check_credentials</span>
+</pre></div>
+</div>
+<p>This means <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span> <span class="pre">pytest</span></code> genuinely calls Airtable for a few tests
+(<code class="docutils literal notranslate"><span class="pre">tests/test_airtable.py</span></code>, <code class="docutils literal notranslate"><span class="pre">tests/test_contact_*.py</span></code>) – there is no
+mock/fixture layer for Airtable yet. That’s exactly why tests don’t run in
+CI (see <a class="reference internal" href="operations.html"><span class="doc">Operations</span></a>): they need six working token/credential secrets
+(<code class="docutils literal notranslate"><span class="pre">ADMIN_TOKEN</span></code>, <code class="docutils literal notranslate"><span class="pre">HELLOPRO_TOKEN</span></code>, <code class="docutils literal notranslate"><span class="pre">MACHINIO_TOKEN</span></code>, <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code>,
+<code class="docutils literal notranslate"><span class="pre">AIRTABLE_TOKEN</span></code>, <code class="docutils literal notranslate"><span class="pre">AIRTABLE_BASE_ID</span></code>) just to pass, and a scope/typo
+issue in any one of them produces a wall of unrelated-looking 500s rather
+than a clear failure – more fragile than valuable as a required gate today.
+Run them locally with a real <code class="docutils literal notranslate"><span class="pre">.env</span></code> instead.</p>
+</section>
+<section id="shopify-dev-store">
+<h2>Shopify (dev store)<a class="headerlink" href="#shopify-dev-store" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">shopify_catalog_reconciliation</span></code> (ported from the RewakeMonitor proof of
+concept – see <a class="reference internal" href="architecture.html"><span class="doc">Architecture</span></a>) is the one thing here that calls
+Shopify, via <code class="docutils literal notranslate"><span class="pre">SHOPIFY_SHOP_DOMAIN</span></code>/<code class="docutils literal notranslate"><span class="pre">SHOPIFY_ACCESS_TOKEN</span></code>/
+<code class="docutils literal notranslate"><span class="pre">SHOPIFY_API_VERSION</span></code> in <code class="docutils literal notranslate"><span class="pre">.env.example</span></code>. Test it against the
+<strong>RewakeDev</strong> Shopify development store, never production (<code class="docutils literal notranslate"><span class="pre">rewake-2</span></code>):
+client-credentials tokens are short-lived (~24h), so a 401 from Shopify
+after a while usually just means the token needs regenerating, not a code
+problem:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>shopify-token<span class="w">   </span><span class="c1"># uv run python -m scripts.shopify.exchange_access_token</span>
+make<span class="w"> </span>shopify-check<span class="w">    </span><span class="c1"># uv run python -m scripts.shopify.check_credentials</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">scripts/shopify/exchange_access_token.py</span></code> walks through Shopify’s
+client-credentials grant to get a short-lived token for a development store
+in the Dev Dashboard’s organization. The RewakeMonitor repo’s
+<code class="docutils literal notranslate"><span class="pre">scripts/seed_dev_store</span></code> populates that same <code class="docutils literal notranslate"><span class="pre">RewakeDev</span></code> store from the
+real Airtable catalog, with a hardcoded guard that refuses to run against
+anything else – see that repo’s <code class="docutils literal notranslate"><span class="pre">scripts/README.md</span></code> for the full design.
+Point this project’s <code class="docutils literal notranslate"><span class="pre">.env</span></code> at the same store when testing anything
+Shopify-related here.</p>
+</section>
+<section id="development-scripts">
+<h2>Development scripts<a class="headerlink" href="#development-scripts" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">scripts/</span></code> (repository root, not part of the <code class="docutils literal notranslate"><span class="pre">api</span></code> package) holds
+developer-run setup tooling, run as a module:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>scripts.airtable.check_credentials
+uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>scripts.shopify.check_credentials
+uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>scripts.shopify.exchange_access_token
+</pre></div>
+</div>
+<p>See <code class="docutils literal notranslate"><span class="pre">scripts/README.md</span></code> for what each one does. More will be added here as
+the migration in <code class="docutils literal notranslate"><span class="pre">PROPOSAL.md</span></code> proceeds (deploy/check-deployment/upgrade
+scripts, mirroring the pattern already built out in the RewakeMonitor repo’s
+own <code class="docutils literal notranslate"><span class="pre">scripts/</span></code>).</p>
+</section>
+<section id="known-gaps-this-tooling-surfaces">
+<h2>Known gaps this tooling surfaces<a class="headerlink" href="#known-gaps-this-tooling-surfaces" title="Link to this heading"></a></h2>
+<p>Adding <code class="docutils literal notranslate"><span class="pre">ruff</span></code>/<code class="docutils literal notranslate"><span class="pre">mypy</span></code>/coverage/CI to a codebase that had none of it
+before makes existing debt visible; none of the following was introduced by
+adding the tooling itself, and none of it was fixed as part of adding it
+(fixing business logic wasn’t in scope for that pass):</p>
+<ul class="simple">
+<li><p><strong>2 tests marked ``xfail``</strong> (<code class="docutils literal notranslate"><span class="pre">tests/test_fees.py::test_distritec_fees_simple_package</span></code>,
+<code class="docutils literal notranslate"><span class="pre">test_distritec_fees_multiple_packages</span></code>, both <code class="docutils literal notranslate"><span class="pre">strict=True</span></code>): the
+expected totals don’t match <code class="docutils literal notranslate"><span class="pre">api/services/fees.py</span></code>’s current output.
+Needs someone who knows the intended Distritec tariff to say which side is
+wrong. <code class="docutils literal notranslate"><span class="pre">strict=True</span></code> means if the underlying bug ever gets fixed, these
+flip to a hard CI failure (<code class="docutils literal notranslate"><span class="pre">XPASS</span></code>) instead of silently staying green –
+remove the marker at that point, don’t leave it in place.</p></li>
+<li><p><strong>mypy</strong>: clean at its current (non-strict) level – the ~32 findings this
+surfaced when first turned on (mostly a <code class="docutils literal notranslate"><span class="pre">dict[str,</span> <span class="pre">str]</span></code> parameter
+annotation that was actually <code class="docutils literal notranslate"><span class="pre">dict[str,</span> <span class="pre">Any]</span></code> in practice, since Airtable
+fields aren’t all strings, plus a few missing local annotations and two
+untyped tariff-table dicts in <code class="docutils literal notranslate"><span class="pre">api/services/fees.py</span></code>) have all been
+fixed. <code class="docutils literal notranslate"><span class="pre">--strict</span></code> finds ~106 more, almost all missing-annotation noise
+across the wider codebase rather than bugs – a deliberate future ratchet,
+not turned on yet.</p></li>
+<li><p><strong>``docs/routes.md`` is stale</strong>: several router modules that exist in code
+today (<code class="docutils literal notranslate"><span class="pre">brand</span></code>, <code class="docutils literal notranslate"><span class="pre">cache</span></code>, <code class="docutils literal notranslate"><span class="pre">model/*</span></code>, <code class="docutils literal notranslate"><span class="pre">formulaire/*</span></code>,
+<code class="docutils literal notranslate"><span class="pre">contact/entreprise/*</span></code>, <code class="docutils literal notranslate"><span class="pre">pdf/intervention</span></code>, <code class="docutils literal notranslate"><span class="pre">pdf/logistique</span></code>,
+<code class="docutils literal notranslate"><span class="pre">pdf/rachat</span></code>, <code class="docutils literal notranslate"><span class="pre">invoice</span></code>, <code class="docutils literal notranslate"><span class="pre">pdf/get</span></code>) aren’t documented there yet, and
+have no dedicated tests. Auditing, documenting, and testing that surface
+endpoint-by-endpoint is real, separate follow-up work (<code class="docutils literal notranslate"><span class="pre">PROPOSAL.md</span></code>’s
+“RewakeAPI audit” phase), not attempted in this pass.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="operations.html" class="btn btn-neutral float-left" title="Operations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="scripts.html" class="btn btn-neutral float-right" title="Scripts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Rewake.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

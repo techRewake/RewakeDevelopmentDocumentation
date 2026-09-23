@@ -1,0 +1,34 @@
+Rewake API
+==========
+
+The back-end API for Rewake -- internal tooling (used by the
+``app.rewake.fr``/``sav.rewake.fr`` intranet apps) and external integrations
+(HelloPro, Machinio), served at `api.rewake.fr <https://api.rewake.fr>`_.
+
+This documentation set is new (see :doc:`development` for why and what's
+still missing); the API and its endpoints existed and were in production
+well before it.
+
+Reference
+---------
+
+- :doc:`routes` -- every endpoint, its access rules, and example responses.
+- :doc:`authentication` -- the token/origin model behind those access rules.
+- :doc:`architecture` -- how the project fits together, including the
+  Celery/Redis queued-script path.
+- :doc:`operations` -- configuration, deployment, and logging.
+- :doc:`development` -- environment setup, Airtable/Shopify dev credentials,
+  and the ``scripts/`` dev tooling.
+- :doc:`scripts` -- what each registered script does, on demand or
+  scheduled.
+
+.. toctree::
+   :maxdepth: 2
+   :hidden:
+
+   routes
+   authentication
+   architecture
+   operations
+   development
+   scripts

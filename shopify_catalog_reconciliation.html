@@ -1,0 +1,665 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shopify Catalog Reconciliation &mdash; Rewake API  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Airtable Catalog Stats" href="airtable_catalog_stats.html" />
+    <link rel="prev" title="Update Product" href="update_product.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Rewake API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="routes.html">Routes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="scripts.html">Scripts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="update_product.html">Update Product</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Shopify Catalog Reconciliation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-it-does">What it does</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#why-the-matching-is-value-based-not-id-based">Why the matching is value-based, not ID-based</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-it-fetches">Data it fetches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-it-works">How it works</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metrics-and-details">Metrics and details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#where-to-look">Where to look</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="airtable_catalog_stats.html">Airtable Catalog Stats</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Rewake API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="scripts.html">Scripts</a></li>
+      <li class="breadcrumb-item active">Shopify Catalog Reconciliation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/shopify_catalog_reconciliation.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="shopify-catalog-reconciliation">
+<h1>Shopify Catalog Reconciliation<a class="headerlink" href="#shopify-catalog-reconciliation" title="Link to this heading"></a></h1>
+<p><img src="https://cdn.simpleicons.org/airtable" alt="Airtable" width="28" height="28"> <img src="https://cdn.simpleicons.org/shopify" alt="Shopify" width="28" height="28"></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Module</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">api.scripts.shopify_catalog_reconciliation</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Schedule</strong></p></td>
+<td><p>every hour (<code class="docutils literal notranslate"><span class="pre">SHOPIFY_CATALOG_RECONCILIATION_INTERVAL_SECONDS</span></code>, default <code class="docutils literal notranslate"><span class="pre">3600</span></code>) – also runnable on demand</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Reads</strong></p></td>
+<td><p>Airtable (Model, Variation, Toutes les unités, Annonces Shopify) + Shopify (Products, Variants)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Writes</strong></p></td>
+<td><p>nothing – strictly read-only</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Origin</strong></p></td>
+<td><p>ported from the RewakeMonitor proof of concept, where this logic was developed and validated against real production data</p></td>
+</tr>
+</tbody>
+</table>
+<section id="what-it-does">
+<h2>What it does<a class="headerlink" href="#what-it-does" title="Link to this heading"></a></h2>
+<p>Verifies that Shopify actually reflects what Airtable says should be sellable, in three
+checks, from broad to specific:</p>
+<ol class="arabic simple">
+<li><p><strong>Every relevant Model exists as a Shopify product.</strong></p></li>
+<li><p><strong>Every relevant Variation of a Model found in Shopify exists as a Shopify variant.</strong></p></li>
+<li><p><strong>Every “A vendre” unit’s Shopify variant has the right inventory quantity.</strong></p></li>
+</ol>
+<p>“Relevant” always means: flagged <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> <strong>and</strong> currently has at least one
+unit in stock (<code class="docutils literal notranslate"><span class="pre">Statut</span> <span class="pre">commercial</span> <span class="pre">=</span> <span class="pre">&quot;A</span> <span class="pre">vendre&quot;</span></code>). A Model or Variation that’s the <em>kind</em>
+of thing sold online but has zero stock right now is correctly absent from Shopify –
+it is never flagged as “missing”.</p>
+</section>
+<section id="why-the-matching-is-value-based-not-id-based">
+<h2>Why the matching is value-based, not ID-based<a class="headerlink" href="#why-the-matching-is-value-based-not-id-based" title="Link to this heading"></a></h2>
+<p>Airtable’s <code class="docutils literal notranslate"><span class="pre">Variation.ShopifyID</span></code> field is <strong>not a real variant id</strong> – confirmed against
+production data, it always duplicates the parent Model’s own product id, even across
+Variations that are genuinely different Shopify variants. There is no Airtable field
+holding a real Shopify variant id at all.</p>
+<p>Instead, a Shopify variant is identified by its <code class="docutils literal notranslate"><span class="pre">selectedOptions</span></code> <strong>values</strong> (the option
+<em>names</em> vary per product type – a pipette’s size option isn’t named the same as a
+fridge’s – so matching is name-agnostic, value-only). Those literal value strings do
+match Airtable exactly:</p>
+<ul class="simple">
+<li><p>a Variation’s own <code class="docutils literal notranslate"><span class="pre">Variant_value</span></code> (a size/range, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;5</span> <span class="pre">-</span> <span class="pre">50&quot;</span></code>), plus</p></li>
+<li><p>a Unit’s own <code class="docutils literal notranslate"><span class="pre">Etat</span> <span class="pre">esthétique</span></code> (condition, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;Très</span> <span class="pre">bon&quot;</span></code>)</p></li>
+</ul>
+<p>…together pin down exactly one Shopify variant. So <strong>one Airtable Variation
+corresponds to one Shopify variant <em>per condition it currently has stock in</em></strong>, not a
+single variant – and a unit that’s “A vendre” through a different channel entirely
+(eBay, an auction, direct sale) is never expected on Shopify in the first place, so it’s
+excluded from all three checks.</p>
+<p>This was two real, confirmed production bugs (ID-based matching finding 100% of
+variations “missing”; then a scoping bug over-flagging units sold through other
+channels) before this design – see the RewakeMonitor repo’s own copy of this document
+for the full story.</p>
+</section>
+<section id="data-it-fetches">
+<h2>Data it fetches<a class="headerlink" href="#data-it-fetches" title="Link to this heading"></a></h2>
+<pre  class="mermaid">
+        flowchart LR
+    subgraph AT[&quot;Airtable&quot;]
+        M[&quot;Model&lt;br/&gt;(ShopifyID, to_sell_on_shopify)&quot;]
+        V[&quot;Variation&lt;br/&gt;(Variant_value, to_sell_on_shopify)&quot;]
+        U[&quot;Toutes les unités&lt;br/&gt;(Statut commercial, Etat esthétique)&quot;]
+        L[&quot;Annonces Shopify&lt;br/&gt;(ID_shopify)&quot;]
+    end
+    subgraph SH[&quot;Shopify (GraphQL)&quot;]
+        P[&quot;Product&lt;br/&gt;(legacyResourceId)&quot;]
+        PV[&quot;ProductVariant&lt;br/&gt;(selectedOptions, inventoryQuantity)&quot;]
+    end
+
+    M -- &quot;Variation link&quot; --&gt; V
+    V -- &quot;Toutes les unités link&quot; --&gt; U
+    L -- &quot;Model link&quot; --&gt; M
+    P -- &quot;variants&quot; --&gt; PV
+
+    M -. &quot;ShopifyID / Annonces Shopify.ID_shopify&lt;br/&gt;== Product id&quot; .-&gt; P
+    V -. &quot;Variant_value + Unit's Etat esthétique&lt;br/&gt;== ProductVariant.selectedOptions values&quot; .-&gt; PV
+
+    M --&gt; R[[&quot;shopify_catalog_reconciliation&quot;]]
+    V --&gt; R
+    U --&gt; R
+    L --&gt; R
+    P --&gt; R
+    PV --&gt; R
+
+    R --&gt; RUNS[(&quot;Redis run history&lt;br/&gt;GET /internal/scripts/shopify_catalog_reconciliation/runs&quot;)]
+    R --&gt; SNAP[(&quot;Redis snapshot&lt;br/&gt;model/variation ids, for day-over-day diff&quot;)]
+    R --&gt; LOG[(&quot;structlog (api.tasks)&lt;br/&gt;-&gt; stdout / rotating file&quot;)]
+    </pre></section>
+<section id="how-it-works">
+<h2>How it works<a class="headerlink" href="#how-it-works" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Fetch Models, Variations, Units, and Annonces Shopify listings from Airtable
+(<code class="docutils literal notranslate"><span class="pre">api.domain.catalog</span></code>, built on this project’s own <code class="docutils literal notranslate"><span class="pre">api.services.airtable</span></code>
+functions).</p></li>
+<li><p>Fetch every Shopify Product and its Variants in one paginated GraphQL sweep
+(<code class="docutils literal notranslate"><span class="pre">api.integrations.shopify.ShopifyCatalog</span></code>).</p></li>
+<li><p>Resolve each Model’s Shopify product: prefer the linked Annonces Shopify listing’s
+<code class="docutils literal notranslate"><span class="pre">ID_shopify</span></code>, fall back to the Model’s own <code class="docutils literal notranslate"><span class="pre">ShopifyID</span></code>.</p></li>
+<li><p><strong>Check 1:</strong> for every Model that’s <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> and has current stock, is its
+resolved product id actually one of the fetched Shopify products?</p></li>
+<li><p><strong>Check 2:</strong> for every Variation of a <em>found</em> Model that’s <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> and has
+current stock, does that product have any variant whose option values are a superset
+of the Variation’s <code class="docutils literal notranslate"><span class="pre">Variant_value</span></code>?</p></li>
+<li><p><strong>Check 3:</strong> group “A vendre” units of Shopify-bound Variations by
+<code class="docutils literal notranslate"><span class="pre">(Variation,</span> <span class="pre">Etat</span> <span class="pre">esthétique)</span></code>. For each group, does a variant exist whose option
+values are a superset of <code class="docutils literal notranslate"><span class="pre">{Variant_value,</span> <span class="pre">condition}</span></code>? If not, that’s a missing
+variant; if it exists but its <code class="docutils literal notranslate"><span class="pre">inventoryQuantity</span></code> doesn’t match the unit count,
+that’s a quantity mismatch.</p></li>
+<li><p>Diff the current full set of Model/Variation ids against the previous run’s snapshot
+(stored in Redis, via <code class="docutils literal notranslate"><span class="pre">api.run_store.RunStore</span></code>) to report how many were added since
+last time.</p></li>
+</ol>
+</section>
+<section id="metrics-and-details">
+<h2>Metrics and details<a class="headerlink" href="#metrics-and-details" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/shopify_catalog_reconciliation/runs</span></code> returns, per run:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Metric</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">relevant_models_total</span></code></p></td>
+<td><p>Models that are <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> and currently in stock</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">models_missing_in_shopify</span></code></p></td>
+<td><p>…of those, how many have no matching Shopify product</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">relevant_variations_total</span></code></p></td>
+<td><p>Variations of a <em>found</em> Model that are <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> and in stock</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">variations_missing_in_shopify</span></code></p></td>
+<td><p>…of those, how many have no matching Shopify variant (any condition)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">a_vendre_units_total</span></code></p></td>
+<td><p>Shopify-bound “A vendre” units (excludes other sales channels)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">a_vendre_units_missing_variant</span></code></p></td>
+<td><p>(Variation, condition) pairs with stock but no matching Shopify variant at all</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">a_vendre_quantity_mismatches</span></code></p></td>
+<td><p>(Variation, condition) pairs where the variant exists but its quantity is wrong</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">models_added_since_last_run</span></code> / <code class="docutils literal notranslate"><span class="pre">variations_added_since_last_run</span></code></p></td>
+<td><p>Catalog growth since the previous run</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">details</span></code> in the same response carries the actual named records behind each count above
+(model/variation id + name, capped at 100 each) – unlike the RewakeMonitor original,
+these aren’t yet enriched with a direct Airtable web-UI link; that’s a small,
+straightforward follow-up (<code class="docutils literal notranslate"><span class="pre">api.domain.catalog.record_url</span></code> already exists and is used
+elsewhere, just not wired into this script’s <code class="docutils literal notranslate"><span class="pre">details</span></code> yet).</p>
+</section>
+<section id="where-to-look">
+<h2>Where to look<a class="headerlink" href="#where-to-look" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Trigger/history:</strong> <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/</span></code> (confirm it’s registered), <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/internal/scripts/shopify_catalog_reconciliation/run</span></code> (run it now), <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/status/{task_id}</span></code> (poll one run), <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/shopify_catalog_reconciliation/runs</span></code> (history).</p></li>
+<li><p><strong>Schedule:</strong> <code class="docutils literal notranslate"><span class="pre">api/celery_app.py</span></code>’s <code class="docutils literal notranslate"><span class="pre">beat_schedule</span></code>, driven by the <code class="docutils literal notranslate"><span class="pre">beat</span></code> service in
+<code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code>.</p></li>
+<li><p><strong>Logs:</strong> <code class="docutils literal notranslate"><span class="pre">structlog</span></code>, logger <code class="docutils literal notranslate"><span class="pre">api.tasks</span></code> (stdout, or the rotating file at
+<code class="docutils literal notranslate"><span class="pre">api/constants.py</span></code>’s <code class="docutils literal notranslate"><span class="pre">LOG_FILE</span></code>).</p></li>
+<li><p><strong>Dashboards/alerting:</strong> none yet for this API – RewakeObserve’s Grafana already has
+the two dashboards this exact logic feeds in RewakeMonitor; wiring a <code class="docutils literal notranslate"><span class="pre">/metrics</span></code>
+endpoint here so Prometheus can scrape it is a clear, not-yet-done next step (see
+<code class="docutils literal notranslate"><span class="pre">docs/development.rst</span></code>).</p></li>
+<li><p><strong>Source:</strong> <code class="docutils literal notranslate"><span class="pre">api/scripts/shopify_catalog_reconciliation.py</span></code>, <code class="docutils literal notranslate"><span class="pre">api/domain/catalog.py</span></code>,
+<code class="docutils literal notranslate"><span class="pre">api/integrations/shopify.py</span></code>.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="update_product.html" class="btn btn-neutral float-left" title="Update Product" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="airtable_catalog_stats.html" class="btn btn-neutral float-right" title="Airtable Catalog Stats" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Rewake.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

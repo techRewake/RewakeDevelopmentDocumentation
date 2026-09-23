@@ -1,0 +1,236 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Authentification &mdash; Rewake API  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Architecture" href="architecture.html" />
+    <link rel="prev" title="Routes" href="routes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Rewake API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="routes.html">Routes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Authentification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#tokens">Tokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#origines-autorisees">Origines autorisées</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logique-de-verification">Logique de vérification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#avec-admin-token">Avec <code class="docutils literal notranslate"><span class="pre">ADMIN_TOKEN</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regles-par-route">Règles par route</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#exemples-de-requetes">Exemples de requêtes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#token-seul-admin-token">Token seul (ADMIN_TOKEN)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#token-origin-autres-tokens">Token + Origin (autres tokens)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#token-sans-origin-autres-tokens">Token sans Origin (autres tokens)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#origin-sans-token">Origin sans Token</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">Scripts</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Rewake API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Authentification</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/authentication.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="authentification">
+<h1>Authentification<a class="headerlink" href="#authentification" title="Link to this heading"></a></h1>
+<p>Le système d’authentification de l’API Rewake repose sur des <strong>tokens Bearer</strong> et une vérification optionnelle de l’origine/referer.</p>
+<hr class="docutils" />
+<section id="tokens">
+<h2>Tokens<a class="headerlink" href="#tokens" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Token</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Accès</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ADMIN_TOKEN</span></code></p></td>
+<td><p>Token administrateur</p></td>
+<td><p><strong>Toutes les routes</strong>, contourne la vérification d’origine</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">HELLOPRO_TOKEN</span></code></p></td>
+<td><p>Token dédié HelloPro</p></td>
+<td><p>Routes <code class="docutils literal notranslate"><span class="pre">/hellopro/*</span></code> uniquement</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code></p></td>
+<td><p>Token dédié à l’app interne</p></td>
+<td><p>Routes <code class="docutils literal notranslate"><span class="pre">/internal/*</span></code> uniquement</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>[!WARNING]
+Les tokens doivent être définis dans <code class="docutils literal notranslate"><span class="pre">.env</span></code> et <strong>ne jamais être commités</strong>.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="origines-autorisees">
+<h2>Origines autorisées<a class="headerlink" href="#origines-autorisees" title="Link to this heading"></a></h2>
+<p>L’API accepte les requêtes provenant des domaines suivants (quand la vérification de domaine est activée) :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">https://app.rewake.fr</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">https://sav.rewake.fr</span></code></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="logique-de-verification">
+<h2>Logique de vérification<a class="headerlink" href="#logique-de-verification" title="Link to this heading"></a></h2>
+<section id="avec-admin-token">
+<h3>Avec <code class="docutils literal notranslate"><span class="pre">ADMIN_TOKEN</span></code><a class="headerlink" href="#avec-admin-token" title="Link to this heading"></a></h3>
+<p>Accès <strong>automatique</strong> à toutes les routes, <strong>sans vérification d’origine/referer</strong>.</p>
+</section>
+<section id="regles-par-route">
+<h3>Règles par route<a class="headerlink" href="#regles-par-route" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Route</p></th>
+<th class="head"><p>Vérification d’origine</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/hellopro/*</span></code></p></td>
+<td><p>❌ Non (seulement <code class="docutils literal notranslate"><span class="pre">HELLOPRO_TOKEN</span></code> requis)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/internal/*</span></code></p></td>
+<td><p>✅ Oui (<code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide)</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>[!IMPORTANT]
+<code class="docutils literal notranslate"><span class="pre">ADMIN_TOKEN</span></code> contourne toujours la vérification d’origine sur toutes les routes.</p>
+</div></blockquote>
+</section>
+</section>
+<hr class="docutils" />
+<section id="exemples-de-requetes">
+<h2>Exemples de requêtes<a class="headerlink" href="#exemples-de-requetes" title="Link to this heading"></a></h2>
+<section id="token-seul-admin-token">
+<h3>Token seul (ADMIN_TOKEN)<a class="headerlink" href="#token-seul-admin-token" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer ADMIN_TOKEN&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>http://localhost:8000/internal/
+<span class="c1"># ✅ 200 - Accès autorisé (contourne l&#39;origine)</span>
+</pre></div>
+</div>
+</section>
+<section id="token-origin-autres-tokens">
+<h3>Token + Origin (autres tokens)<a class="headerlink" href="#token-origin-autres-tokens" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer HELLOPRO_TOKEN&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-H<span class="w"> </span><span class="s2">&quot;Origin: https://app.rewake.fr&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>http://localhost:8000/hellopro/csv
+<span class="c1"># ✅ 200 - Token valide + origine autorisée</span>
+</pre></div>
+</div>
+</section>
+<section id="token-sans-origin-autres-tokens">
+<h3>Token sans Origin (autres tokens)<a class="headerlink" href="#token-sans-origin-autres-tokens" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer HELLOPRO_TOKEN&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>http://localhost:8000/hellopro/csv
+<span class="c1"># ❌ 403 - Origin manquant</span>
+</pre></div>
+</div>
+</section>
+<section id="origin-sans-token">
+<h3>Origin sans Token<a class="headerlink" href="#origin-sans-token" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Origin: https://app.rewake.fr&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>http://localhost:8000/hellopro/csv
+<span class="c1"># ❌ 403 - Token manquant</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="routes.html" class="btn btn-neutral float-left" title="Routes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="architecture.html" class="btn btn-neutral float-right" title="Architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Rewake.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

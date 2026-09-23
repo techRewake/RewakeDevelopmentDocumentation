@@ -1,0 +1,121 @@
+Architecture
+============
+
+A single FastAPI app (``api/main.py``) assembling routers grouped by access
+level:
+
+- ``api/routes/health.py`` -- public.
+- ``api/routes/hellopro/``, ``api/routes/machinio/`` -- external integrations,
+  each gated by its own static token (no origin check).
+- ``api/routes/internal/`` -- the internal surface used by ``app.rewake.fr``/
+  ``sav.rewake.fr``, gated by ``APP_TOKEN`` **and** an allowed origin/referer
+  (``ADMIN_TOKEN`` bypasses the origin check everywhere) -- see
+  :doc:`authentication`.
+- ``api/routes/invoice/``, ``api/routes/pdf/``, ``api/routes/formulaire/`` --
+  a handful of routes outside ``/internal`` with their own access rules; see
+  :doc:`routes`.
+
+``api/services/`` holds integration logic (``airtable.py``, ``fees.py``,
+``gmail.py``, ``pdf.py``, ``parsers/``), reused across routes rather than
+duplicated in them. ``api/utils/`` holds cross-cutting concerns: ``auth.py``
+(the token/origin dependency), ``logger.py`` (structlog setup + request
+logging middleware), ``token.py``, ``pdf.py``.
+
+Scripts: a registry, not one-off endpoints
+--------------------------------------------
+
+``api/routes/internal/scripts.py``'s ``POST /internal/scripts/update`` and
+``POST /internal/scripts/verification`` were the only scripted automation in
+this API, and turned out to have no real caller: ``app.rewake.fr`` runs its
+own equivalents by shelling out directly from Next.js
+(``app/api/lauch_script/*``), bypassing this API entirely. With nothing
+depending on their exact shape, they've been replaced outright by the
+registry pattern proven in the RewakeMonitor proof of concept
+(``rewake_monitor.scripts``) rather than kept alongside a new parallel
+implementation. ``verification_shopify`` (a thin wrapper around the sibling
+``Verification-Shopify-Airtable`` project, itself an older, separate
+Airtable/Shopify comparison) was ported alongside them briefly, then removed
+outright once ``shopify_catalog_reconciliation`` below covered the same
+comparison properly -- there was no reason to keep two ways to check the
+same thing.
+
+- ``api/scripts/base.py`` -- ``ApiScript`` (a ``name``, an optional
+  ``schedule``, and a ``run(previous_snapshot=None, **kwargs) ->
+  (ScriptResult, new_snapshot | None)``) and ``ScriptResult`` (status,
+  details, metrics, duration). ``schedule`` is ``None`` for purely on-demand
+  scripts -- a script with a real schedule is still also runnable on demand,
+  through the exact same endpoint.
+- ``api/scripts/update_product.py`` -- on-demand only (``schedule = None``),
+  still just a ``subprocess.run(...)`` against the sibling ``Update-Product``
+  project -- spawning a process is an implementation detail, not what needed
+  standardizing.
+- ``api/scripts/shopify_catalog_reconciliation.py``,
+  ``api/scripts/airtable_catalog_stats.py`` -- **ported from the
+  RewakeMonitor proof of concept**, where this business logic was developed
+  and validated against real production data (two genuine Airtable/Shopify
+  matching bugs found and fixed there -- see that repo's
+  ``docs/shopify_catalog_reconciliation.md``). Scheduled (hourly /
+  daily-at-20:42-Europe/Paris) via a real ``schedule``, and read via
+  ``api/domain/catalog.py`` (the Model/Variation/Unit/ShopifyListing
+  dataclasses, built on this project's own existing ``api/services/airtable``
+  functions rather than a separate client class) and
+  ``api/integrations/shopify.py`` (the Shopify GraphQL client, ported using
+  ``requests`` instead of RewakeMonitor's ``httpx``, to match what this
+  project already uses everywhere else).
+- ``api/scripts/registry.py`` -- ``SCRIPTS: dict[str, ApiScript]``. Adding a
+  script means adding one entry here; nothing else changes.
+- ``api/tasks.py`` -- **one** generic Celery task, ``run_script(name,
+  **kwargs)``, used for every script regardless of on-demand vs. scheduled:
+  it checks ``is_configured()`` (recording a ``skipped`` result if
+  credentials are missing, rather than failing), fetches the previous
+  snapshot from Redis, runs the script, records the result, and persists
+  the new snapshot if one was returned. Retries automatically on any
+  exception (``autoretry_for=(Exception,)`` -- these two new scripts are
+  network-call-heavy, where transient failures are the expected failure
+  mode, unlike the subprocess-based ones).
+- ``api/run_store.py`` -- a small Redis-backed history (last 100 runs per
+  script) plus a per-script snapshot slot, so a run's outcome is still
+  inspectable after the task itself has been garbage-collected from
+  Celery's result backend, and a scheduled script's day-over-day diff
+  survives a worker/beat restart.
+
+Endpoints, generic over the registry (unchanged by adding the two scheduled
+scripts -- this is exactly the point of the registry):
+
+- ``GET /internal/scripts/`` -- list registered script names.
+- ``POST /internal/scripts/{name}/run`` -- queue a run (``record_id`` as a
+  query param for ``update_product``); returns a ``task_id`` immediately.
+- ``GET /internal/scripts/status/{task_id}`` -- poll one task
+  (``PENDING``/``STARTED``/``RETRY``/``SUCCESS``/``FAILURE``, plus the
+  result once ready).
+- ``GET /internal/scripts/{name}/runs`` -- that script's recent run history.
+
+A dedicated ``celery -A api.celery_app worker``/``beat`` process only ever
+imports ``api/celery_app.py`` directly -- it never goes through
+``api/main.py``, so it never imports ``api/tasks.py`` on its own.
+``celery_app.py`` calls ``celery_app.autodiscover_tasks(["api"])`` for
+exactly this reason; without it the worker starts with an empty task
+registry and every dispatched task fails with ``NotRegistered`` (caught by
+testing this end-to-end against a real worker before relying on it, not
+just by reading the code -- same for the two new scheduled scripts'
+``beat_schedule`` entries and their Redis snapshot round-trip, both
+verified against the real, live Airtable/Shopify data before calling this
+done).
+
+``docker-compose.yml`` runs a ``redis`` service, a ``worker`` service
+(``celery -A api.celery_app worker``), and a ``beat`` service (``celery -A
+api.celery_app beat``, needed once any script has a real ``schedule``)
+alongside the existing ``api`` service, which is otherwise unchanged. This
+is the same shape as the pattern proposed for the rest of Rewake's
+automation in ``PROPOSAL.md`` (RewakeMonitor repo): a script behind a queue
+instead of Google Cloud Run or a bare subprocess call, with a registry so
+adding one never means adding infrastructure.
+
+What's deliberately *not* duplicated here
+------------------------------------------
+
+Grafana/Prometheus/Loki/Uptime Kuma/Flower are proposed as **one shared
+stack** for all of Rewake's services (``PROPOSAL.md``), not one per project.
+This repository's ``docker-compose.yml`` only adds what the API itself needs
+to function (Redis, a worker) -- it does not stand up its own copy of that
+observability stack.

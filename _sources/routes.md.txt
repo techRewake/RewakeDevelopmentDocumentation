@@ -1,0 +1,335 @@
+# Routes
+
+Liste complète des endpoints de l'API Rewake avec leurs règles d'accès et exemples de réponses.
+
+---
+
+## 🔍 Public
+
+### `/health/`
+- **Méthode** : `GET`
+- **Accès** : Public (pas de token requis)
+- **Description** : Vérifie que l'API est opérationnelle
+- **Réponse** :
+  ```json
+  {
+    "status": "healthy",
+    "message": "API is running"
+  }
+  ```
+
+---
+
+## 📊 HelloPro
+
+### `/hellopro/csv`
+- **Méthode** : `GET`
+- **Accès** : `HELLOPRO_TOKEN` (sans vérification d'origine)
+- **Description** : Export des données CSV pour HelloPro (format pipe-delimited)
+- **Réponse** :
+  - Fichier CSV (download)
+  - Content-Type: text/csv
+  - Delimiter: `|`
+  - Nom du fichier: `hellopro_export.csv`
+
+---
+
+## ⚙️ Machinio
+
+### `/machinio/csv`
+- **Méthode** : `GET`
+- **Accès** : `MACHINIO_TOKEN` (sans vérification d'origine)
+- **Description** : Export des données CSV pour Machinio (format semicolon-delimited)
+- **Réponse** :
+  - Fichier CSV (download)
+  - Content-Type: text/csv
+  - Delimiter: `;`
+  - Nom du fichier: `machinio_export.csv`
+
+---
+
+## 🔒 Interne
+
+### `/internal/contact/check`
+- **Méthode** : `GET`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : Recherche les contacts potentiels dans la table "Personne" d'Airtable.
+- **Stratégie** :
+  - Email fourni → recherche par `Email OR Nom`, puis bonus prénom +3
+  - Pas d'email → recherche par `Nom OR Prénom`
+- **Scoring** : Email +15, Nom +10, Prénom +3
+- **Note** : `best_match` n'est pas inclus dans `potential_contacts`
+- **Query Params** (au moins un requis) :
+  - `email` (string) : Email du contact
+  - `nom` (string) : Nom du contact
+  - `prenom` (string) : Prénom du contact
+- **Réponse** :
+  ```json
+  {
+    "exists": true,
+    "best_match": {
+      "id": "recXXX",
+      "nom": "Dupont",
+      "prenom": "Jean",
+      "email": "jean.dupont@example.com",
+      "mobile": "+33612345678",
+      "poste": "Technicien",
+      "entreprise": "Acme Corp",
+      "score": 30
+    },
+    "potential_matching": 2,
+    "potential_contacts": [
+      {
+        "id": "recXXX",
+        "nom": "Dupont",
+        "prenom": "Jean",
+        "email": "jean.dupont@example.com",
+        "mobile": "+33612345678",
+        "poste": "Technicien",
+        "entreprise": "Acme Corp",
+        "score": 30
+      },
+      {
+        "id": "recYYY",
+        "nom": "Dupont",
+        "prenom": "Marie",
+        "email": "m.dupont@example.com",
+        "mobile": "+33698765432",
+        "poste": "Manager",
+        "entreprise": "Acme Corp",
+        "score": 10
+      }
+    ]
+  }
+  ```
+- **Erreurs** : `422` si aucun paramètre fourni, `500` si erreur Airtable
+
+### `/internal/contact/update/{id}`
+- **Méthode** : `PATCH`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : Met à jour les champs fournis d'un record dans la table "Personne" d'Airtable.
+- **Path Params** : `id` (string, requis) - L'ID du record Airtable
+- **Request Body** (au moins un champ requis) :
+  ```json
+  {
+    "nom": "Dupont",
+    "prenom": "Jean",
+    "email": "jean.dupont@example.com",
+    "mobile": "+33612345678",
+    "poste": "Technicien",
+    "entreprise": ["recEntreprise1", "recEntreprise2"]
+  }
+  ```
+- **Réponse** :
+  ```text
+  {
+    "id": "recXXX",
+    "fields": { ... }
+  }
+  ```
+- **Erreurs** : `404` si contact introuvable, `422` si aucun champ fourni, `500` si erreur Airtable
+
+### `/internal/contact/create`
+- **Méthode** : `POST`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : Crée un nouveau contact dans la table "Personne" d'Airtable.
+- **Request Body** (au moins un champ requis) :
+  ```json
+  {
+    "nom": "Dupont",
+    "prenom": "Jean",
+    "email": "jean.dupont@example.com",
+    "mobile": "+33612345678",
+    "poste": "Technicien",
+    "entreprise": ["recEntreprise1"]
+  }
+  ```
+- **Réponse** :
+  ```text
+  {
+    "id": "recXXX",
+    "fields": { ... }
+  }
+  ```
+- **Erreurs** : `422` si aucun champ fourni, `500` si erreur Airtable
+
+### `/internal/backups/`
+- **Méthode** : `GET`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : Liste des backups avec leurs fichiers et contenu (comparison.txt)
+- **Réponse** :
+  ```json
+  {
+    "backups": [
+      {
+        "name": "2024-01-15_12-00-00",
+        "path": "/home/rewake/Verification-Shopify-Airtable/backups/2024-01-15_12-00-00",
+        "files": ["comparison.txt", "airtable.json", "shopify.json"],
+        "hasComparison": true,
+        "content": "Contenu de comparison.txt..."
+      }
+    ]
+  }
+  ```
+
+### `/internal/fees/distritec`
+- **Méthode** : `POST`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : Calcule les frais de transport Distritec
+- **Request Body** :
+  ```json
+  {
+    "departureCity": 75,
+    "arrivalCity": 13,
+    "packages": [
+      {
+        "id": "pkg001",
+        "weight": 10.5,
+        "portage": true,
+        "roulage": false
+      }
+    ]
+  }
+  ```
+- **Réponse** :
+  ```text
+  {
+    "success": true,
+    "total": 12345,
+    "breakdown": [...],
+    "warning": "Possible surcharge de 57.11€ (île ou montagne). Total avec surcharge: XXX€"
+  }
+  ```
+
+### `/internal/logs/`
+- **Méthode** : `GET`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : Récupère le contenu d'un fichier de log
+- **Query Params** : `log` (nom du fichier, défaut: api.log)
+- **Réponse** :
+  ```json
+  {
+    "content": "Contenu du log...",
+    "logName": "api.log"
+  }
+  ```
+
+### `/internal/scripts/`
+- **Méthode** : `GET`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : Liste les scripts enregistrés (voir `api/scripts/registry.py`
+  et [docs/architecture.rst](./architecture.rst))
+- **Réponse** :
+  ```text
+  { "scripts": ["update_product", "shopify_catalog_reconciliation", "airtable_catalog_stats"] }
+  ```
+
+### `/internal/scripts/{name}/run`
+- **Méthode** : `POST`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : Met en file d'attente (Celery) une exécution du script `name`.
+  `record_id` (query param) est requis pour `update_product`.
+- **Réponse** :
+  ```text
+  { "task_id": "...", "status": "queued", "script": "update_product" }
+  ```
+- **Erreurs** : `404` si `name` inconnu, `400` si `record_id` manquant pour `update_product`
+
+### `/internal/scripts/status/{task_id}`
+- **Méthode** : `GET`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : État d'une tâche mise en file par `POST /internal/scripts/{name}/run`
+- **Réponse** :
+  ```text
+  {
+    "task_id": "...",
+    "status": "SUCCESS",
+    "result": { "status": "success", "details": { "stdout": "...", "stderr": "" }, "duration_seconds": 1.2 }
+  }
+  ```
+
+### `/internal/scripts/{name}/runs`
+- **Méthode** : `GET`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : Historique des dernières exécutions de `name` (100 max, Redis)
+- **Query Params** : `limit` (int, défaut 20, max 100)
+- **Réponse** :
+  ```text
+  { "script": "shopify_catalog_reconciliation", "runs": [ { "status": "success", "...": "..." } ] }
+  ```
+
+### `/internal/invoice/analysis`
+- **Méthode** : `POST`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : Analyse une facture PDF et extrait les informations selon la source
+- **Request Body** :
+  - `file`: Fichier PDF (upload) - **requis**
+  - `source`: (string) - **requis** - Doit être soit `"surplus"` soit `"equipnet"`
+- **Réponse** :
+  ```text
+  {
+    "file_info": {
+      "filename": "nom_du_fichier.pdf",
+      "content_type": "application/pdf",
+      "size": 1024,
+      "source": "surplus"
+    },
+    "file_location": "hash_du_fichier",
+    "equipements": [...]
+  }
+  ```
+
+### `/internal/invoice/get`
+- **Méthode** : `GET`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : Récupère une facture PDF sauvegardée par son hash
+- **Query Params** : `hash` (string, **requis**) - Le hash du fichier de facture
+- **Réponse** :
+  - Fichier PDF (download)
+  - Content-Type: application/pdf
+
+### `/internal/airtable/location/get/<record_id>`
+- **Méthode** : `GET`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : Récupère les informations de localisation d'une unité spécifique dans l'entrepôt
+- **Path Params** : `record_id` (string, requis) - L'ID du record Airtable de l'unité
+- **Réponse** :
+  ```json
+  {
+    "name": "Nom de l'unité",
+    "serialNumber": "Numéro de série",
+    "imageUrls": ["https://url1.jpg", "https://url2.jpg"],
+    "currentLocation": "Emplacement actuel",
+    "possibleLocations": ["Emplacement 1", "Emplacement 2", "Emplacement 3"]
+  }
+  ```
+
+### `/internal/airtable/location/update/<record_id>`
+- **Méthode** : `POST`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : Mets à jour l'emplacement d'une unité spécifique dans l'entrepôt sur Airtable
+- **Path Params** : `record_id` (string, requis) - L'ID du record Airtable de l'unité
+- **Request Body** :
+  ```json
+  {
+    "location": "Nouvel emplacement"
+  }
+  ```
+- **Réponse** :
+  ```json
+  {
+    "success": true,
+    "message": "Location updated from 'Ancien emplacement' to 'Nouvel emplacement'"
+  }
+  ```
+
+---
+
+## Résumé des règles
+
+| Route | Token requis | Origin/Referer requis |
+|-------|--------------|---------------------|
+| `/health/` | ❌ Non | ❌ Non |
+| `/hellopro/csv` | ✅ Oui (`HELLOPRO_TOKEN`) | ❌ Non |
+| `/machinio/csv` | ✅ Oui (`MACHINIO_TOKEN`) | ❌ Non |
+| `/internal/*` | ✅ Oui (`APP_TOKEN`) | ✅ Oui |

@@ -1,0 +1,232 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Architecture &mdash; Rewake API  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Operations" href="operations.html" />
+    <link rel="prev" title="Authentification" href="authentication.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Rewake API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="routes.html">Routes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentification</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#scripts-a-registry-not-one-off-endpoints">Scripts: a registry, not one-off endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-s-deliberately-not-duplicated-here">What’s deliberately <em>not</em> duplicated here</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">Scripts</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Rewake API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Architecture</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/architecture.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="architecture">
+<h1>Architecture<a class="headerlink" href="#architecture" title="Link to this heading"></a></h1>
+<p>A single FastAPI app (<code class="docutils literal notranslate"><span class="pre">api/main.py</span></code>) assembling routers grouped by access
+level:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">api/routes/health.py</span></code> – public.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api/routes/hellopro/</span></code>, <code class="docutils literal notranslate"><span class="pre">api/routes/machinio/</span></code> – external integrations,
+each gated by its own static token (no origin check).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api/routes/internal/</span></code> – the internal surface used by <code class="docutils literal notranslate"><span class="pre">app.rewake.fr</span></code>/
+<code class="docutils literal notranslate"><span class="pre">sav.rewake.fr</span></code>, gated by <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>and</strong> an allowed origin/referer
+(<code class="docutils literal notranslate"><span class="pre">ADMIN_TOKEN</span></code> bypasses the origin check everywhere) – see
+<a class="reference internal" href="authentication.html"><span class="doc">Authentification</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api/routes/invoice/</span></code>, <code class="docutils literal notranslate"><span class="pre">api/routes/pdf/</span></code>, <code class="docutils literal notranslate"><span class="pre">api/routes/formulaire/</span></code> –
+a handful of routes outside <code class="docutils literal notranslate"><span class="pre">/internal</span></code> with their own access rules; see
+<a class="reference internal" href="routes.html"><span class="doc">Routes</span></a>.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">api/services/</span></code> holds integration logic (<code class="docutils literal notranslate"><span class="pre">airtable.py</span></code>, <code class="docutils literal notranslate"><span class="pre">fees.py</span></code>,
+<code class="docutils literal notranslate"><span class="pre">gmail.py</span></code>, <code class="docutils literal notranslate"><span class="pre">pdf.py</span></code>, <code class="docutils literal notranslate"><span class="pre">parsers/</span></code>), reused across routes rather than
+duplicated in them. <code class="docutils literal notranslate"><span class="pre">api/utils/</span></code> holds cross-cutting concerns: <code class="docutils literal notranslate"><span class="pre">auth.py</span></code>
+(the token/origin dependency), <code class="docutils literal notranslate"><span class="pre">logger.py</span></code> (structlog setup + request
+logging middleware), <code class="docutils literal notranslate"><span class="pre">token.py</span></code>, <code class="docutils literal notranslate"><span class="pre">pdf.py</span></code>.</p>
+<section id="scripts-a-registry-not-one-off-endpoints">
+<h2>Scripts: a registry, not one-off endpoints<a class="headerlink" href="#scripts-a-registry-not-one-off-endpoints" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">api/routes/internal/scripts.py</span></code>’s <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/internal/scripts/update</span></code> and
+<code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/internal/scripts/verification</span></code> were the only scripted automation in
+this API, and turned out to have no real caller: <code class="docutils literal notranslate"><span class="pre">app.rewake.fr</span></code> runs its
+own equivalents by shelling out directly from Next.js
+(<code class="docutils literal notranslate"><span class="pre">app/api/lauch_script/*</span></code>), bypassing this API entirely. With nothing
+depending on their exact shape, they’ve been replaced outright by the
+registry pattern proven in the RewakeMonitor proof of concept
+(<code class="docutils literal notranslate"><span class="pre">rewake_monitor.scripts</span></code>) rather than kept alongside a new parallel
+implementation. <code class="docutils literal notranslate"><span class="pre">verification_shopify</span></code> (a thin wrapper around the sibling
+<code class="docutils literal notranslate"><span class="pre">Verification-Shopify-Airtable</span></code> project, itself an older, separate
+Airtable/Shopify comparison) was ported alongside them briefly, then removed
+outright once <code class="docutils literal notranslate"><span class="pre">shopify_catalog_reconciliation</span></code> below covered the same
+comparison properly – there was no reason to keep two ways to check the
+same thing.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">api/scripts/base.py</span></code> – <code class="docutils literal notranslate"><span class="pre">ApiScript</span></code> (a <code class="docutils literal notranslate"><span class="pre">name</span></code>, an optional
+<code class="docutils literal notranslate"><span class="pre">schedule</span></code>, and a <code class="docutils literal notranslate"><span class="pre">run(previous_snapshot=None,</span> <span class="pre">**kwargs)</span> <span class="pre">-&gt;</span>
+<span class="pre">(ScriptResult,</span> <span class="pre">new_snapshot</span> <span class="pre">|</span> <span class="pre">None)</span></code>) and <code class="docutils literal notranslate"><span class="pre">ScriptResult</span></code> (status,
+details, metrics, duration). <code class="docutils literal notranslate"><span class="pre">schedule</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> for purely on-demand
+scripts – a script with a real schedule is still also runnable on demand,
+through the exact same endpoint.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api/scripts/update_product.py</span></code> – on-demand only (<code class="docutils literal notranslate"><span class="pre">schedule</span> <span class="pre">=</span> <span class="pre">None</span></code>),
+still just a <code class="docutils literal notranslate"><span class="pre">subprocess.run(...)</span></code> against the sibling <code class="docutils literal notranslate"><span class="pre">Update-Product</span></code>
+project – spawning a process is an implementation detail, not what needed
+standardizing.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api/scripts/shopify_catalog_reconciliation.py</span></code>,
+<code class="docutils literal notranslate"><span class="pre">api/scripts/airtable_catalog_stats.py</span></code> – <strong>ported from the
+RewakeMonitor proof of concept</strong>, where this business logic was developed
+and validated against real production data (two genuine Airtable/Shopify
+matching bugs found and fixed there – see that repo’s
+<code class="docutils literal notranslate"><span class="pre">docs/shopify_catalog_reconciliation.md</span></code>). Scheduled (hourly /
+daily-at-20:42-Europe/Paris) via a real <code class="docutils literal notranslate"><span class="pre">schedule</span></code>, and read via
+<code class="docutils literal notranslate"><span class="pre">api/domain/catalog.py</span></code> (the Model/Variation/Unit/ShopifyListing
+dataclasses, built on this project’s own existing <code class="docutils literal notranslate"><span class="pre">api/services/airtable</span></code>
+functions rather than a separate client class) and
+<code class="docutils literal notranslate"><span class="pre">api/integrations/shopify.py</span></code> (the Shopify GraphQL client, ported using
+<code class="docutils literal notranslate"><span class="pre">requests</span></code> instead of RewakeMonitor’s <code class="docutils literal notranslate"><span class="pre">httpx</span></code>, to match what this
+project already uses everywhere else).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api/scripts/registry.py</span></code> – <code class="docutils literal notranslate"><span class="pre">SCRIPTS:</span> <span class="pre">dict[str,</span> <span class="pre">ApiScript]</span></code>. Adding a
+script means adding one entry here; nothing else changes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api/tasks.py</span></code> – <strong>one</strong> generic Celery task, <code class="docutils literal notranslate"><span class="pre">run_script(name,</span>
+<span class="pre">**kwargs)</span></code>, used for every script regardless of on-demand vs. scheduled:
+it checks <code class="docutils literal notranslate"><span class="pre">is_configured()</span></code> (recording a <code class="docutils literal notranslate"><span class="pre">skipped</span></code> result if
+credentials are missing, rather than failing), fetches the previous
+snapshot from Redis, runs the script, records the result, and persists
+the new snapshot if one was returned. Retries automatically on any
+exception (<code class="docutils literal notranslate"><span class="pre">autoretry_for=(Exception,)</span></code> – these two new scripts are
+network-call-heavy, where transient failures are the expected failure
+mode, unlike the subprocess-based ones).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api/run_store.py</span></code> – a small Redis-backed history (last 100 runs per
+script) plus a per-script snapshot slot, so a run’s outcome is still
+inspectable after the task itself has been garbage-collected from
+Celery’s result backend, and a scheduled script’s day-over-day diff
+survives a worker/beat restart.</p></li>
+</ul>
+<p>Endpoints, generic over the registry (unchanged by adding the two scheduled
+scripts – this is exactly the point of the registry):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/</span></code> – list registered script names.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/internal/scripts/{name}/run</span></code> – queue a run (<code class="docutils literal notranslate"><span class="pre">record_id</span></code> as a
+query param for <code class="docutils literal notranslate"><span class="pre">update_product</span></code>); returns a <code class="docutils literal notranslate"><span class="pre">task_id</span></code> immediately.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/status/{task_id}</span></code> – poll one task
+(<code class="docutils literal notranslate"><span class="pre">PENDING</span></code>/<code class="docutils literal notranslate"><span class="pre">STARTED</span></code>/<code class="docutils literal notranslate"><span class="pre">RETRY</span></code>/<code class="docutils literal notranslate"><span class="pre">SUCCESS</span></code>/<code class="docutils literal notranslate"><span class="pre">FAILURE</span></code>, plus the
+result once ready).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/{name}/runs</span></code> – that script’s recent run history.</p></li>
+</ul>
+<p>A dedicated <code class="docutils literal notranslate"><span class="pre">celery</span> <span class="pre">-A</span> <span class="pre">api.celery_app</span> <span class="pre">worker</span></code>/<code class="docutils literal notranslate"><span class="pre">beat</span></code> process only ever
+imports <code class="docutils literal notranslate"><span class="pre">api/celery_app.py</span></code> directly – it never goes through
+<code class="docutils literal notranslate"><span class="pre">api/main.py</span></code>, so it never imports <code class="docutils literal notranslate"><span class="pre">api/tasks.py</span></code> on its own.
+<code class="docutils literal notranslate"><span class="pre">celery_app.py</span></code> calls <code class="docutils literal notranslate"><span class="pre">celery_app.autodiscover_tasks([&quot;api&quot;])</span></code> for
+exactly this reason; without it the worker starts with an empty task
+registry and every dispatched task fails with <code class="docutils literal notranslate"><span class="pre">NotRegistered</span></code> (caught by
+testing this end-to-end against a real worker before relying on it, not
+just by reading the code – same for the two new scheduled scripts’
+<code class="docutils literal notranslate"><span class="pre">beat_schedule</span></code> entries and their Redis snapshot round-trip, both
+verified against the real, live Airtable/Shopify data before calling this
+done).</p>
+<p><code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> runs a <code class="docutils literal notranslate"><span class="pre">redis</span></code> service, a <code class="docutils literal notranslate"><span class="pre">worker</span></code> service
+(<code class="docutils literal notranslate"><span class="pre">celery</span> <span class="pre">-A</span> <span class="pre">api.celery_app</span> <span class="pre">worker</span></code>), and a <code class="docutils literal notranslate"><span class="pre">beat</span></code> service (<code class="docutils literal notranslate"><span class="pre">celery</span> <span class="pre">-A</span>
+<span class="pre">api.celery_app</span> <span class="pre">beat</span></code>, needed once any script has a real <code class="docutils literal notranslate"><span class="pre">schedule</span></code>)
+alongside the existing <code class="docutils literal notranslate"><span class="pre">api</span></code> service, which is otherwise unchanged. This
+is the same shape as the pattern proposed for the rest of Rewake’s
+automation in <code class="docutils literal notranslate"><span class="pre">PROPOSAL.md</span></code> (RewakeMonitor repo): a script behind a queue
+instead of Google Cloud Run or a bare subprocess call, with a registry so
+adding one never means adding infrastructure.</p>
+</section>
+<section id="what-s-deliberately-not-duplicated-here">
+<h2>What’s deliberately <em>not</em> duplicated here<a class="headerlink" href="#what-s-deliberately-not-duplicated-here" title="Link to this heading"></a></h2>
+<p>Grafana/Prometheus/Loki/Uptime Kuma/Flower are proposed as <strong>one shared
+stack</strong> for all of Rewake’s services (<code class="docutils literal notranslate"><span class="pre">PROPOSAL.md</span></code>), not one per project.
+This repository’s <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> only adds what the API itself needs
+to function (Redis, a worker) – it does not stand up its own copy of that
+observability stack.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="authentication.html" class="btn btn-neutral float-left" title="Authentification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="operations.html" class="btn btn-neutral float-right" title="Operations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Rewake.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

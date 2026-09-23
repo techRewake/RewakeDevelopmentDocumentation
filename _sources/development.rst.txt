@@ -1,0 +1,118 @@
+Development
+===========
+
+Environment setup
+------------------
+
+Requires Python 3.14 and `uv <https://docs.astral.sh/uv/>`_.
+
+.. code-block:: sh
+
+   cp .env.example .env          # fill in tokens/credentials, see below
+   make install                  # uv sync --group dev --group docs
+   make dev                      # uv run uvicorn api.main:app --reload --port 3002
+   make test                     # uv run pytest
+   make check                    # lint + typecheck + test
+   make docs                     # this Sphinx site -> docs/_build/html/index.html
+
+Or the equivalent ``uv run ...`` commands directly -- ``make`` is a thin
+wrapper (see the ``Makefile``), not a requirement.
+
+To run the full stack, including the new queued-script worker, in Docker
+instead: ``docker compose up -d --build`` (see :doc:`operations`).
+
+Airtable
+--------
+
+There is one Airtable base, and it's the real one -- ``AIRTABLE_BASE_ID`` in
+``.env`` (no separate development/sandbox base exists today). Get a personal
+access token with read/write access to that base, then verify it:
+
+.. code-block:: sh
+
+   make airtable-check
+   # or: uv run python -m scripts.airtable.check_credentials
+
+This means ``uv run pytest`` genuinely calls Airtable for a few tests
+(``tests/test_airtable.py``, ``tests/test_contact_*.py``) -- there is no
+mock/fixture layer for Airtable yet. That's exactly why tests don't run in
+CI (see :doc:`operations`): they need six working token/credential secrets
+(``ADMIN_TOKEN``, ``HELLOPRO_TOKEN``, ``MACHINIO_TOKEN``, ``APP_TOKEN``,
+``AIRTABLE_TOKEN``, ``AIRTABLE_BASE_ID``) just to pass, and a scope/typo
+issue in any one of them produces a wall of unrelated-looking 500s rather
+than a clear failure -- more fragile than valuable as a required gate today.
+Run them locally with a real ``.env`` instead.
+
+Shopify (dev store)
+--------------------
+
+``shopify_catalog_reconciliation`` (ported from the RewakeMonitor proof of
+concept -- see :doc:`architecture`) is the one thing here that calls
+Shopify, via ``SHOPIFY_SHOP_DOMAIN``/``SHOPIFY_ACCESS_TOKEN``/
+``SHOPIFY_API_VERSION`` in ``.env.example``. Test it against the
+**RewakeDev** Shopify development store, never production (``rewake-2``):
+client-credentials tokens are short-lived (~24h), so a 401 from Shopify
+after a while usually just means the token needs regenerating, not a code
+problem:
+
+.. code-block:: sh
+
+   make shopify-token   # uv run python -m scripts.shopify.exchange_access_token
+   make shopify-check    # uv run python -m scripts.shopify.check_credentials
+
+``scripts/shopify/exchange_access_token.py`` walks through Shopify's
+client-credentials grant to get a short-lived token for a development store
+in the Dev Dashboard's organization. The RewakeMonitor repo's
+``scripts/seed_dev_store`` populates that same ``RewakeDev`` store from the
+real Airtable catalog, with a hardcoded guard that refuses to run against
+anything else -- see that repo's ``scripts/README.md`` for the full design.
+Point this project's ``.env`` at the same store when testing anything
+Shopify-related here.
+
+Development scripts
+--------------------
+
+``scripts/`` (repository root, not part of the ``api`` package) holds
+developer-run setup tooling, run as a module:
+
+.. code-block:: sh
+
+   uv run python -m scripts.airtable.check_credentials
+   uv run python -m scripts.shopify.check_credentials
+   uv run python -m scripts.shopify.exchange_access_token
+
+See ``scripts/README.md`` for what each one does. More will be added here as
+the migration in ``PROPOSAL.md`` proceeds (deploy/check-deployment/upgrade
+scripts, mirroring the pattern already built out in the RewakeMonitor repo's
+own ``scripts/``).
+
+Known gaps this tooling surfaces
+----------------------------------
+
+Adding ``ruff``/``mypy``/coverage/CI to a codebase that had none of it
+before makes existing debt visible; none of the following was introduced by
+adding the tooling itself, and none of it was fixed as part of adding it
+(fixing business logic wasn't in scope for that pass):
+
+- **2 tests marked ``xfail``** (``tests/test_fees.py::test_distritec_fees_simple_package``,
+  ``test_distritec_fees_multiple_packages``, both ``strict=True``): the
+  expected totals don't match ``api/services/fees.py``'s current output.
+  Needs someone who knows the intended Distritec tariff to say which side is
+  wrong. ``strict=True`` means if the underlying bug ever gets fixed, these
+  flip to a hard CI failure (``XPASS``) instead of silently staying green --
+  remove the marker at that point, don't leave it in place.
+- **mypy**: clean at its current (non-strict) level -- the ~32 findings this
+  surfaced when first turned on (mostly a ``dict[str, str]`` parameter
+  annotation that was actually ``dict[str, Any]`` in practice, since Airtable
+  fields aren't all strings, plus a few missing local annotations and two
+  untyped tariff-table dicts in ``api/services/fees.py``) have all been
+  fixed. ``--strict`` finds ~106 more, almost all missing-annotation noise
+  across the wider codebase rather than bugs -- a deliberate future ratchet,
+  not turned on yet.
+- **``docs/routes.md`` is stale**: several router modules that exist in code
+  today (``brand``, ``cache``, ``model/*``, ``formulaire/*``,
+  ``contact/entreprise/*``, ``pdf/intervention``, ``pdf/logistique``,
+  ``pdf/rachat``, ``invoice``, ``pdf/get``) aren't documented there yet, and
+  have no dedicated tests. Auditing, documenting, and testing that surface
+  endpoint-by-endpoint is real, separate follow-up work (``PROPOSAL.md``'s
+  "RewakeAPI audit" phase), not attempted in this pass.
