@@ -96,21 +96,24 @@ there is no separate Airtable sandbox today (see <a class="reference internal" h
 <li><p><strong>Logging</strong>: <code class="docutils literal notranslate"><span class="pre">LOG_LEVEL</span></code> (default <code class="docutils literal notranslate"><span class="pre">INFO</span></code>), <code class="docutils literal notranslate"><span class="pre">LOG_FORMAT</span></code>
 (<code class="docutils literal notranslate"><span class="pre">json</span></code>/<code class="docutils literal notranslate"><span class="pre">console</span></code>, default <code class="docutils literal notranslate"><span class="pre">json</span></code>).</p></li>
 <li><p><strong>Scripts</strong> (<code class="docutils literal notranslate"><span class="pre">api/scripts/</span></code>, queued via <code class="docutils literal notranslate"><span class="pre">api/tasks.py</span></code> – see
-<a class="reference internal" href="architecture.html"><span class="doc">Architecture</span></a>): <code class="docutils literal notranslate"><span class="pre">UV_BIN</span></code>, <code class="docutils literal notranslate"><span class="pre">UPDATE_PRODUCT_DIR</span></code> – the sibling
-script project <code class="docutils literal notranslate"><span class="pre">update_product</span></code> shells out to, plus <code class="docutils literal notranslate"><span class="pre">REDIS_URL</span></code> for
-the Celery broker/backend (defaults to <code class="docutils literal notranslate"><span class="pre">redis://localhost:6379/0</span></code>,
-<code class="docutils literal notranslate"><span class="pre">redis://redis:6379/0</span></code> under docker compose). <code class="docutils literal notranslate"><span class="pre">VERIFICATION_SHOPIFY_DIR</span></code>
-still exists too, but only to locate the legacy
-<code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/backups/</span></code> directory (see <a class="reference internal" href="routes.html"><span class="doc">Routes</span></a>) – the
-<code class="docutils literal notranslate"><span class="pre">verification_shopify</span></code> script itself has been removed.</p></li>
+<a class="reference internal" href="architecture.html"><span class="doc">Architecture</span></a>): <code class="docutils literal notranslate"><span class="pre">REDIS_URL</span></code> for the Celery broker/backend
+(defaults to <code class="docutils literal notranslate"><span class="pre">redis://localhost:6379/0</span></code>, <code class="docutils literal notranslate"><span class="pre">redis://redis:6379/0</span></code> under
+docker compose). <code class="docutils literal notranslate"><span class="pre">VERIFICATION_SHOPIFY_DIR</span></code> still exists too, but only
+to locate the legacy <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/backups/</span></code> directory (see
+<a class="reference internal" href="routes.html"><span class="doc">Routes</span></a>) – the <code class="docutils literal notranslate"><span class="pre">verification_shopify</span></code> script itself has been
+removed. <code class="docutils literal notranslate"><span class="pre">update_product</span></code> no longer shells out to a sibling project
+(<code class="docutils literal notranslate"><span class="pre">UV_BIN</span></code>/<code class="docutils literal notranslate"><span class="pre">UPDATE_PRODUCT_DIR</span></code>/<code class="docutils literal notranslate"><span class="pre">UPDATE_PRODUCT_HOST_DIR</span></code> are gone,
+along with the bind mount they configured) – see <a class="reference internal" href="update_product.html"><span class="doc">Update Product</span></a>.</p></li>
 <li><p><strong>Scheduled scripts</strong>: <code class="docutils literal notranslate"><span class="pre">SHOPIFY_CATALOG_RECONCILIATION_INTERVAL_SECONDS</span></code>
 (default <code class="docutils literal notranslate"><span class="pre">3600</span></code>), <code class="docutils literal notranslate"><span class="pre">AIRTABLE_CATALOG_STATS_HOUR</span></code>/<code class="docutils literal notranslate"><span class="pre">_MINUTE</span></code> (default
 <code class="docutils literal notranslate"><span class="pre">20</span></code>/<code class="docutils literal notranslate"><span class="pre">42</span></code>, interpreted in <code class="docutils literal notranslate"><span class="pre">celery_app</span></code>’s <code class="docutils literal notranslate"><span class="pre">Europe/Paris</span></code> timezone)
 – see the <code class="docutils literal notranslate"><span class="pre">beat</span></code> service below.</p></li>
-<li><p><strong>Shopify</strong>: <code class="docutils literal notranslate"><span class="pre">SHOPIFY_SHOP_DOMAIN</span></code>, <code class="docutils literal notranslate"><span class="pre">SHOPIFY_ACCESS_TOKEN</span></code>,
-<code class="docutils literal notranslate"><span class="pre">SHOPIFY_API_VERSION</span></code> – used by <code class="docutils literal notranslate"><span class="pre">shopify_catalog_reconciliation</span></code>
-(ported from the RewakeMonitor proof of concept), ahead of the wider Cloud
-Run migration described in <code class="docutils literal notranslate"><span class="pre">PROPOSAL.md</span></code>.</p></li>
+<li><p><strong>Shopify</strong>: <code class="docutils literal notranslate"><span class="pre">SHOPIFY_SHOP_DOMAIN</span></code>, <code class="docutils literal notranslate"><span class="pre">SHOPIFY_CLIENT_ID</span></code>,
+<code class="docutils literal notranslate"><span class="pre">SHOPIFY_CLIENT_SECRET</span></code> (exchanged at runtime for a self-renewing token,
+cached in Redis – see <a class="reference internal" href="development.html"><span class="doc">Development</span></a>), <code class="docutils literal notranslate"><span class="pre">SHOPIFY_API_VERSION</span></code>,
+<code class="docutils literal notranslate"><span class="pre">SHOPIFY_LOCATION_ID</span></code>, the <code class="docutils literal notranslate"><span class="pre">SHOPIFY_PDF_METAFIELD_*</span></code> keys – used by
+<code class="docutils literal notranslate"><span class="pre">shopify_catalog_reconciliation</span></code>, <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">update_product</span></code>.</p></li>
 <li><p><strong>Deploy</strong>: <code class="docutils literal notranslate"><span class="pre">TAG</span></code> (default <code class="docutils literal notranslate"><span class="pre">latest</span></code>) – which
 <code class="docutils literal notranslate"><span class="pre">ghcr.io/rewake-fr/api</span></code> build <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> and
 <code class="docutils literal notranslate"><span class="pre">scripts/deploy/deploy.sh</span></code> run.</p></li>

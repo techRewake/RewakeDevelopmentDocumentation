@@ -5,6 +5,21 @@ A single FastAPI app (``api/main.py``) assembling routers grouped by access
 level:
 
 - ``api/routes/health.py`` -- public.
+- ``api/routes/metrics.py`` -- public (matches ``health.py``, and how
+  Prometheus is configured to scrape it -- no bearer token). ``GET /metrics``
+  computes a fresh Prometheus exposition on every scrape from each
+  registered script's last recorded run (Redis, via ``api/run_store.py``):
+  every numeric key in ``ScriptResult.metrics`` as
+  ``rewake_api_script_metric{script, metric}``, plus
+  ``rewake_api_script_duration_seconds``,
+  ``rewake_api_script_last_run_success`` (0/1), and
+  ``rewake_api_script_last_run_timestamp_seconds``. Computed fresh rather
+  than accumulated in-process because scripts actually run in the Celery
+  worker/beat processes, not this one -- an in-process
+  Counter/Gauge here would never observe their updates. Scraped by
+  RewakeObserve's Prometheus (``prometheus/prometheus.yml``, job
+  ``rewake-api``); the two dashboards under its
+  ``grafana/provisioning/dashboards/`` query these series.
 - ``api/routes/hellopro/``, ``api/routes/machinio/`` -- external integrations,
   each gated by its own static token (no origin check).
 - ``api/routes/internal/`` -- the internal surface used by ``app.rewake.fr``/
@@ -30,8 +45,7 @@ this API, and turned out to have no real caller: ``app.rewake.fr`` runs its
 own equivalents by shelling out directly from Next.js
 (``app/api/lauch_script/*``), bypassing this API entirely. With nothing
 depending on their exact shape, they've been replaced outright by the
-registry pattern proven in the RewakeMonitor proof of concept
-(``rewake_monitor.scripts``) rather than kept alongside a new parallel
+registry pattern described below rather than kept alongside a new parallel
 implementation. ``verification_shopify`` (a thin wrapper around the sibling
 ``Verification-Shopify-Airtable`` project, itself an older, separate
 Airtable/Shopify comparison) was ported alongside them briefly, then removed
@@ -46,22 +60,31 @@ same thing.
   scripts -- a script with a real schedule is still also runnable on demand,
   through the exact same endpoint.
 - ``api/scripts/update_product.py`` -- on-demand only (``schedule = None``),
-  still just a ``subprocess.run(...)`` against the sibling ``Update-Product``
-  project -- spawning a process is an implementation detail, not what needed
-  standardizing.
+  ported in-process from a subprocess call against a sibling
+  ``Update-Product`` project (see :doc:`update_product` for the full story,
+  including deliberate deviations from that project). Takes either a
+  Variation ``record_id`` (default) or a Model ``model_id`` -- both converge
+  on the same update, since Shopify variants all belong to one product per
+  Model. Shares its exception class, Airtable cache, link builders, and
+  unit/spec aggregation with ``create_product_shopify.py`` via
+  ``api/scripts/_shopify_links.py``, rather than duplicating them.
+- ``api/scripts/create_product_shopify.py`` -- on-demand only, creates a new
+  Shopify listing from an Airtable Model (see :doc:`create_product_shopify`
+  for the full story, including deliberate deviations from the Cloud
+  Function it was ported from). Native code, not a subprocess wrapper --
+  the other script here that writes to Shopify, alongside ``update_product``
+  (which only ever updates a listing that already exists).
 - ``api/scripts/shopify_catalog_reconciliation.py``,
-  ``api/scripts/airtable_catalog_stats.py`` -- **ported from the
-  RewakeMonitor proof of concept**, where this business logic was developed
-  and validated against real production data (two genuine Airtable/Shopify
-  matching bugs found and fixed there -- see that repo's
+  ``api/scripts/airtable_catalog_stats.py`` -- this business logic was
+  developed and validated against real production data (two genuine
+  Airtable/Shopify matching bugs found and fixed along the way -- see
   ``docs/shopify_catalog_reconciliation.md``). Scheduled (hourly /
   daily-at-20:42-Europe/Paris) via a real ``schedule``, and read via
   ``api/domain/catalog.py`` (the Model/Variation/Unit/ShopifyListing
   dataclasses, built on this project's own existing ``api/services/airtable``
   functions rather than a separate client class) and
-  ``api/integrations/shopify.py`` (the Shopify GraphQL client, ported using
-  ``requests`` instead of RewakeMonitor's ``httpx``, to match what this
-  project already uses everywhere else).
+  ``api/integrations/shopify.py`` (the Shopify GraphQL client, using
+  ``requests`` to match what this project already uses everywhere else).
 - ``api/scripts/registry.py`` -- ``SCRIPTS: dict[str, ApiScript]``. Adding a
   script means adding one entry here; nothing else changes.
 - ``api/tasks.py`` -- **one** generic Celery task, ``run_script(name,
@@ -70,25 +93,62 @@ same thing.
   credentials are missing, rather than failing), fetches the previous
   snapshot from Redis, runs the script, records the result, and persists
   the new snapshot if one was returned. Retries automatically on any
-  exception (``autoretry_for=(Exception,)`` -- these two new scripts are
+  exception (``autoretry_for=(Exception,)`` -- every script here is
   network-call-heavy, where transient failures are the expected failure
-  mode, unlike the subprocess-based ones).
-- ``api/run_store.py`` -- a small Redis-backed history (last 100 runs per
-  script) plus a per-script snapshot slot, so a run's outcome is still
-  inspectable after the task itself has been garbage-collected from
-  Celery's result backend, and a scheduled script's day-over-day diff
-  survives a worker/beat restart.
+  mode).
+
+  Celery itself doesn't deduplicate concurrent invocations with the same
+  arguments -- nothing stops two ``POST /internal/scripts/{name}/run``
+  calls for the *same* ``record_id`` from executing at the same time.
+  ``run_script`` guards against this explicitly: when ``record_id`` is
+  present, it takes a Redis lock (``RunStore.acquire_lock``, ``SET NX`` with
+  a TTL as a crash safety net) before calling ``script.run(...)``, and
+  records a ``skipped`` result immediately (never calling ``run()`` at all)
+  if another run for that same ``record_id`` is already holding it. This is
+  what actually stops ``create_product_shopify`` from creating two Shopify
+  products for one Model when triggered twice in quick succession -- a
+  script's own idempotence check alone only catches *sequential* retries
+  (one finishes, then a second one starts), not truly concurrent ones.
+  Verified live: two simultaneous triggers for the same record, one
+  rejected in 5ms, the other ran normally. ``update_product.py`` adds a
+  *second* lock of its own, inside ``run()``, keyed by the actual Shopify
+  product id rather than whatever Airtable id the caller passed in -- a
+  Variation and its own Model (or two sibling Variations) are different
+  ``record_id``/``model_id`` values but the same underlying product, which
+  the outer per-``record_id`` lock alone wouldn't catch.
+- ``api/run_store.py`` -- a small Redis-backed history (last
+  ``MAX_RUNS_PER_SCRIPT`` runs per script -- currently 1000, a deliberate
+  cap enforced with ``LTRIM`` on every write, not a Redis engineering
+  limit; older runs past it are gone, not just unpaginated-to) plus a
+  per-script snapshot slot, so a run's outcome is still inspectable after
+  the task itself has been garbage-collected from Celery's result backend,
+  and a scheduled script's day-over-day diff survives a worker/beat
+  restart; also the per-record_id lock described above.
+  ``RunStore.recent(script, limit, offset)`` pages through this history via
+  Redis ``LRANGE`` (cheap at arbitrary offsets for a list this size), and
+  ``RunStore.count(script)`` (``LLEN``) gives the frontend a total so it
+  knows when it's fetched everything. Each run's stored JSON is small (a
+  few KB, even for ``shopify_catalog_reconciliation``'s now-uncapped
+  ~300-entry missing-model lists), so 1000 of them per script is a
+  negligible amount of Redis memory -- raise ``MAX_RUNS_PER_SCRIPT`` freely
+  if more history is ever wanted.
 
 Endpoints, generic over the registry (unchanged by adding the two scheduled
 scripts -- this is exactly the point of the registry):
 
 - ``GET /internal/scripts/`` -- list registered script names.
 - ``POST /internal/scripts/{name}/run`` -- queue a run (``record_id`` as a
-  query param for ``update_product``); returns a ``task_id`` immediately.
+  query param for ``create_product_shopify``, or either ``record_id`` or
+  ``model_id`` -- exactly one -- for ``update_product``); returns a
+  ``task_id`` immediately.
 - ``GET /internal/scripts/status/{task_id}`` -- poll one task
   (``PENDING``/``STARTED``/``RETRY``/``SUCCESS``/``FAILURE``, plus the
   result once ready).
-- ``GET /internal/scripts/{name}/runs`` -- that script's recent run history.
+- ``GET /internal/scripts/{name}/runs`` -- a page of that script's run
+  history (``limit``, default 20, max 100 per request; ``offset`` to page
+  further back), newest first, plus ``total`` (how many runs are stored in
+  total) so the frontend knows when it's reached the end. The RewakeApp
+  dashboard uses this for infinite scroll on the run history table.
 
 A dedicated ``celery -A api.celery_app worker``/``beat`` process only ever
 imports ``api/celery_app.py`` directly -- it never goes through
@@ -106,16 +166,16 @@ done).
 (``celery -A api.celery_app worker``), and a ``beat`` service (``celery -A
 api.celery_app beat``, needed once any script has a real ``schedule``)
 alongside the existing ``api`` service, which is otherwise unchanged. This
-is the same shape as the pattern proposed for the rest of Rewake's
-automation in ``PROPOSAL.md`` (RewakeMonitor repo): a script behind a queue
-instead of Google Cloud Run or a bare subprocess call, with a registry so
-adding one never means adding infrastructure.
+is the same shape as the pattern planned for the rest of Rewake's
+automation: a script behind a queue instead of Google Cloud Run or a bare
+subprocess call, with a registry so adding one never means adding
+infrastructure.
 
 What's deliberately *not* duplicated here
 ------------------------------------------
 
-Grafana/Prometheus/Loki/Uptime Kuma/Flower are proposed as **one shared
-stack** for all of Rewake's services (``PROPOSAL.md``), not one per project.
-This repository's ``docker-compose.yml`` only adds what the API itself needs
+Grafana/Prometheus/Loki/Uptime Kuma/Flower are planned as **one shared
+stack** for all of Rewake's services, not one per project. This
+repository's ``docker-compose.yml`` only adds what the API itself needs
 to function (Redis, a worker) -- it does not stand up its own copy of that
 observability stack.

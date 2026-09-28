@@ -15,21 +15,24 @@ each credential locally.
 - **Logging**: ``LOG_LEVEL`` (default ``INFO``), ``LOG_FORMAT``
   (``json``/``console``, default ``json``).
 - **Scripts** (``api/scripts/``, queued via ``api/tasks.py`` -- see
-  :doc:`architecture`): ``UV_BIN``, ``UPDATE_PRODUCT_DIR`` -- the sibling
-  script project ``update_product`` shells out to, plus ``REDIS_URL`` for
-  the Celery broker/backend (defaults to ``redis://localhost:6379/0``,
-  ``redis://redis:6379/0`` under docker compose). ``VERIFICATION_SHOPIFY_DIR``
-  still exists too, but only to locate the legacy
-  ``GET /internal/backups/`` directory (see :doc:`routes`) -- the
-  ``verification_shopify`` script itself has been removed.
+  :doc:`architecture`): ``REDIS_URL`` for the Celery broker/backend
+  (defaults to ``redis://localhost:6379/0``, ``redis://redis:6379/0`` under
+  docker compose). ``VERIFICATION_SHOPIFY_DIR`` still exists too, but only
+  to locate the legacy ``GET /internal/backups/`` directory (see
+  :doc:`routes`) -- the ``verification_shopify`` script itself has been
+  removed. ``update_product`` no longer shells out to a sibling project
+  (``UV_BIN``/``UPDATE_PRODUCT_DIR``/``UPDATE_PRODUCT_HOST_DIR`` are gone,
+  along with the bind mount they configured) -- see :doc:`update_product`.
 - **Scheduled scripts**: ``SHOPIFY_CATALOG_RECONCILIATION_INTERVAL_SECONDS``
   (default ``3600``), ``AIRTABLE_CATALOG_STATS_HOUR``/``_MINUTE`` (default
   ``20``/``42``, interpreted in ``celery_app``'s ``Europe/Paris`` timezone)
   -- see the ``beat`` service below.
-- **Shopify**: ``SHOPIFY_SHOP_DOMAIN``, ``SHOPIFY_ACCESS_TOKEN``,
-  ``SHOPIFY_API_VERSION`` -- used by ``shopify_catalog_reconciliation``
-  (ported from the RewakeMonitor proof of concept), ahead of the wider Cloud
-  Run migration described in ``PROPOSAL.md``.
+- **Shopify**: ``SHOPIFY_SHOP_DOMAIN``, ``SHOPIFY_CLIENT_ID``,
+  ``SHOPIFY_CLIENT_SECRET`` (exchanged at runtime for a self-renewing token,
+  cached in Redis -- see :doc:`development`), ``SHOPIFY_API_VERSION``,
+  ``SHOPIFY_LOCATION_ID``, the ``SHOPIFY_PDF_METAFIELD_*`` keys -- used by
+  ``shopify_catalog_reconciliation``, ``create_product_shopify``, and
+  ``update_product``.
 - **Deploy**: ``TAG`` (default ``latest``) -- which
   ``ghcr.io/rewake-fr/api`` build ``docker-compose.yml`` and
   ``scripts/deploy/deploy.sh`` run.

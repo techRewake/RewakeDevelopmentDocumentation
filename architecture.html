@@ -85,6 +85,21 @@
 level:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">api/routes/health.py</span></code> – public.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api/routes/metrics.py</span></code> – public (matches <code class="docutils literal notranslate"><span class="pre">health.py</span></code>, and how
+Prometheus is configured to scrape it – no bearer token). <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/metrics</span></code>
+computes a fresh Prometheus exposition on every scrape from each
+registered script’s last recorded run (Redis, via <code class="docutils literal notranslate"><span class="pre">api/run_store.py</span></code>):
+every numeric key in <code class="docutils literal notranslate"><span class="pre">ScriptResult.metrics</span></code> as
+<code class="docutils literal notranslate"><span class="pre">rewake_api_script_metric{script,</span> <span class="pre">metric}</span></code>, plus
+<code class="docutils literal notranslate"><span class="pre">rewake_api_script_duration_seconds</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rewake_api_script_last_run_success</span></code> (0/1), and
+<code class="docutils literal notranslate"><span class="pre">rewake_api_script_last_run_timestamp_seconds</span></code>. Computed fresh rather
+than accumulated in-process because scripts actually run in the Celery
+worker/beat processes, not this one – an in-process
+Counter/Gauge here would never observe their updates. Scraped by
+RewakeObserve’s Prometheus (<code class="docutils literal notranslate"><span class="pre">prometheus/prometheus.yml</span></code>, job
+<code class="docutils literal notranslate"><span class="pre">rewake-api</span></code>); the two dashboards under its
+<code class="docutils literal notranslate"><span class="pre">grafana/provisioning/dashboards/</span></code> query these series.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">api/routes/hellopro/</span></code>, <code class="docutils literal notranslate"><span class="pre">api/routes/machinio/</span></code> – external integrations,
 each gated by its own static token (no origin check).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">api/routes/internal/</span></code> – the internal surface used by <code class="docutils literal notranslate"><span class="pre">app.rewake.fr</span></code>/
@@ -108,15 +123,14 @@ this API, and turned out to have no real caller: <code class="docutils literal n
 own equivalents by shelling out directly from Next.js
 (<code class="docutils literal notranslate"><span class="pre">app/api/lauch_script/*</span></code>), bypassing this API entirely. With nothing
 depending on their exact shape, they’ve been replaced outright by the
-registry pattern proven in the RewakeMonitor proof of concept
-(<code class="docutils literal notranslate"><span class="pre">rewake_monitor.scripts</span></code>) rather than kept alongside a new parallel
+registry pattern described below rather than kept alongside a new parallel
 implementation. <code class="docutils literal notranslate"><span class="pre">verification_shopify</span></code> (a thin wrapper around the sibling
 <code class="docutils literal notranslate"><span class="pre">Verification-Shopify-Airtable</span></code> project, itself an older, separate
 Airtable/Shopify comparison) was ported alongside them briefly, then removed
 outright once <code class="docutils literal notranslate"><span class="pre">shopify_catalog_reconciliation</span></code> below covered the same
 comparison properly – there was no reason to keep two ways to check the
 same thing.</p>
-<ul class="simple">
+<ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">api/scripts/base.py</span></code> – <code class="docutils literal notranslate"><span class="pre">ApiScript</span></code> (a <code class="docutils literal notranslate"><span class="pre">name</span></code>, an optional
 <code class="docutils literal notranslate"><span class="pre">schedule</span></code>, and a <code class="docutils literal notranslate"><span class="pre">run(previous_snapshot=None,</span> <span class="pre">**kwargs)</span> <span class="pre">-&gt;</span>
 <span class="pre">(ScriptResult,</span> <span class="pre">new_snapshot</span> <span class="pre">|</span> <span class="pre">None)</span></code>) and <code class="docutils literal notranslate"><span class="pre">ScriptResult</span></code> (status,
@@ -124,22 +138,31 @@ details, metrics, duration). <code class="docutils literal notranslate"><span cl
 scripts – a script with a real schedule is still also runnable on demand,
 through the exact same endpoint.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">api/scripts/update_product.py</span></code> – on-demand only (<code class="docutils literal notranslate"><span class="pre">schedule</span> <span class="pre">=</span> <span class="pre">None</span></code>),
-still just a <code class="docutils literal notranslate"><span class="pre">subprocess.run(...)</span></code> against the sibling <code class="docutils literal notranslate"><span class="pre">Update-Product</span></code>
-project – spawning a process is an implementation detail, not what needed
-standardizing.</p></li>
+ported in-process from a subprocess call against a sibling
+<code class="docutils literal notranslate"><span class="pre">Update-Product</span></code> project (see <a class="reference internal" href="update_product.html"><span class="doc">Update Product</span></a> for the full story,
+including deliberate deviations from that project). Takes either a
+Variation <code class="docutils literal notranslate"><span class="pre">record_id</span></code> (default) or a Model <code class="docutils literal notranslate"><span class="pre">model_id</span></code> – both converge
+on the same update, since Shopify variants all belong to one product per
+Model. Shares its exception class, Airtable cache, link builders, and
+unit/spec aggregation with <code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code> via
+<code class="docutils literal notranslate"><span class="pre">api/scripts/_shopify_links.py</span></code>, rather than duplicating them.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api/scripts/create_product_shopify.py</span></code> – on-demand only, creates a new
+Shopify listing from an Airtable Model (see <a class="reference internal" href="create_product_shopify.html"><span class="doc">Create Product Shopify</span></a>
+for the full story, including deliberate deviations from the Cloud
+Function it was ported from). Native code, not a subprocess wrapper –
+the other script here that writes to Shopify, alongside <code class="docutils literal notranslate"><span class="pre">update_product</span></code>
+(which only ever updates a listing that already exists).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">api/scripts/shopify_catalog_reconciliation.py</span></code>,
-<code class="docutils literal notranslate"><span class="pre">api/scripts/airtable_catalog_stats.py</span></code> – <strong>ported from the
-RewakeMonitor proof of concept</strong>, where this business logic was developed
-and validated against real production data (two genuine Airtable/Shopify
-matching bugs found and fixed there – see that repo’s
+<code class="docutils literal notranslate"><span class="pre">api/scripts/airtable_catalog_stats.py</span></code> – this business logic was
+developed and validated against real production data (two genuine
+Airtable/Shopify matching bugs found and fixed along the way – see
 <code class="docutils literal notranslate"><span class="pre">docs/shopify_catalog_reconciliation.md</span></code>). Scheduled (hourly /
 daily-at-20:42-Europe/Paris) via a real <code class="docutils literal notranslate"><span class="pre">schedule</span></code>, and read via
 <code class="docutils literal notranslate"><span class="pre">api/domain/catalog.py</span></code> (the Model/Variation/Unit/ShopifyListing
 dataclasses, built on this project’s own existing <code class="docutils literal notranslate"><span class="pre">api/services/airtable</span></code>
 functions rather than a separate client class) and
-<code class="docutils literal notranslate"><span class="pre">api/integrations/shopify.py</span></code> (the Shopify GraphQL client, ported using
-<code class="docutils literal notranslate"><span class="pre">requests</span></code> instead of RewakeMonitor’s <code class="docutils literal notranslate"><span class="pre">httpx</span></code>, to match what this
-project already uses everywhere else).</p></li>
+<code class="docutils literal notranslate"><span class="pre">api/integrations/shopify.py</span></code> (the Shopify GraphQL client, using
+<code class="docutils literal notranslate"><span class="pre">requests</span></code> to match what this project already uses everywhere else).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">api/scripts/registry.py</span></code> – <code class="docutils literal notranslate"><span class="pre">SCRIPTS:</span> <span class="pre">dict[str,</span> <span class="pre">ApiScript]</span></code>. Adding a
 script means adding one entry here; nothing else changes.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">api/tasks.py</span></code> – <strong>one</strong> generic Celery task, <code class="docutils literal notranslate"><span class="pre">run_script(name,</span>
@@ -148,25 +171,62 @@ it checks <code class="docutils literal notranslate"><span class="pre">is_config
 credentials are missing, rather than failing), fetches the previous
 snapshot from Redis, runs the script, records the result, and persists
 the new snapshot if one was returned. Retries automatically on any
-exception (<code class="docutils literal notranslate"><span class="pre">autoretry_for=(Exception,)</span></code> – these two new scripts are
+exception (<code class="docutils literal notranslate"><span class="pre">autoretry_for=(Exception,)</span></code> – every script here is
 network-call-heavy, where transient failures are the expected failure
-mode, unlike the subprocess-based ones).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">api/run_store.py</span></code> – a small Redis-backed history (last 100 runs per
-script) plus a per-script snapshot slot, so a run’s outcome is still
-inspectable after the task itself has been garbage-collected from
-Celery’s result backend, and a scheduled script’s day-over-day diff
-survives a worker/beat restart.</p></li>
+mode).</p>
+<p>Celery itself doesn’t deduplicate concurrent invocations with the same
+arguments – nothing stops two <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/internal/scripts/{name}/run</span></code>
+calls for the <em>same</em> <code class="docutils literal notranslate"><span class="pre">record_id</span></code> from executing at the same time.
+<code class="docutils literal notranslate"><span class="pre">run_script</span></code> guards against this explicitly: when <code class="docutils literal notranslate"><span class="pre">record_id</span></code> is
+present, it takes a Redis lock (<code class="docutils literal notranslate"><span class="pre">RunStore.acquire_lock</span></code>, <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">NX</span></code> with
+a TTL as a crash safety net) before calling <code class="docutils literal notranslate"><span class="pre">script.run(...)</span></code>, and
+records a <code class="docutils literal notranslate"><span class="pre">skipped</span></code> result immediately (never calling <code class="docutils literal notranslate"><span class="pre">run()</span></code> at all)
+if another run for that same <code class="docutils literal notranslate"><span class="pre">record_id</span></code> is already holding it. This is
+what actually stops <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> from creating two Shopify
+products for one Model when triggered twice in quick succession – a
+script’s own idempotence check alone only catches <em>sequential</em> retries
+(one finishes, then a second one starts), not truly concurrent ones.
+Verified live: two simultaneous triggers for the same record, one
+rejected in 5ms, the other ran normally. <code class="docutils literal notranslate"><span class="pre">update_product.py</span></code> adds a
+<em>second</em> lock of its own, inside <code class="docutils literal notranslate"><span class="pre">run()</span></code>, keyed by the actual Shopify
+product id rather than whatever Airtable id the caller passed in – a
+Variation and its own Model (or two sibling Variations) are different
+<code class="docutils literal notranslate"><span class="pre">record_id</span></code>/<code class="docutils literal notranslate"><span class="pre">model_id</span></code> values but the same underlying product, which
+the outer per-<code class="docutils literal notranslate"><span class="pre">record_id</span></code> lock alone wouldn’t catch.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api/run_store.py</span></code> – a small Redis-backed history (last
+<code class="docutils literal notranslate"><span class="pre">MAX_RUNS_PER_SCRIPT</span></code> runs per script – currently 1000, a deliberate
+cap enforced with <code class="docutils literal notranslate"><span class="pre">LTRIM</span></code> on every write, not a Redis engineering
+limit; older runs past it are gone, not just unpaginated-to) plus a
+per-script snapshot slot, so a run’s outcome is still inspectable after
+the task itself has been garbage-collected from Celery’s result backend,
+and a scheduled script’s day-over-day diff survives a worker/beat
+restart; also the per-record_id lock described above.
+<code class="docutils literal notranslate"><span class="pre">RunStore.recent(script,</span> <span class="pre">limit,</span> <span class="pre">offset)</span></code> pages through this history via
+Redis <code class="docutils literal notranslate"><span class="pre">LRANGE</span></code> (cheap at arbitrary offsets for a list this size), and
+<code class="docutils literal notranslate"><span class="pre">RunStore.count(script)</span></code> (<code class="docutils literal notranslate"><span class="pre">LLEN</span></code>) gives the frontend a total so it
+knows when it’s fetched everything. Each run’s stored JSON is small (a
+few KB, even for <code class="docutils literal notranslate"><span class="pre">shopify_catalog_reconciliation</span></code>’s now-uncapped
+~300-entry missing-model lists), so 1000 of them per script is a
+negligible amount of Redis memory – raise <code class="docutils literal notranslate"><span class="pre">MAX_RUNS_PER_SCRIPT</span></code> freely
+if more history is ever wanted.</p></li>
 </ul>
 <p>Endpoints, generic over the registry (unchanged by adding the two scheduled
 scripts – this is exactly the point of the registry):</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/</span></code> – list registered script names.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/internal/scripts/{name}/run</span></code> – queue a run (<code class="docutils literal notranslate"><span class="pre">record_id</span></code> as a
-query param for <code class="docutils literal notranslate"><span class="pre">update_product</span></code>); returns a <code class="docutils literal notranslate"><span class="pre">task_id</span></code> immediately.</p></li>
+query param for <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code>, or either <code class="docutils literal notranslate"><span class="pre">record_id</span></code> or
+<code class="docutils literal notranslate"><span class="pre">model_id</span></code> – exactly one – for <code class="docutils literal notranslate"><span class="pre">update_product</span></code>); returns a
+<code class="docutils literal notranslate"><span class="pre">task_id</span></code> immediately.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/status/{task_id}</span></code> – poll one task
 (<code class="docutils literal notranslate"><span class="pre">PENDING</span></code>/<code class="docutils literal notranslate"><span class="pre">STARTED</span></code>/<code class="docutils literal notranslate"><span class="pre">RETRY</span></code>/<code class="docutils literal notranslate"><span class="pre">SUCCESS</span></code>/<code class="docutils literal notranslate"><span class="pre">FAILURE</span></code>, plus the
 result once ready).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/{name}/runs</span></code> – that script’s recent run history.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/{name}/runs</span></code> – a page of that script’s run
+history (<code class="docutils literal notranslate"><span class="pre">limit</span></code>, default 20, max 100 per request; <code class="docutils literal notranslate"><span class="pre">offset</span></code> to page
+further back), newest first, plus <code class="docutils literal notranslate"><span class="pre">total</span></code> (how many runs are stored in
+total) so the frontend knows when it’s reached the end. The RewakeApp
+dashboard uses this for infinite scroll on the run history table.</p></li>
 </ul>
 <p>A dedicated <code class="docutils literal notranslate"><span class="pre">celery</span> <span class="pre">-A</span> <span class="pre">api.celery_app</span> <span class="pre">worker</span></code>/<code class="docutils literal notranslate"><span class="pre">beat</span></code> process only ever
 imports <code class="docutils literal notranslate"><span class="pre">api/celery_app.py</span></code> directly – it never goes through
@@ -183,16 +243,16 @@ done).</p>
 (<code class="docutils literal notranslate"><span class="pre">celery</span> <span class="pre">-A</span> <span class="pre">api.celery_app</span> <span class="pre">worker</span></code>), and a <code class="docutils literal notranslate"><span class="pre">beat</span></code> service (<code class="docutils literal notranslate"><span class="pre">celery</span> <span class="pre">-A</span>
 <span class="pre">api.celery_app</span> <span class="pre">beat</span></code>, needed once any script has a real <code class="docutils literal notranslate"><span class="pre">schedule</span></code>)
 alongside the existing <code class="docutils literal notranslate"><span class="pre">api</span></code> service, which is otherwise unchanged. This
-is the same shape as the pattern proposed for the rest of Rewake’s
-automation in <code class="docutils literal notranslate"><span class="pre">PROPOSAL.md</span></code> (RewakeMonitor repo): a script behind a queue
-instead of Google Cloud Run or a bare subprocess call, with a registry so
-adding one never means adding infrastructure.</p>
+is the same shape as the pattern planned for the rest of Rewake’s
+automation: a script behind a queue instead of Google Cloud Run or a bare
+subprocess call, with a registry so adding one never means adding
+infrastructure.</p>
 </section>
 <section id="what-s-deliberately-not-duplicated-here">
 <h2>What’s deliberately <em>not</em> duplicated here<a class="headerlink" href="#what-s-deliberately-not-duplicated-here" title="Link to this heading"></a></h2>
-<p>Grafana/Prometheus/Loki/Uptime Kuma/Flower are proposed as <strong>one shared
-stack</strong> for all of Rewake’s services (<code class="docutils literal notranslate"><span class="pre">PROPOSAL.md</span></code>), not one per project.
-This repository’s <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> only adds what the API itself needs
+<p>Grafana/Prometheus/Loki/Uptime Kuma/Flower are planned as <strong>one shared
+stack</strong> for all of Rewake’s services, not one per project. This
+repository’s <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> only adds what the API itself needs
 to function (Redis, a worker) – it does not stand up its own copy of that
 observability stack.</p>
 </section>

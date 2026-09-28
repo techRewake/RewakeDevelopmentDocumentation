@@ -5,81 +5,251 @@
 | | |
 | --- | --- |
 | **Module** | `api.scripts.update_product` |
-| **Schedule** | on-demand only (`schedule = None`) -- requires a `record_id` |
-| **Reads** | Airtable (via the sibling `Update-Product` project) |
-| **Writes** | **Shopify** (via the sibling `Update-Product` project) -- the only script here that writes anything |
-| **Origin** | wraps an existing sibling project, not new logic written for this API |
+| **Schedule** | on-demand only (`schedule = None`) -- requires exactly one of `record_id` (a Variation) or `model_id` (a Model) |
+| **Reads** | Airtable |
+| **Writes** | **Shopify** -- the other script here that writes anything, alongside `create_product_shopify` (which creates a brand-new listing; this one only ever updates one that already exists) |
+| **Origin** | ported in-process from a sibling project (`Update-Product`, a separate git repository) that this script previously shelled out to as a subprocess -- see "Deliberate deviations" below |
 
 ## What it does
 
-Runs the sibling `Update-Product` project (a separate git repository, path configured
-via `UPDATE_PRODUCT_DIR`) for exactly one Airtable Model record: that project reads the
-Model's current Airtable data and pushes the corresponding create/update to Shopify
-(title, images, variants, inventory, metafields -- whatever `Update-Product`'s own
-`main.py` does; that logic lives in its own repository, not here).
+Syncs an existing Shopify product from Airtable: description, two metafields
+(`custom.long_description`, `custom.main_table` -- the exact same keys
+`create_product_shopify` writes at creation time, so a product's content stays
+consistent regardless of which script last touched it), and per-variant price and
+inventory quantity. Creates a missing Shopify variant along the way if Airtable now
+has stock for a combination that didn't exist on Shopify yet -- not gated behind a
+permission flag, since that's a routine, expected part of "update", not an edge case to
+block.
 
-This is **not** read-only, unlike every other script registered in this API --
-`shopify_catalog_reconciliation` and `airtable_catalog_stats` only ever
-compare or report; this one changes the live Shopify catalog.
+Two entry modes, both real (nothing here previews or dry-runs):
 
-`app.rewake.fr`'s own `/api/lauch_script/update_shopify` route currently invokes the
-same `Update-Product` project directly (`execAsync` from its own Next.js server),
-entirely bypassing this API. This script is a second, independent way to trigger the
-exact same underlying project -- queued, retried, and with a persisted run history,
-rather than a bare synchronous shell-out -- not (yet) a replacement for that other
-path. See `PROPOSAL.md` in the RewakeMonitor repo for the broader migration this fits
-into.
+- **`record_id`** (a Variation id, the default/existing convention): resolves that
+  Variation's parent Model, then updates the whole product. Shopify variants all belong
+  to one product per Model anyway, so "update one variation" and "update its model"
+  converge on the same write -- this has always been true, even before this script had
+  an explicit `model_id` mode.
+- **`model_id`** (new): the identical pipeline, entered directly from a Model id --
+  useful when reconciliation, or a human, already knows the Model rather than one of
+  its Variations.
+
+Nothing here creates a brand-new Shopify listing -- see `create_product_shopify` for
+that. A Model with no Shopify product yet (`Aucun produit Shopify associé à ce
+modèle`) is a validation failure here, not something this script will fix.
+
+## Documentation PDF
+
+Shared with `create_product_shopify` via `api/scripts/_product_documentation.py` (upload through
+`api/integrations/shopify_files.py`, GraphQL).
+
+- **Source:** the Model's Airtable `Documentation` attachment field -- the first attachment
+  that is a PDF (MIME type, or a `.pdf` filename). Other attachments are ignored.
+- **Target:** the product metafield `SHOPIFY_PDF_METAFIELD_NAMESPACE`.`SHOPIFY_PDF_METAFIELD_KEY`
+  (default `custom.pdf_descriptif`, the "PDF Descriptif" definition), type `file_reference`,
+  plus a companion `single_line_text_field` (`custom.pdf_descriptif_airtable_id` by default)
+  recording the Airtable attachment id the Shopify file came from.
+- **Upload:** the PDF is downloaded from Airtable (signed url, fetched fresh with the
+  record) and sent through Shopify's staged upload -> `fileCreate` -> poll until
+  `READY` -> `metafieldsSet` (both metafields in one atomic call).
+- **Change detection:** same "diff against live Shopify" approach as the rest of
+  `update_product` -- no extra state store. Upload when Shopify has no PDF, or when the
+  recorded source id differs from Airtable's current attachment id (Airtable gives a
+  replaced file a new id). A Shopify PDF set by hand before this sync existed has no
+  source id, so it is replaced once by Airtable's, then stays stable.
+- **Never clears:** an empty Airtable field writes nothing (`documentation_status:
+  "absent"`) -- there's no deletion-sync convention in this project.
+- The replaced Shopify file is not deleted from the Files library (it may be referenced
+  elsewhere).
+- **Scopes:** the Shopify app needs `write_files` and `read_files` (confirmed missing on
+  the RewakeDev token on 2026-09-28 -- `fileCreate` answers ACCESS_DENIED without them).
+- **Failure handling:** runs inside the per-Shopify-product lock, before variants. A
+  failed upload doesn't stop the rest of the sync, but turns the run into a `failure`
+  afterwards (same rule as a failed variant creation: it's what reconciliation's
+  documentation bulk action runs this script for).
+
+## Idempotence and locking (two layers)
+
+1. The per-`record_id` Redis lock in `api/tasks.py` (shared by every script) guards the
+   outer request layer -- but it's keyed by whatever the caller passed in (a Variation
+   id, or a Model id), and two *different* keys can resolve to the very same Shopify
+   product.
+2. A second lock, acquired inside `run()` itself once the real Shopify product id is
+   known, keyed by that Shopify product id (`RunStore.acquire_lock("update_product_shopify_id",
+   shopify_id)`) -- this is the one that actually matters for correctness. Two
+   concurrent triggers that resolve to the same product (different Variations of one
+   Model, or a Variation and its own Model triggered at the same time) collide here and
+   the second is rejected with `status="skipped"`, not a race on Shopify. This mirrors
+   `Update-Product`'s own `fcntl` file lock, which existed for exactly this reason --
+   see "Deliberate deviations" below.
 
 ## Data it touches
 
 ```mermaid
 flowchart LR
-    CALLER[["POST /internal/scripts/update_product/run?record_id=..."]]
-    TASK[["api.tasks.run_script<br/>(Celery)"]]
-    SCRIPT[["Update-Product/main.py<br/>(sibling project, subprocess)"]]
-    AT[("Airtable<br/>Model record")]
-    SH[("Shopify<br/>product create/update")]
+    CALLER[["POST /internal/scripts/update_product/run?record_id=...<br/>or ?model_id=..."]]
+    TASK[["api.tasks.run_script (Celery)<br/>per-record_id Redis lock"]]
+    SCRIPT[["api.scripts.update_product<br/>(in-process)"]]
+    LOCK[("Redis: per-Shopify-product-id lock")]
+    AT[("Airtable<br/>Model + Variation + Unit records")]
+    SH[("Shopify<br/>product/metafield/variant/inventory writes")]
 
     CALLER --> TASK --> SCRIPT
+    SCRIPT -- acquires --> LOCK
     SCRIPT -- reads --> AT
     SCRIPT -- writes --> SH
 
     TASK --> RUNS[("Redis run history<br/>GET /internal/scripts/update_product/runs")]
-    TASK --> LOG[("structlog (api.tasks)<br/>-> stdout / rotating file")]
+    TASK --> LOG[("structlog (api.scripts.update_product)<br/>-> stdout / rotating file")]
 ```
 
 ## How it works
 
-1. `POST /internal/scripts/update_product/run?record_id=recXXXXXXXXXXXXXX` queues a
-   Celery task with that `record_id`; a missing `record_id` is rejected with `400`
-   before anything is queued.
-2. The task runs `uv run <UPDATE_PRODUCT_DIR>/main.py <record_id>` as a subprocess,
-   with `cwd=UPDATE_PRODUCT_DIR`, and captures its stdout/stderr.
-3. Success is `stderr == ""` -- any stderr output at all (not just a non-zero exit
-   code) is treated as a failed run, matching how `Update-Product` itself signals
-   problems.
-4. On a Celery-visible failure (the subprocess itself failing to start, or exiting
-   non-zero), the task retries automatically (`autoretry_for=(Exception,)`, up to 3
-   times with backoff) -- a transient issue (e.g. a slow Airtable/Shopify response
-   inside `Update-Product`) resolves itself without manual intervention; a
-   consistently broken `record_id` will exhaust retries and show as `FAILURE`.
+1. Resolve the Model: `record_id` mode verifies the id really belongs to the
+   `Variation` table (Airtable's single-record GET doesn't validate that -- see
+   `_assert_belongs_to_table`, the same "confirmed the hard way" gotcha
+   `create_product_shopify.py`'s equivalent checks already document), then reads its
+   `Model` link field; `model_id` mode verifies the id belongs to `Model` directly.
+2. Validate: the Model must still be `to_sell_on_shopify`, must already have a Shopify
+   product linked (via `Annonces Shopify` -> `ID_shopify`, the exact same
+   `_resolve_listing_ids` helper `create_product_shopify.py` uses -- confirmed against
+   the live Airtable schema that Variation's own `ShopifyID`/`Status Shopify` lookup
+   fields resolve through this identical two-hop chain, so there's no need to read them
+   separately), and must have at least one sellable unit (reusing
+   `create_product_shopify.py`'s own `_collect_sellable_units`/`_build_variant_rows` --
+   the same aggregation, so both scripts always agree on what a product's variants
+   *should* look like).
+3. Acquire the per-Shopify-product-id lock (see above), then: fetch the live product,
+   sync description and metafields (diffed against current values first -- a no-op
+   write is never sent), then for every desired (état esthétique, variant value)
+   combination: create the Shopify variant if missing, update its price if different,
+   push inventory if the quantity differs. Matching an Airtable variant row to a live
+   Shopify variant is **positional** -- option 1 is always "État esthétique" (position
+   1, fixed at creation time by `create_product_shopify.py`'s own `_create_variants`),
+   option 2 (if the product actually has one, read from the live product's own
+   `options`, not re-derived from Airtable) is the variant value distinguishing sibling
+   Variations.
+4. A description/metafield/single-variant sync failure is logged and skipped, not fatal
+   to the whole run -- one Shopify hiccup on one variant shouldn't block every other
+   variant's sync. The run only reports `status="failure"` for a genuine validation
+   problem (missing data, no linked product) or being completely unable to reach the
+   product on Shopify at all.
 
-## Details payload
+## Deliberate deviations from the source (`Update-Product`)
 
-No numeric `metrics` -- `GET /internal/scripts/update_product/runs` returns, per run:
+- **In-process, no subprocess.** The source shelled out to
+  `uv run Update-Product/main.py <record_id>`, parsing captured stdout/stderr to guess
+  success (`stderr == ""`) -- unreliable, since `Update-Product` logs structured JSON
+  events to stderr *by design*, even on a clean run. This port sidesteps that signal
+  entirely.
+- **No sandbox/dry-run mode.** The source defaulted to a sandbox mode (reads real data,
+  logs what it *would* do, never actually writes) unless an `ENVIRONMENT`/`ENV` var said
+  "prod". This port always writes for real once triggered, matching
+  `create_product_shopify`'s own behavior and this codebase's existing posture.
+- **No `ALLOW_VARIANT_CREATE` permission gate.** The source required an explicit opt-in
+  env var before it would create a missing variant, defaulting to blocking that. This
+  port always creates a missing variant -- a routine, expected part of "update", not an
+  edge case to guard against (this is also exactly what makes reconciliation's
+  "Variations absentes de Shopify" -> "Mettre à jour" button meaningful).
+- **REST, not GraphQL, for every Shopify write.** The source used Shopify's GraphQL
+  Admin API (`productUpdate`, `metafieldsSet`, `productVariantsBulkUpdate`,
+  `productVariantsBulkCreate`) plus one REST inventory call. This port extends the
+  existing REST-only `ShopifyAdmin` (`api/integrations/shopify_rest.py`) instead of
+  introducing a second, GraphQL-based client alongside it -- one consistent Shopify
+  integration style for both scripts, same asymmetric retry semantics (see that
+  module's own docstring), same positional option/variant matching
+  `create_product_shopify.py`'s own `_create_variants` already established.
+- **Inventory location: the existing `SHOPIFY_LOCATION_ID` constant, not a live
+  lookup.** The source queried Shopify for "the first location" on every run
+  (`locations(first: 1)`) and used whatever came back. This port reuses the
+  already-configured `SHOPIFY_LOCATION_ID` (set up for `create_product_shopify`) --
+  the dev store alone has 3 locations, so "whichever one Shopify lists first" is a real
+  correctness risk the source carried, not something worth preserving.
+- **A single `_ValidationFailed` exception, not the source's 9-class hierarchy.**
+  `Update-Product/errors.py`'s granular exceptions (`RecordNotInVariationTableError`,
+  `NoUnitsLinkedError`, `NoPriceError`, etc.) map 1:1 to specific checks, but
+  `create_product_shopify.py` already established a single internal exception
+  (message + `extra_details` for Airtable links) as this codebase's own convention for
+  exactly this kind of "one of several checks failed" flow. This port follows that
+  precedent rather than introducing a second error-handling philosophy alongside it --
+  each check still raises a distinct, specific message, just not a distinct class.
+- **Alerts via the existing Gmail API service, not raw SMTP.** The source sent alert
+  emails via `smtplib` and a Gmail app password (`SMTP_GMAIL_PASSWORD`) -- the same
+  category of credential exposure flagged in `Update-Product/docs/incident-2026-08-shopify-duplicates.md`'s
+  security remediation checklist. This port reuses `api/services/gmail.py`'s
+  `send_alert_email` (Gmail API + a service account), exactly like
+  `create_product_shopify.py` already does.
+- **This port is the incident doc's own target architecture.** That document's
+  "architecture cible" diagram explicitly names bringing this logic in-process behind
+  an authenticated internal endpoint, with a per-Shopify-id lock and no silent-success
+  masking of a real failure -- this is that migration, not an unrelated refactor.
+
+## Known risks / things worth reviewing
+
+- **A model_id-mode (or a Model's *other* Variations') update isn't attributed back to
+  an individual Variation in reconciliation's cross-reference.**
+  `attach_update_attempts` in `shopify_catalog_reconciliation.py` only matches a stored
+  `update_product` run against `variations_missing_in_shopify` via that run's own
+  `record_id` -- a run triggered by `model_id` (or by a *different* sibling Variation of
+  the same Model) has no `record_id` of its own to match on, so it won't show up as
+  "already tried" against a Variation it may well have actually updated.
+- **No dedicated test against a live Shopify product with a genuinely different
+  historical option-1 value.** The positional variant-matching assumes option 1 is
+  always literally "État esthétique" (fixed at creation time) -- true for everything
+  `create_product_shopify.py` has created, but not verified against an older,
+  differently-structured product that might predate that convention.
+- ~~First real end-to-end verification against the dev store is still pending~~ --
+  done: both entry modes and the reconciliation buttons were run live against the dev
+  store, which is exactly what caught the bug below.
+- **Fixed, but worth knowing about: variant option values must be compared stripped,
+  not raw.** Confirmed live: Airtable's `Variant_value` can carry incidental trailing
+  whitespace (`"120x47 "`) that Shopify itself trims on save (`"120x47"`). Comparing
+  the raw, untrimmed Airtable value against Shopify's own (already-trimmed) option
+  values meant an already-existing variant was never recognized as a match --
+  `update_product` would then attempt to create a *duplicate* variant with the same
+  option combination, which Shopify correctly rejects, and (before this fix) that
+  rejection was silently logged and swallowed, with the run still reporting
+  `status="success"`. Both bugs are now fixed: `_variant_key_from_row`/
+  `_variant_key_from_shopify` strip both sides before comparing, and a failed variant
+  *creation* now makes the whole run report `status="failure"` (with the real Shopify
+  rejection reason in `details.error`) instead of silently succeeding -- a
+  price/quantity sync failure on an *already-existing* variant still stays soft
+  (logged only), since that variant remains sellable in the meantime.
+- **A `requests.Response` is falsy for any non-2xx status** (`Response.__bool__`
+  returns `self.ok`) -- code that checks `if response else None` instead of
+  `if response is not None else None` silently discards the real status code/body of
+  a genuine error response. This exact mistake is what hid the bug above during initial
+  testing (logs showed `"status": null` for a real 422). Fixed via `_response_error_detail`,
+  which checks `is not None` and includes the actual response body. Worth grepping for
+  this same `if response else ...` pattern if it's ever copied elsewhere.
+
+## Metrics and details
+
+`GET /internal/scripts/update_product/runs` returns, per run:
 
 | Key | Meaning |
 | --- | --- |
-| `record_id` | The Model record this run was for |
-| `stdout` / `stderr` | Raw output from `Update-Product/main.py` |
-| `error` | Present on failure: the subprocess's stderr, or a generic message if the process never started |
+| `metrics.variants_created` | How many Shopify variants were newly created this run |
+| `metrics.prices_updated` / `metrics.quantities_updated` | How many existing variants had their price/inventory changed |
+| `metrics.metafields_updated` | How many of the two metafields were actually written (0 if both already matched) |
+| `metrics.documentation_updated` | 1 when a documentation PDF was uploaded this run, else 0 |
+| `details.documentation_status` | `uploaded` / `unchanged` / `absent` (no PDF in Airtable, Shopify untouched) / `failed` |
+| `details.documentation_error` | Present when `documentation_status` is `failed` (the run is then a `failure` too) |
+| `details.model_id` | The Model this run resolved to, regardless of entry mode |
+| `details.record_id` | The Variation id, only when that was the entry mode used (absent for `model_id` mode) |
+| `details.title` | The Model's name, present on every outcome |
+| `details.description_updated` | Whether the product description actually needed (and got) a sync this run |
+| `details.shopify_product_id` / `details.shopify_product_url` / `details.airtable_listing_url` | Present on success and on the per-Shopify-id lock skip -- links to the product this run was about |
+| `details.error` | Present on failure, or on a lock-collision skip |
+| `details.airtable_model_url` / `details.airtable_variation_url` / `details.airtable_unit_url` | Best-effort links to the Airtable record a validation failure is actually about -- same convention as `create_product_shopify` |
 
 ## Where to look
 
-- **Trigger:** `POST /internal/scripts/update_product/run?record_id=recXXX`.
-- **Status/history:** `GET /internal/scripts/status/{task_id}`, `GET
-  /internal/scripts/update_product/runs`.
-- **Logs:** `structlog`, logger `api.tasks`; `Update-Product`'s own stdout/stderr is
-  captured into the run's `details`, not this API's log files.
-- **Source:** `api/scripts/update_product.py`. The actual update logic is in the
-  `Update-Product` repository, outside this one.
+- **Trigger/history:** `POST /internal/scripts/update_product/run?record_id=recXXX`
+  (or `?model_id=recXXX`), `GET /internal/scripts/status/{task_id}`, `GET
+  /internal/scripts/update_product/runs`, `GET /internal/scripts/update_product/current`
+  (live stage while running).
+- **Logs:** `structlog`, logger `api.scripts.update_product` (business logic) and
+  `api.tasks` (task lifecycle).
+- **Source:** `api/scripts/update_product.py`; shared helpers with
+  `create_product_shopify.py` (the exception class, the Airtable cache, link builders,
+  unit/spec aggregation) live in `api/scripts/_shopify_links.py`.
+- **Tests:** `tests/test_update_product.py`.

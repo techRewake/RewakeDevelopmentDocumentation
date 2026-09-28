@@ -1,0 +1,794 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Product Shopify &mdash; Rewake API  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Shopify Catalog Reconciliation" href="shopify_catalog_reconciliation.html" />
+    <link rel="prev" title="Update Product" href="update_product.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Rewake API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="routes.html">Routes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="scripts.html">Scripts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="update_product.html">Update Product</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Create Product Shopify</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-it-does">What it does</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#documentation-pdf">Documentation PDF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#idempotence-two-layers">Idempotence (two layers)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-it-touches">Data it touches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-it-works">How it works</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deliberate-deviations-from-the-source-cloud-function">Deliberate deviations from the source Cloud Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#known-risks-things-worth-reviewing">Known risks / things worth reviewing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metrics-and-details">Metrics and details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#where-to-look">Where to look</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shopify_catalog_reconciliation.html">Shopify Catalog Reconciliation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="airtable_catalog_stats.html">Airtable Catalog Stats</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Rewake API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="scripts.html">Scripts</a></li>
+      <li class="breadcrumb-item active">Create Product Shopify</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/create_product_shopify.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="create-product-shopify">
+<h1>Create Product Shopify<a class="headerlink" href="#create-product-shopify" title="Link to this heading"></a></h1>
+<p><img src="https://cdn.simpleicons.org/airtable" alt="Airtable" width="28" height="28"> <img src="https://cdn.simpleicons.org/shopify" alt="Shopify" width="28" height="28"></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Module</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">api.scripts.create_product_shopify</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Schedule</strong></p></td>
+<td><p>on-demand only (<code class="docutils literal notranslate"><span class="pre">schedule</span> <span class="pre">=</span> <span class="pre">None</span></code>) – requires a <code class="docutils literal notranslate"><span class="pre">record_id</span></code> (an Airtable <strong>Model</strong> id)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Reads</strong></p></td>
+<td><p>Airtable (Model, Variation, Toutes les unités, Type d’équipement, Marque, Familles, Specification)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Writes</strong></p></td>
+<td><p><strong>Shopify</strong> (creates a new product, variants, metafields, images, inventory) + Airtable (<code class="docutils literal notranslate"><span class="pre">Annonces</span> <span class="pre">Shopify</span></code>, and <code class="docutils literal notranslate"><span class="pre">Date</span> <span class="pre">de</span> <span class="pre">mise</span> <span class="pre">en</span> <span class="pre">ligne</span></code> on units)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Origin</strong></p></td>
+<td><p>ported from a Google Cloud Function (<code class="docutils literal notranslate"><span class="pre">create_product_shopify(request)</span></code>, a Flask handler); this port is new code written in-process for this API, not a subprocess wrapper around a sibling project like <code class="docutils literal notranslate"><span class="pre">update_product</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<section id="what-it-does">
+<h2>What it does<a class="headerlink" href="#what-it-does" title="Link to this heading"></a></h2>
+<p>Creates a brand-new Shopify product listing from an Airtable Model that doesn’t have
+one yet: validates the Model’s data is complete enough to list (descriptions, weight,
+a usable photo, sellable units with a valid price), builds one Shopify variant per
+(size/range, état esthétique) combination found among its sellable units, sets generic
+and family-specific metafields, uploads product images, and pushes inventory levels –
+then records the new listing back into Airtable (<code class="docutils literal notranslate"><span class="pre">Annonces</span> <span class="pre">Shopify</span></code>) so it isn’t
+created twice.</p>
+<p>This is the <strong>only script here besides <code class="docutils literal notranslate"><span class="pre">update_product</span></code></strong> that writes to Shopify, and
+the only one of the two that <em>creates</em> a listing rather than updating an existing one.
+Unlike <code class="docutils literal notranslate"><span class="pre">update_product</span></code> (shells out to a sibling project’s <code class="docutils literal notranslate"><span class="pre">main.py</span></code>), this logic is
+native Python in this repo – there’s no external process involved.</p>
+</section>
+<section id="documentation-pdf">
+<h2>Documentation PDF<a class="headerlink" href="#documentation-pdf" title="Link to this heading"></a></h2>
+<p>Shared with <code class="docutils literal notranslate"><span class="pre">update_product</span></code> via <code class="docutils literal notranslate"><span class="pre">api/scripts/_product_documentation.py</span></code> (upload through
+<code class="docutils literal notranslate"><span class="pre">api/integrations/shopify_files.py</span></code>, GraphQL).</p>
+<ul class="simple">
+<li><p><strong>Source:</strong> the Model’s Airtable <code class="docutils literal notranslate"><span class="pre">Documentation</span></code> attachment field – the first attachment
+that is a PDF (MIME type, or a <code class="docutils literal notranslate"><span class="pre">.pdf</span></code> filename). Other attachments are ignored.</p></li>
+<li><p><strong>Target:</strong> the product metafield <code class="docutils literal notranslate"><span class="pre">SHOPIFY_PDF_METAFIELD_NAMESPACE</span></code>.<code class="docutils literal notranslate"><span class="pre">SHOPIFY_PDF_METAFIELD_KEY</span></code>
+(default <code class="docutils literal notranslate"><span class="pre">custom.pdf_descriptif</span></code>, the “PDF Descriptif” definition), type <code class="docutils literal notranslate"><span class="pre">file_reference</span></code>,
+plus a companion <code class="docutils literal notranslate"><span class="pre">single_line_text_field</span></code> (<code class="docutils literal notranslate"><span class="pre">custom.pdf_descriptif_airtable_id</span></code> by default)
+recording the Airtable attachment id the Shopify file came from.</p></li>
+<li><p><strong>Upload:</strong> the PDF is downloaded from Airtable (signed url, fetched fresh with the
+record) and sent through Shopify’s staged upload -&gt; <code class="docutils literal notranslate"><span class="pre">fileCreate</span></code> -&gt; poll until
+<code class="docutils literal notranslate"><span class="pre">READY</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">metafieldsSet</span></code> (both metafields in one atomic call).</p></li>
+<li><p><strong>Change detection:</strong> same “diff against live Shopify” approach as the rest of
+<code class="docutils literal notranslate"><span class="pre">update_product</span></code> – no extra state store. Upload when Shopify has no PDF, or when the
+recorded source id differs from Airtable’s current attachment id (Airtable gives a
+replaced file a new id). A Shopify PDF set by hand before this sync existed has no
+source id, so it is replaced once by Airtable’s, then stays stable.</p></li>
+<li><p><strong>Never clears:</strong> an empty Airtable field writes nothing (<code class="docutils literal notranslate"><span class="pre">documentation_status:</span> <span class="pre">&quot;absent&quot;</span></code>) – there’s no deletion-sync convention in this project.</p></li>
+<li><p>The replaced Shopify file is not deleted from the Files library (it may be referenced
+elsewhere).</p></li>
+<li><p><strong>Scopes:</strong> the Shopify app needs <code class="docutils literal notranslate"><span class="pre">write_files</span></code> and <code class="docutils literal notranslate"><span class="pre">read_files</span></code> (confirmed missing on
+the RewakeDev token on 2026-09-28 – <code class="docutils literal notranslate"><span class="pre">fileCreate</span></code> answers ACCESS_DENIED without them).</p></li>
+<li><p><strong>Failure handling:</strong> attached last, after variants, so a creation rolled back earlier
+never leaves an orphan file. It’s optional content: no PDF -&gt; nothing happens. A PDF
+that can’t be uploaded sends an alert email and is reported in <code class="docutils literal notranslate"><span class="pre">details</span></code>, but the
+product is kept and the run is still a <code class="docutils literal notranslate"><span class="pre">success</span></code>. Reconciliation then lists it under
+“Documentation PDF absente de Shopify”, and its bulk action retries it.</p></li>
+</ul>
+</section>
+<section id="idempotence-two-layers">
+<h2>Idempotence (two layers)<a class="headerlink" href="#idempotence-two-layers" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Before anything else</strong>, verify directly against Shopify (not just Airtable) that no
+listing already exists for this Model. Airtable’s own record of “does this have a
+Shopify id” can be stale (a previous attempt could have failed after linking but
+before actually creating the product, or vice versa), so this always makes a real
+Shopify API call rather than trusting Airtable alone.</p></li>
+<li><p><strong>Immediately after</strong> the Shopify product is created – before metafields, images, or
+variants – an <code class="docutils literal notranslate"><span class="pre">Annonces</span> <span class="pre">Shopify</span></code> Airtable record is created linking back to the
+Model. This is a retry-safe lock: Airtable auto-maintains the reverse link, so if this
+run (or Cloud Tasks-style retry, in the original) is re-triggered, layer 1’s check
+finds this record and stops before creating a second product. <strong>This ordering is
+deliberate – don’t move the lock-record creation later “for cleanliness.”</strong></p></li>
+</ol>
+<p>Neither of those two layers, on their own, stops two truly <em>concurrent</em> triggers for the
+same Model from both passing layer 1’s check before either has created anything –
+that’s a real race, present in the original Cloud Function too, not introduced by this
+port. It’s closed by a third mechanism, one level up: <code class="docutils literal notranslate"><span class="pre">api/tasks.py</span></code>’s <code class="docutils literal notranslate"><span class="pre">run_script</span></code>
+takes a Redis lock (<code class="docutils literal notranslate"><span class="pre">RunStore.acquire_lock</span></code>) keyed by <code class="docutils literal notranslate"><span class="pre">record_id</span></code> before calling this
+script’s <code class="docutils literal notranslate"><span class="pre">run()</span></code> at all, and records an immediate <code class="docutils literal notranslate"><span class="pre">skipped</span></code> result for a second
+concurrent trigger rather than letting it race. See <code class="docutils literal notranslate"><span class="pre">docs/architecture.rst</span></code>’s
+<code class="docutils literal notranslate"><span class="pre">api/tasks.py</span></code> section for the full explanation – verified live: two simultaneous
+triggers for the same record, one rejected in 5ms, the other ran normally to completion.</p>
+</section>
+<section id="data-it-touches">
+<h2>Data it touches<a class="headerlink" href="#data-it-touches" title="Link to this heading"></a></h2>
+<pre  class="mermaid">
+        flowchart LR
+    CALLER[[&quot;POST /internal/scripts/create_product_shopify/run?record_id=...&quot;]]
+    TASK[[&quot;api.tasks.run_script&lt;br/&gt;(Celery)&quot;]]
+    AT[(&quot;Airtable&lt;br/&gt;Model, Variation, Unit, Type, Marque&quot;)]
+    SH[(&quot;Shopify&lt;br/&gt;product + variants + metafields + images + inventory&quot;)]
+    LOCK[(&quot;Airtable&lt;br/&gt;Annonces Shopify (lock record)&quot;)]
+    MAIL[(&quot;Gmail API&lt;br/&gt;error alert email&quot;)]
+
+    CALLER --&gt; TASK
+    TASK -- reads --&gt; AT
+    TASK -- creates --&gt; SH
+    TASK -- creates --&gt; LOCK
+    TASK -- on failure --&gt; MAIL
+
+    TASK --&gt; RUNS[(&quot;Redis run history&lt;br/&gt;GET /internal/scripts/create_product_shopify/runs&quot;)]
+    TASK --&gt; LOG[(&quot;structlog (api.tasks)&lt;br/&gt;-&gt; stdout / rotating file, `stage` field per checkpoint&quot;)]
+    </pre></section>
+<section id="how-it-works">
+<h2>How it works<a class="headerlink" href="#how-it-works" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/internal/scripts/create_product_shopify/run?record_id=recXXXXXXXXXXXXXX</span></code>
+queues a Celery task; a missing <code class="docutils literal notranslate"><span class="pre">record_id</span></code> is rejected with <code class="docutils literal notranslate"><span class="pre">400</span></code> (same query param
+<code class="docutils literal notranslate"><span class="pre">update_product</span></code> uses – both take a <code class="docutils literal notranslate"><span class="pre">record_id</span></code>, they’re just for different tables:
+<code class="docutils literal notranslate"><span class="pre">update_product</span></code>’s is a Variation id, this one’s is a Model id).</p></li>
+<li><p>Reports a <code class="docutils literal notranslate"><span class="pre">report_stage</span></code> checkpoint at each major step (<code class="docutils literal notranslate"><span class="pre">checking_existing_listing</span></code>,
+<code class="docutils literal notranslate"><span class="pre">validating_model</span></code>, <code class="docutils literal notranslate"><span class="pre">resolving_type_and_marque</span></code>, <code class="docutils literal notranslate"><span class="pre">creating_shopify_product</span></code>,
+<code class="docutils literal notranslate"><span class="pre">creating_airtable_lock_record</span></code>, <code class="docutils literal notranslate"><span class="pre">building_metafields</span></code>, <code class="docutils literal notranslate"><span class="pre">uploading_images</span></code>,
+<code class="docutils literal notranslate"><span class="pre">creating_variants</span></code>, <code class="docutils literal notranslate"><span class="pre">updating_unit_listing_dates</span></code>) – visible live via
+<code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/create_product_shopify/current</span></code> while it runs, and in
+Grafana/Loki (<code class="docutils literal notranslate"><span class="pre">script=&quot;create_product_shopify&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">stage=&quot;...&quot;</span></code>).</p></li>
+<li><p>Existence check, then ~15 individual field validations (each raises an internal-only
+<code class="docutils literal notranslate"><span class="pre">_ValidationFailed</span></code>, caught once and turned into a <code class="docutils literal notranslate"><span class="pre">ScriptResult</span></code> failure – see
+<code class="docutils literal notranslate"><span class="pre">api/scripts/create_product_shopify.py</span></code>’s module docstring for why this shape was
+chosen over either a bare early-return chain or a full custom exception hierarchy).</p></li>
+<li><p>Creates the Shopify product (shell, no variants yet), then the Airtable lock record.</p></li>
+<li><p>Builds the metafields: a generic spec table (weight, dimensions, any non-variant
+Specification whose name is <code class="docutils literal notranslate"><span class="pre">&quot;key</span> <span class="pre">:</span> <span class="pre">value&quot;</span></code>-shaped) plus family-specific “filter”
+metafields (currently only defined for the <code class="docutils literal notranslate"><span class="pre">&quot;Balances&quot;</span></code> family – see
+<code class="docutils literal notranslate"><span class="pre">FAMILY_FILTER_METAFIELDS</span></code> in the source).</p></li>
+<li><p>Uploads product images in parallel (3 workers): “Photo neuve” always, plus
+marketplace photos from the <em>first</em> sellable unit that has any (see “Known risks”
+below for the exact semantics here).</p></li>
+<li><p>Groups sellable units into variant rows by <code class="docutils literal notranslate"><span class="pre">(variant</span> <span class="pre">value,</span> <span class="pre">état</span> <span class="pre">esthétique)</span></code>,
+aggregating to <code class="docutils literal notranslate"><span class="pre">(min</span> <span class="pre">price,</span> <span class="pre">count)</span></code> per group; creates one Shopify variant per row
+(the first is bundled into the product-level update that also sets Shopify’s
+<code class="docutils literal notranslate"><span class="pre">options</span></code>, matching Shopify’s own requirement that a product have at least one
+variant before more can be added), and pushes each variant’s inventory level.</p></li>
+<li><p>Updates <code class="docutils literal notranslate"><span class="pre">Date</span> <span class="pre">de</span> <span class="pre">mise</span> <span class="pre">en</span> <span class="pre">ligne</span></code> on every unit that was just listed, if not already set.</p></li>
+<li><p>Sends an error-alert email (<code class="docutils literal notranslate"><span class="pre">api.services.gmail.send_alert_email</span></code>, reusing the
+existing Google service account – no separate SMTP credential) on any failure.</p></li>
+</ol>
+</section>
+<section id="deliberate-deviations-from-the-source-cloud-function">
+<h2>Deliberate deviations from the source Cloud Function<a class="headerlink" href="#deliberate-deviations-from-the-source-cloud-function" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>No pandas/numpy.</strong> The source used pandas only for a small groupby-aggregate and
+numpy only for incrementally building small 2D arrays; this port uses a plain
+<code class="docutils literal notranslate"><span class="pre">collections.defaultdict</span></code> instead (see <code class="docutils literal notranslate"><span class="pre">_build_variant_rows</span></code>). Behaviorally
+equivalent, including <code class="docutils literal notranslate"><span class="pre">sorted()</span></code> on the groups to match pandas’ <code class="docutils literal notranslate"><span class="pre">groupby(sort=True)</span></code>
+default – this matters because the <em>first</em> variant row is special-cased (bundled
+into the options-setting product update), so group iteration order isn’t cosmetic.</p></li>
+<li><p><strong>No SMTP / hardcoded credential.</strong> The source had a Gmail app-password hardcoded in
+plaintext. This port instead reuses the Gmail API service account already configured
+for <code class="docutils literal notranslate"><span class="pre">api.services.gmail.create_draft</span></code> (<code class="docutils literal notranslate"><span class="pre">GOOGLE_APPLICATION_CREDENTIALS</span></code>), sending
+(not drafting) from <code class="docutils literal notranslate"><span class="pre">ALERT_EMAIL_SENDER</span></code> to <code class="docutils literal notranslate"><span class="pre">ALERT_EMAIL_RECIPIENTS</span></code>. No new
+credential type, and nothing plaintext.</p></li>
+<li><p><strong>Hardened: zero-variants-created is now a failure, not a silent success.</strong> The
+source logs each variant/metafield creation failure and continues regardless –
+if <em>every</em> variant call failed (e.g. a bad payload, a Shopify API change), it still
+returned success with a real product that has zero real variants. This port checks
+the count of variants actually created and fails the run (with cleanup: the Shopify
+product and Airtable lock record are both deleted) if it’s zero. Metafield failures
+are still soft/non-fatal, same as source – only “the product is fundamentally
+unsellable” is hardened.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">SHOPIFY_LOCATION_ID</span></code> is now required config</strong>, not a hardcoded production value.
+Confirmed empirically the dev store has three locations, none matching the
+production id the source hardcoded (<code class="docutils literal notranslate"><span class="pre">84104446276</span></code>) – see <code class="docutils literal notranslate"><span class="pre">.env.example</span></code>.</p></li>
+</ul>
+</section>
+<section id="known-risks-things-worth-reviewing">
+<h2>Known risks / things worth reviewing<a class="headerlink" href="#known-risks-things-worth-reviewing" title="Link to this heading"></a></h2>
+<p>This is a large, first-time port of real, previously-production business logic, tested
+so far with unit tests (hand-written fakes) and one real end-to-end run against the
+dev store (see below) – not exhaustively exercised against every historical edge case
+the source handled. Worth a closer look before relying on this for real production
+listings:</p>
+<ul class="simple">
+<li><p><strong>Marketplace-photo semantics, preserved exactly (possibly surprising).</strong> Only the
+<em>first</em> unit (in Airtable’s own order) with any raw <code class="docutils literal notranslate"><span class="pre">Photos</span> <span class="pre">marketplace</span></code> entries at
+all contributes photos – even if every one of its photos gets filtered out by the
+≥300×300px/dedup-against-“Photo neuve” checks, the function does not keep looking at
+later units for one that actually has a usable photo. If a Model’s first-listed unit
+happens to have only low-res marketplace photos, the listing gets <strong>zero</strong> marketplace
+photos even though a later unit might have great ones. This is the source’s exact
+behavior, kept deliberately rather than “fixed” – confirm this is actually wanted.</p></li>
+<li><p><strong>Metafield creation failures are silent.</strong> Unlike the hardened variant-count check
+above, a metafield (generic or family-filter) that fails to create is only logged,
+never surfaces in the run’s result at all. A product could ship with a missing
+<code class="docutils literal notranslate"><span class="pre">main_table</span></code> or a missing filter metafield and the run would still report success.</p></li>
+<li><p>~~Fixed, but worth knowing about: the second Shopify option was decided by a
+hardcoded Type-name lookup, not by whether the Model actually needed one.~~
+<code class="docutils literal notranslate"><span class="pre">_resolve_option</span></code> used to return <code class="docutils literal notranslate"><span class="pre">None</span></code> (no second option at all) for any Type
+outside two hardcoded special cases (<code class="docutils literal notranslate"><span class="pre">Micropipette</span></code>, <code class="docutils literal notranslate"><span class="pre">Paillasse</span></code>/<code class="docutils literal notranslate"><span class="pre">Meuble</span> <span class="pre">sous</span> <span class="pre">paillasse</span></code>) – confirmed live: a genuinely multi-variant Model (two distinct sizes)
+whose Type was neither of those got created with <strong>only one Shopify option</strong>,
+permanently unable to represent both sizes as separate variants (there’s no way to
+add a missing option to an already-created product via <code class="docutils literal notranslate"><span class="pre">update_product</span></code> – it only
+ever creates variants <em>within</em> an existing option structure). Now detected from
+whether the Model actually has more than one distinct <code class="docutils literal notranslate"><span class="pre">variant_value</span></code> across its
+Variations; the Type name still only picks a nicer option label for the two known
+families, falling back to a generic <code class="docutils literal notranslate"><span class="pre">&quot;Variante&quot;</span></code> otherwise. <strong>Any product already
+created before this fix with a genuinely multi-variant Model but only one Shopify
+option is still stuck that way</strong> – fixing an already-created product needs a
+one-time manual/scripted repair (adding the missing option + variant on Shopify
+directly), which hasn’t been built.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">SHOPIFY_API_VERSION</span></code> is <code class="docutils literal notranslate"><span class="pre">2025-01</span></code></strong> (this project’s existing shared default),
+<strong>not</strong> <code class="docutils literal notranslate"><span class="pre">2025-07</span></code> (what the source was actually written and validated against). No
+equivalence check has been done between these two versions for the specific mutating
+endpoints this script uses (product/variant/metafield/image/inventory writes) –
+worth a deliberate check, not an assumption, before trusting this in production.</p></li>
+<li><p><strong>Family-specific filter metafields only cover <code class="docutils literal notranslate"><span class="pre">&quot;Balances&quot;</span></code></strong> (ported as-is from the
+source’s own <code class="docutils literal notranslate"><span class="pre">METAFIELDS</span></code> dict) – every other family gets only the generic spec
+table, no dedicated filter metafields. If other families need filters, that mapping
+needs extending; nothing in this port adds new families beyond what the source had.</p></li>
+<li><p><strong>The three-repo naming quirk in <code class="docutils literal notranslate"><span class="pre">Model.fields[&quot;Status</span> <span class="pre">(from</span> <span class="pre">Annonces</span> <span class="pre">Shopify</span> <span class="pre">(dev))&quot;]</span></code>
+is real, not a typo</strong> – copied byte-for-byte from the source. It’s a rollup field
+whose own name happens to contain <code class="docutils literal notranslate"><span class="pre">&quot;(dev)&quot;</span></code> even when read against the production
+base. If this field is ever renamed in Airtable, this string must be updated to match
+exactly, or the “already has an active listing” short-circuit silently stops working
+(falls through to always re-checking Shopify directly, which is safe but slower –
+not a silent-corruption risk, just worth knowing this specific string is load-bearing).</p></li>
+<li><p>~~No dedicated unit test for the “network error on the initial product-creation POST”
+path~~ – covered by <code class="docutils literal notranslate"><span class="pre">tests/test_shopify_rest.py</span></code>, added alongside the 409 fix below.</p></li>
+<li><p><strong>Concurrent image uploads to the same product can 409 – now retried.</strong>
+<code class="docutils literal notranslate"><span class="pre">IMAGE_UPLOAD_WORKERS</span></code> images upload in parallel to <em>one</em> product; Shopify’s Admin API
+rejects a same-product write that collides with another one in flight with <code class="docutils literal notranslate"><span class="pre">409</span> <span class="pre">{&quot;errors&quot;:</span> <span class="pre">{&quot;product&quot;:</span> <span class="pre">[&quot;This</span> <span class="pre">product</span> <span class="pre">is</span> <span class="pre">currently</span> <span class="pre">being</span> <span class="pre">modified.</span> <span class="pre">Please</span> <span class="pre">try</span> <span class="pre">again</span> <span class="pre">later.&quot;]}}</span></code> – confirmed live against the dev store (7 concurrent image uploads via
+<code class="docutils literal notranslate"><span class="pre">ThreadPoolExecutor(max_workers=3)</span></code> reliably produced at least one 409). Unlike a
+network error or 5xx, this isn’t ambiguous about whether the write applied – Shopify
+says outright it didn’t – so <code class="docutils literal notranslate"><span class="pre">ShopifyAdmin._request</span></code> now retries a 409 with backoff
+regardless of HTTP method. See <code class="docutils literal notranslate"><span class="pre">tests/test_shopify_rest.py</span></code> for the retry-matrix
+coverage.</p></li>
+</ul>
+</section>
+<section id="metrics-and-details">
+<h2>Metrics and details<a class="headerlink" href="#metrics-and-details" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/create_product_shopify/runs</span></code> returns, per run:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.variants_created</span></code></p></td>
+<td><p>How many Shopify variants were actually created (0 forces failure – see “Deliberate deviations” above)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.images_uploaded</span></code></p></td>
+<td><p>How many images were successfully uploaded</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.documentation_uploaded</span></code></p></td>
+<td><p>1 when the documentation PDF was attached, else 0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.documentation_status</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uploaded</span></code> / <code class="docutils literal notranslate"><span class="pre">absent</span></code> (no PDF in Airtable) / <code class="docutils literal notranslate"><span class="pre">failed</span></code> (product kept – see “Documentation PDF”)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.documentation_error</span></code></p></td>
+<td><p>Present when <code class="docutils literal notranslate"><span class="pre">documentation_status</span></code> is <code class="docutils literal notranslate"><span class="pre">failed</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.model_id</span></code></p></td>
+<td><p>The Model record this run was for</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.shopify_product_id</span></code></p></td>
+<td><p>The newly-created Shopify product id (on success)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.title</span></code></p></td>
+<td><p>The Model’s name, for quick scanning in the run history – present on <strong>every</strong> outcome (success, skip, or <code class="docutils literal notranslate"><span class="pre">_ValidationFailed</span></code>), not just success: it defaults to <code class="docutils literal notranslate"><span class="pre">&quot;Produit</span> <span class="pre">inconnu&quot;</span></code> at the top of <code class="docutils literal notranslate"><span class="pre">run()</span></code> and is filled in from the Model record (or, for the existence-check skip, from <code class="docutils literal notranslate"><span class="pre">_check_existing_listing</span></code>’s own cached fetch) as soon as it’s known.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.skipped_reason</span></code></p></td>
+<td><p>Present (with <code class="docutils literal notranslate"><span class="pre">status:</span> <span class="pre">&quot;success&quot;</span></code>) when an existing-listing guard stopped the run before creating anything – not a failure</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.error</span></code></p></td>
+<td><p>Present on failure: the validation message or the unexpected exception</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.airtable_model_url</span></code></p></td>
+<td><p>Present on every <code class="docutils literal notranslate"><span class="pre">_ValidationFailed</span></code> – a link to the Model record the failing check is about, even for a Model-level check with no more specific link (e.g. a missing description)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.airtable_unit_url</span></code> / <code class="docutils literal notranslate"><span class="pre">details.airtable_variation_url</span></code> / <code class="docutils literal notranslate"><span class="pre">details.airtable_type_url</span></code></p></td>
+<td><p>Present when the specific failing check is scoped to a Unit, Variation, or Type record rather than the Model as a whole (e.g. a per-unit sale-price-vs-buyback-price check) – lets a human jump straight to the <em>actual</em> record that’s wrong, not just the Model it belongs to</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="where-to-look">
+<h2>Where to look<a class="headerlink" href="#where-to-look" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Trigger/history:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/internal/scripts/create_product_shopify/run?record_id=recXXX</span></code>,
+<code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/status/{task_id}</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/create_product_shopify/runs</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/create_product_shopify/current</span></code> (live stage while running).</p></li>
+<li><p><strong>Logs:</strong> <code class="docutils literal notranslate"><span class="pre">structlog</span></code>, logger <code class="docutils literal notranslate"><span class="pre">api.scripts.create_product_shopify</span></code> (business logic) and
+<code class="docutils literal notranslate"><span class="pre">api.tasks</span></code> (stage/lifecycle events) – stdout, the rotating file, and Grafana/Loki
+(<code class="docutils literal notranslate"><span class="pre">script=&quot;create_product_shopify&quot;</span></code>).</p></li>
+<li><p><strong>Error alerts:</strong> email, via <code class="docutils literal notranslate"><span class="pre">api.services.gmail.send_alert_email</span></code> –
+<code class="docutils literal notranslate"><span class="pre">ALERT_EMAIL_SENDER</span></code>/<code class="docutils literal notranslate"><span class="pre">ALERT_EMAIL_RECIPIENTS</span></code> in <code class="docutils literal notranslate"><span class="pre">.env</span></code>.</p></li>
+<li><p><strong>Source:</strong> <code class="docutils literal notranslate"><span class="pre">api/scripts/create_product_shopify.py</span></code>, <code class="docutils literal notranslate"><span class="pre">api/integrations/shopify_rest.py</span></code>
+(the Shopify Admin REST client, mutation-focused – distinct from
+<code class="docutils literal notranslate"><span class="pre">api/integrations/shopify.py</span></code>’s read-only GraphQL client used by
+<code class="docutils literal notranslate"><span class="pre">shopify_catalog_reconciliation</span></code>).</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="update_product.html" class="btn btn-neutral float-left" title="Update Product" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="shopify_catalog_reconciliation.html" class="btn btn-neutral float-right" title="Shopify Catalog Reconciliation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Rewake.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

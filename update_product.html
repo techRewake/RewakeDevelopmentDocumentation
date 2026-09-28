@@ -377,7 +377,7 @@ window.runMermaid = runMermaid;</script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Shopify Catalog Reconciliation" href="shopify_catalog_reconciliation.html" />
+    <link rel="next" title="Create Product Shopify" href="create_product_shopify.html" />
     <link rel="prev" title="Scripts" href="scripts.html" /> 
 </head>
 
@@ -409,12 +409,17 @@ window.runMermaid = runMermaid;</script>
 <li class="toctree-l1 current"><a class="reference internal" href="scripts.html">Scripts</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Update Product</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#what-it-does">What it does</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#documentation-pdf">Documentation PDF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#idempotence-and-locking-two-layers">Idempotence and locking (two layers)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#data-it-touches">Data it touches</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#how-it-works">How it works</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#details-payload">Details payload</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deliberate-deviations-from-the-source-update-product">Deliberate deviations from the source (<code class="docutils literal notranslate"><span class="pre">Update-Product</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#known-risks-things-worth-reviewing">Known risks / things worth reviewing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metrics-and-details">Metrics and details</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#where-to-look">Where to look</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="create_product_shopify.html">Create Product Shopify</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shopify_catalog_reconciliation.html">Shopify Catalog Reconciliation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="airtable_catalog_stats.html">Airtable Catalog Stats</a></li>
 </ul>
@@ -460,75 +465,237 @@ window.runMermaid = runMermaid;</script>
 <td><p><code class="docutils literal notranslate"><span class="pre">api.scripts.update_product</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>Schedule</strong></p></td>
-<td><p>on-demand only (<code class="docutils literal notranslate"><span class="pre">schedule</span> <span class="pre">=</span> <span class="pre">None</span></code>) – requires a <code class="docutils literal notranslate"><span class="pre">record_id</span></code></p></td>
+<td><p>on-demand only (<code class="docutils literal notranslate"><span class="pre">schedule</span> <span class="pre">=</span> <span class="pre">None</span></code>) – requires exactly one of <code class="docutils literal notranslate"><span class="pre">record_id</span></code> (a Variation) or <code class="docutils literal notranslate"><span class="pre">model_id</span></code> (a Model)</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>Reads</strong></p></td>
-<td><p>Airtable (via the sibling <code class="docutils literal notranslate"><span class="pre">Update-Product</span></code> project)</p></td>
+<td><p>Airtable</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>Writes</strong></p></td>
-<td><p><strong>Shopify</strong> (via the sibling <code class="docutils literal notranslate"><span class="pre">Update-Product</span></code> project) – the only script here that writes anything</p></td>
+<td><p><strong>Shopify</strong> – the other script here that writes anything, alongside <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> (which creates a brand-new listing; this one only ever updates one that already exists)</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>Origin</strong></p></td>
-<td><p>wraps an existing sibling project, not new logic written for this API</p></td>
+<td><p>ported in-process from a sibling project (<code class="docutils literal notranslate"><span class="pre">Update-Product</span></code>, a separate git repository) that this script previously shelled out to as a subprocess – see “Deliberate deviations” below</p></td>
 </tr>
 </tbody>
 </table>
 <section id="what-it-does">
 <h2>What it does<a class="headerlink" href="#what-it-does" title="Link to this heading"></a></h2>
-<p>Runs the sibling <code class="docutils literal notranslate"><span class="pre">Update-Product</span></code> project (a separate git repository, path configured
-via <code class="docutils literal notranslate"><span class="pre">UPDATE_PRODUCT_DIR</span></code>) for exactly one Airtable Model record: that project reads the
-Model’s current Airtable data and pushes the corresponding create/update to Shopify
-(title, images, variants, inventory, metafields – whatever <code class="docutils literal notranslate"><span class="pre">Update-Product</span></code>’s own
-<code class="docutils literal notranslate"><span class="pre">main.py</span></code> does; that logic lives in its own repository, not here).</p>
-<p>This is <strong>not</strong> read-only, unlike every other script registered in this API –
-<code class="docutils literal notranslate"><span class="pre">shopify_catalog_reconciliation</span></code> and <code class="docutils literal notranslate"><span class="pre">airtable_catalog_stats</span></code> only ever
-compare or report; this one changes the live Shopify catalog.</p>
-<p><code class="docutils literal notranslate"><span class="pre">app.rewake.fr</span></code>’s own <code class="docutils literal notranslate"><span class="pre">/api/lauch_script/update_shopify</span></code> route currently invokes the
-same <code class="docutils literal notranslate"><span class="pre">Update-Product</span></code> project directly (<code class="docutils literal notranslate"><span class="pre">execAsync</span></code> from its own Next.js server),
-entirely bypassing this API. This script is a second, independent way to trigger the
-exact same underlying project – queued, retried, and with a persisted run history,
-rather than a bare synchronous shell-out – not (yet) a replacement for that other
-path. See <code class="docutils literal notranslate"><span class="pre">PROPOSAL.md</span></code> in the RewakeMonitor repo for the broader migration this fits
-into.</p>
+<p>Syncs an existing Shopify product from Airtable: description, two metafields
+(<code class="docutils literal notranslate"><span class="pre">custom.long_description</span></code>, <code class="docutils literal notranslate"><span class="pre">custom.main_table</span></code> – the exact same keys
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> writes at creation time, so a product’s content stays
+consistent regardless of which script last touched it), and per-variant price and
+inventory quantity. Creates a missing Shopify variant along the way if Airtable now
+has stock for a combination that didn’t exist on Shopify yet – not gated behind a
+permission flag, since that’s a routine, expected part of “update”, not an edge case to
+block.</p>
+<p>Two entry modes, both real (nothing here previews or dry-runs):</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">record_id</span></code></strong> (a Variation id, the default/existing convention): resolves that
+Variation’s parent Model, then updates the whole product. Shopify variants all belong
+to one product per Model anyway, so “update one variation” and “update its model”
+converge on the same write – this has always been true, even before this script had
+an explicit <code class="docutils literal notranslate"><span class="pre">model_id</span></code> mode.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">model_id</span></code></strong> (new): the identical pipeline, entered directly from a Model id –
+useful when reconciliation, or a human, already knows the Model rather than one of
+its Variations.</p></li>
+</ul>
+<p>Nothing here creates a brand-new Shopify listing – see <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> for
+that. A Model with no Shopify product yet (<code class="docutils literal notranslate"><span class="pre">Aucun</span> <span class="pre">produit</span> <span class="pre">Shopify</span> <span class="pre">associé</span> <span class="pre">à</span> <span class="pre">ce</span> <span class="pre">modèle</span></code>) is a validation failure here, not something this script will fix.</p>
+</section>
+<section id="documentation-pdf">
+<h2>Documentation PDF<a class="headerlink" href="#documentation-pdf" title="Link to this heading"></a></h2>
+<p>Shared with <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> via <code class="docutils literal notranslate"><span class="pre">api/scripts/_product_documentation.py</span></code> (upload through
+<code class="docutils literal notranslate"><span class="pre">api/integrations/shopify_files.py</span></code>, GraphQL).</p>
+<ul class="simple">
+<li><p><strong>Source:</strong> the Model’s Airtable <code class="docutils literal notranslate"><span class="pre">Documentation</span></code> attachment field – the first attachment
+that is a PDF (MIME type, or a <code class="docutils literal notranslate"><span class="pre">.pdf</span></code> filename). Other attachments are ignored.</p></li>
+<li><p><strong>Target:</strong> the product metafield <code class="docutils literal notranslate"><span class="pre">SHOPIFY_PDF_METAFIELD_NAMESPACE</span></code>.<code class="docutils literal notranslate"><span class="pre">SHOPIFY_PDF_METAFIELD_KEY</span></code>
+(default <code class="docutils literal notranslate"><span class="pre">custom.pdf_descriptif</span></code>, the “PDF Descriptif” definition), type <code class="docutils literal notranslate"><span class="pre">file_reference</span></code>,
+plus a companion <code class="docutils literal notranslate"><span class="pre">single_line_text_field</span></code> (<code class="docutils literal notranslate"><span class="pre">custom.pdf_descriptif_airtable_id</span></code> by default)
+recording the Airtable attachment id the Shopify file came from.</p></li>
+<li><p><strong>Upload:</strong> the PDF is downloaded from Airtable (signed url, fetched fresh with the
+record) and sent through Shopify’s staged upload -&gt; <code class="docutils literal notranslate"><span class="pre">fileCreate</span></code> -&gt; poll until
+<code class="docutils literal notranslate"><span class="pre">READY</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">metafieldsSet</span></code> (both metafields in one atomic call).</p></li>
+<li><p><strong>Change detection:</strong> same “diff against live Shopify” approach as the rest of
+<code class="docutils literal notranslate"><span class="pre">update_product</span></code> – no extra state store. Upload when Shopify has no PDF, or when the
+recorded source id differs from Airtable’s current attachment id (Airtable gives a
+replaced file a new id). A Shopify PDF set by hand before this sync existed has no
+source id, so it is replaced once by Airtable’s, then stays stable.</p></li>
+<li><p><strong>Never clears:</strong> an empty Airtable field writes nothing (<code class="docutils literal notranslate"><span class="pre">documentation_status:</span> <span class="pre">&quot;absent&quot;</span></code>) – there’s no deletion-sync convention in this project.</p></li>
+<li><p>The replaced Shopify file is not deleted from the Files library (it may be referenced
+elsewhere).</p></li>
+<li><p><strong>Scopes:</strong> the Shopify app needs <code class="docutils literal notranslate"><span class="pre">write_files</span></code> and <code class="docutils literal notranslate"><span class="pre">read_files</span></code> (confirmed missing on
+the RewakeDev token on 2026-09-28 – <code class="docutils literal notranslate"><span class="pre">fileCreate</span></code> answers ACCESS_DENIED without them).</p></li>
+<li><p><strong>Failure handling:</strong> runs inside the per-Shopify-product lock, before variants. A
+failed upload doesn’t stop the rest of the sync, but turns the run into a <code class="docutils literal notranslate"><span class="pre">failure</span></code>
+afterwards (same rule as a failed variant creation: it’s what reconciliation’s
+documentation bulk action runs this script for).</p></li>
+</ul>
+</section>
+<section id="idempotence-and-locking-two-layers">
+<h2>Idempotence and locking (two layers)<a class="headerlink" href="#idempotence-and-locking-two-layers" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>The per-<code class="docutils literal notranslate"><span class="pre">record_id</span></code> Redis lock in <code class="docutils literal notranslate"><span class="pre">api/tasks.py</span></code> (shared by every script) guards the
+outer request layer – but it’s keyed by whatever the caller passed in (a Variation
+id, or a Model id), and two <em>different</em> keys can resolve to the very same Shopify
+product.</p></li>
+<li><p>A second lock, acquired inside <code class="docutils literal notranslate"><span class="pre">run()</span></code> itself once the real Shopify product id is
+known, keyed by that Shopify product id (<code class="docutils literal notranslate"><span class="pre">RunStore.acquire_lock(&quot;update_product_shopify_id&quot;,</span> <span class="pre">shopify_id)</span></code>) – this is the one that actually matters for correctness. Two
+concurrent triggers that resolve to the same product (different Variations of one
+Model, or a Variation and its own Model triggered at the same time) collide here and
+the second is rejected with <code class="docutils literal notranslate"><span class="pre">status=&quot;skipped&quot;</span></code>, not a race on Shopify. This mirrors
+<code class="docutils literal notranslate"><span class="pre">Update-Product</span></code>’s own <code class="docutils literal notranslate"><span class="pre">fcntl</span></code> file lock, which existed for exactly this reason –
+see “Deliberate deviations” below.</p></li>
+</ol>
 </section>
 <section id="data-it-touches">
 <h2>Data it touches<a class="headerlink" href="#data-it-touches" title="Link to this heading"></a></h2>
 <pre  class="mermaid">
         flowchart LR
-    CALLER[[&quot;POST /internal/scripts/update_product/run?record_id=...&quot;]]
-    TASK[[&quot;api.tasks.run_script&lt;br/&gt;(Celery)&quot;]]
-    SCRIPT[[&quot;Update-Product/main.py&lt;br/&gt;(sibling project, subprocess)&quot;]]
-    AT[(&quot;Airtable&lt;br/&gt;Model record&quot;)]
-    SH[(&quot;Shopify&lt;br/&gt;product create/update&quot;)]
+    CALLER[[&quot;POST /internal/scripts/update_product/run?record_id=...&lt;br/&gt;or ?model_id=...&quot;]]
+    TASK[[&quot;api.tasks.run_script (Celery)&lt;br/&gt;per-record_id Redis lock&quot;]]
+    SCRIPT[[&quot;api.scripts.update_product&lt;br/&gt;(in-process)&quot;]]
+    LOCK[(&quot;Redis: per-Shopify-product-id lock&quot;)]
+    AT[(&quot;Airtable&lt;br/&gt;Model + Variation + Unit records&quot;)]
+    SH[(&quot;Shopify&lt;br/&gt;product/metafield/variant/inventory writes&quot;)]
 
     CALLER --&gt; TASK --&gt; SCRIPT
+    SCRIPT -- acquires --&gt; LOCK
     SCRIPT -- reads --&gt; AT
     SCRIPT -- writes --&gt; SH
 
     TASK --&gt; RUNS[(&quot;Redis run history&lt;br/&gt;GET /internal/scripts/update_product/runs&quot;)]
-    TASK --&gt; LOG[(&quot;structlog (api.tasks)&lt;br/&gt;-&gt; stdout / rotating file&quot;)]
+    TASK --&gt; LOG[(&quot;structlog (api.scripts.update_product)&lt;br/&gt;-&gt; stdout / rotating file&quot;)]
     </pre></section>
 <section id="how-it-works">
 <h2>How it works<a class="headerlink" href="#how-it-works" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/internal/scripts/update_product/run?record_id=recXXXXXXXXXXXXXX</span></code> queues a
-Celery task with that <code class="docutils literal notranslate"><span class="pre">record_id</span></code>; a missing <code class="docutils literal notranslate"><span class="pre">record_id</span></code> is rejected with <code class="docutils literal notranslate"><span class="pre">400</span></code>
-before anything is queued.</p></li>
-<li><p>The task runs <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span> <span class="pre">&lt;UPDATE_PRODUCT_DIR&gt;/main.py</span> <span class="pre">&lt;record_id&gt;</span></code> as a subprocess,
-with <code class="docutils literal notranslate"><span class="pre">cwd=UPDATE_PRODUCT_DIR</span></code>, and captures its stdout/stderr.</p></li>
-<li><p>Success is <code class="docutils literal notranslate"><span class="pre">stderr</span> <span class="pre">==</span> <span class="pre">&quot;&quot;</span></code> – any stderr output at all (not just a non-zero exit
-code) is treated as a failed run, matching how <code class="docutils literal notranslate"><span class="pre">Update-Product</span></code> itself signals
-problems.</p></li>
-<li><p>On a Celery-visible failure (the subprocess itself failing to start, or exiting
-non-zero), the task retries automatically (<code class="docutils literal notranslate"><span class="pre">autoretry_for=(Exception,)</span></code>, up to 3
-times with backoff) – a transient issue (e.g. a slow Airtable/Shopify response
-inside <code class="docutils literal notranslate"><span class="pre">Update-Product</span></code>) resolves itself without manual intervention; a
-consistently broken <code class="docutils literal notranslate"><span class="pre">record_id</span></code> will exhaust retries and show as <code class="docutils literal notranslate"><span class="pre">FAILURE</span></code>.</p></li>
+<li><p>Resolve the Model: <code class="docutils literal notranslate"><span class="pre">record_id</span></code> mode verifies the id really belongs to the
+<code class="docutils literal notranslate"><span class="pre">Variation</span></code> table (Airtable’s single-record GET doesn’t validate that – see
+<code class="docutils literal notranslate"><span class="pre">_assert_belongs_to_table</span></code>, the same “confirmed the hard way” gotcha
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code>’s equivalent checks already document), then reads its
+<code class="docutils literal notranslate"><span class="pre">Model</span></code> link field; <code class="docutils literal notranslate"><span class="pre">model_id</span></code> mode verifies the id belongs to <code class="docutils literal notranslate"><span class="pre">Model</span></code> directly.</p></li>
+<li><p>Validate: the Model must still be <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code>, must already have a Shopify
+product linked (via <code class="docutils literal notranslate"><span class="pre">Annonces</span> <span class="pre">Shopify</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">ID_shopify</span></code>, the exact same
+<code class="docutils literal notranslate"><span class="pre">_resolve_listing_ids</span></code> helper <code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code> uses – confirmed against
+the live Airtable schema that Variation’s own <code class="docutils literal notranslate"><span class="pre">ShopifyID</span></code>/<code class="docutils literal notranslate"><span class="pre">Status</span> <span class="pre">Shopify</span></code> lookup
+fields resolve through this identical two-hop chain, so there’s no need to read them
+separately), and must have at least one sellable unit (reusing
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code>’s own <code class="docutils literal notranslate"><span class="pre">_collect_sellable_units</span></code>/<code class="docutils literal notranslate"><span class="pre">_build_variant_rows</span></code> –
+the same aggregation, so both scripts always agree on what a product’s variants
+<em>should</em> look like).</p></li>
+<li><p>Acquire the per-Shopify-product-id lock (see above), then: fetch the live product,
+sync description and metafields (diffed against current values first – a no-op
+write is never sent), then for every desired (état esthétique, variant value)
+combination: create the Shopify variant if missing, update its price if different,
+push inventory if the quantity differs. Matching an Airtable variant row to a live
+Shopify variant is <strong>positional</strong> – option 1 is always “État esthétique” (position
+1, fixed at creation time by <code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code>’s own <code class="docutils literal notranslate"><span class="pre">_create_variants</span></code>),
+option 2 (if the product actually has one, read from the live product’s own
+<code class="docutils literal notranslate"><span class="pre">options</span></code>, not re-derived from Airtable) is the variant value distinguishing sibling
+Variations.</p></li>
+<li><p>A description/metafield/single-variant sync failure is logged and skipped, not fatal
+to the whole run – one Shopify hiccup on one variant shouldn’t block every other
+variant’s sync. The run only reports <code class="docutils literal notranslate"><span class="pre">status=&quot;failure&quot;</span></code> for a genuine validation
+problem (missing data, no linked product) or being completely unable to reach the
+product on Shopify at all.</p></li>
 </ol>
 </section>
-<section id="details-payload">
-<h2>Details payload<a class="headerlink" href="#details-payload" title="Link to this heading"></a></h2>
-<p>No numeric <code class="docutils literal notranslate"><span class="pre">metrics</span></code> – <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/update_product/runs</span></code> returns, per run:</p>
+<section id="deliberate-deviations-from-the-source-update-product">
+<h2>Deliberate deviations from the source (<code class="docutils literal notranslate"><span class="pre">Update-Product</span></code>)<a class="headerlink" href="#deliberate-deviations-from-the-source-update-product" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>In-process, no subprocess.</strong> The source shelled out to
+<code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span> <span class="pre">Update-Product/main.py</span> <span class="pre">&lt;record_id&gt;</span></code>, parsing captured stdout/stderr to guess
+success (<code class="docutils literal notranslate"><span class="pre">stderr</span> <span class="pre">==</span> <span class="pre">&quot;&quot;</span></code>) – unreliable, since <code class="docutils literal notranslate"><span class="pre">Update-Product</span></code> logs structured JSON
+events to stderr <em>by design</em>, even on a clean run. This port sidesteps that signal
+entirely.</p></li>
+<li><p><strong>No sandbox/dry-run mode.</strong> The source defaulted to a sandbox mode (reads real data,
+logs what it <em>would</em> do, never actually writes) unless an <code class="docutils literal notranslate"><span class="pre">ENVIRONMENT</span></code>/<code class="docutils literal notranslate"><span class="pre">ENV</span></code> var said
+“prod”. This port always writes for real once triggered, matching
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code>’s own behavior and this codebase’s existing posture.</p></li>
+<li><p><strong>No <code class="docutils literal notranslate"><span class="pre">ALLOW_VARIANT_CREATE</span></code> permission gate.</strong> The source required an explicit opt-in
+env var before it would create a missing variant, defaulting to blocking that. This
+port always creates a missing variant – a routine, expected part of “update”, not an
+edge case to guard against (this is also exactly what makes reconciliation’s
+“Variations absentes de Shopify” -&gt; “Mettre à jour” button meaningful).</p></li>
+<li><p><strong>REST, not GraphQL, for every Shopify write.</strong> The source used Shopify’s GraphQL
+Admin API (<code class="docutils literal notranslate"><span class="pre">productUpdate</span></code>, <code class="docutils literal notranslate"><span class="pre">metafieldsSet</span></code>, <code class="docutils literal notranslate"><span class="pre">productVariantsBulkUpdate</span></code>,
+<code class="docutils literal notranslate"><span class="pre">productVariantsBulkCreate</span></code>) plus one REST inventory call. This port extends the
+existing REST-only <code class="docutils literal notranslate"><span class="pre">ShopifyAdmin</span></code> (<code class="docutils literal notranslate"><span class="pre">api/integrations/shopify_rest.py</span></code>) instead of
+introducing a second, GraphQL-based client alongside it – one consistent Shopify
+integration style for both scripts, same asymmetric retry semantics (see that
+module’s own docstring), same positional option/variant matching
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code>’s own <code class="docutils literal notranslate"><span class="pre">_create_variants</span></code> already established.</p></li>
+<li><p><strong>Inventory location: the existing <code class="docutils literal notranslate"><span class="pre">SHOPIFY_LOCATION_ID</span></code> constant, not a live
+lookup.</strong> The source queried Shopify for “the first location” on every run
+(<code class="docutils literal notranslate"><span class="pre">locations(first:</span> <span class="pre">1)</span></code>) and used whatever came back. This port reuses the
+already-configured <code class="docutils literal notranslate"><span class="pre">SHOPIFY_LOCATION_ID</span></code> (set up for <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code>) –
+the dev store alone has 3 locations, so “whichever one Shopify lists first” is a real
+correctness risk the source carried, not something worth preserving.</p></li>
+<li><p><strong>A single <code class="docutils literal notranslate"><span class="pre">_ValidationFailed</span></code> exception, not the source’s 9-class hierarchy.</strong>
+<code class="docutils literal notranslate"><span class="pre">Update-Product/errors.py</span></code>’s granular exceptions (<code class="docutils literal notranslate"><span class="pre">RecordNotInVariationTableError</span></code>,
+<code class="docutils literal notranslate"><span class="pre">NoUnitsLinkedError</span></code>, <code class="docutils literal notranslate"><span class="pre">NoPriceError</span></code>, etc.) map 1:1 to specific checks, but
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code> already established a single internal exception
+(message + <code class="docutils literal notranslate"><span class="pre">extra_details</span></code> for Airtable links) as this codebase’s own convention for
+exactly this kind of “one of several checks failed” flow. This port follows that
+precedent rather than introducing a second error-handling philosophy alongside it –
+each check still raises a distinct, specific message, just not a distinct class.</p></li>
+<li><p><strong>Alerts via the existing Gmail API service, not raw SMTP.</strong> The source sent alert
+emails via <code class="docutils literal notranslate"><span class="pre">smtplib</span></code> and a Gmail app password (<code class="docutils literal notranslate"><span class="pre">SMTP_GMAIL_PASSWORD</span></code>) – the same
+category of credential exposure flagged in <code class="docutils literal notranslate"><span class="pre">Update-Product/docs/incident-2026-08-shopify-duplicates.md</span></code>’s
+security remediation checklist. This port reuses <code class="docutils literal notranslate"><span class="pre">api/services/gmail.py</span></code>’s
+<code class="docutils literal notranslate"><span class="pre">send_alert_email</span></code> (Gmail API + a service account), exactly like
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code> already does.</p></li>
+<li><p><strong>This port is the incident doc’s own target architecture.</strong> That document’s
+“architecture cible” diagram explicitly names bringing this logic in-process behind
+an authenticated internal endpoint, with a per-Shopify-id lock and no silent-success
+masking of a real failure – this is that migration, not an unrelated refactor.</p></li>
+</ul>
+</section>
+<section id="known-risks-things-worth-reviewing">
+<h2>Known risks / things worth reviewing<a class="headerlink" href="#known-risks-things-worth-reviewing" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>A model_id-mode (or a Model’s <em>other</em> Variations’) update isn’t attributed back to
+an individual Variation in reconciliation’s cross-reference.</strong>
+<code class="docutils literal notranslate"><span class="pre">attach_update_attempts</span></code> in <code class="docutils literal notranslate"><span class="pre">shopify_catalog_reconciliation.py</span></code> only matches a stored
+<code class="docutils literal notranslate"><span class="pre">update_product</span></code> run against <code class="docutils literal notranslate"><span class="pre">variations_missing_in_shopify</span></code> via that run’s own
+<code class="docutils literal notranslate"><span class="pre">record_id</span></code> – a run triggered by <code class="docutils literal notranslate"><span class="pre">model_id</span></code> (or by a <em>different</em> sibling Variation of
+the same Model) has no <code class="docutils literal notranslate"><span class="pre">record_id</span></code> of its own to match on, so it won’t show up as
+“already tried” against a Variation it may well have actually updated.</p></li>
+<li><p><strong>No dedicated test against a live Shopify product with a genuinely different
+historical option-1 value.</strong> The positional variant-matching assumes option 1 is
+always literally “État esthétique” (fixed at creation time) – true for everything
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code> has created, but not verified against an older,
+differently-structured product that might predate that convention.</p></li>
+<li><p>~~First real end-to-end verification against the dev store is still pending~~ –
+done: both entry modes and the reconciliation buttons were run live against the dev
+store, which is exactly what caught the bug below.</p></li>
+<li><p><strong>Fixed, but worth knowing about: variant option values must be compared stripped,
+not raw.</strong> Confirmed live: Airtable’s <code class="docutils literal notranslate"><span class="pre">Variant_value</span></code> can carry incidental trailing
+whitespace (<code class="docutils literal notranslate"><span class="pre">&quot;120x47</span> <span class="pre">&quot;</span></code>) that Shopify itself trims on save (<code class="docutils literal notranslate"><span class="pre">&quot;120x47&quot;</span></code>). Comparing
+the raw, untrimmed Airtable value against Shopify’s own (already-trimmed) option
+values meant an already-existing variant was never recognized as a match –
+<code class="docutils literal notranslate"><span class="pre">update_product</span></code> would then attempt to create a <em>duplicate</em> variant with the same
+option combination, which Shopify correctly rejects, and (before this fix) that
+rejection was silently logged and swallowed, with the run still reporting
+<code class="docutils literal notranslate"><span class="pre">status=&quot;success&quot;</span></code>. Both bugs are now fixed: <code class="docutils literal notranslate"><span class="pre">_variant_key_from_row</span></code>/
+<code class="docutils literal notranslate"><span class="pre">_variant_key_from_shopify</span></code> strip both sides before comparing, and a failed variant
+<em>creation</em> now makes the whole run report <code class="docutils literal notranslate"><span class="pre">status=&quot;failure&quot;</span></code> (with the real Shopify
+rejection reason in <code class="docutils literal notranslate"><span class="pre">details.error</span></code>) instead of silently succeeding – a
+price/quantity sync failure on an <em>already-existing</em> variant still stays soft
+(logged only), since that variant remains sellable in the meantime.</p></li>
+<li><p><strong>A <code class="docutils literal notranslate"><span class="pre">requests.Response</span></code> is falsy for any non-2xx status</strong> (<code class="docutils literal notranslate"><span class="pre">Response.__bool__</span></code>
+returns <code class="docutils literal notranslate"><span class="pre">self.ok</span></code>) – code that checks <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">response</span> <span class="pre">else</span> <span class="pre">None</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">response</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">None</span> <span class="pre">else</span> <span class="pre">None</span></code> silently discards the real status code/body of
+a genuine error response. This exact mistake is what hid the bug above during initial
+testing (logs showed <code class="docutils literal notranslate"><span class="pre">&quot;status&quot;:</span> <span class="pre">null</span></code> for a real 422). Fixed via <code class="docutils literal notranslate"><span class="pre">_response_error_detail</span></code>,
+which checks <code class="docutils literal notranslate"><span class="pre">is</span> <span class="pre">not</span> <span class="pre">None</span></code> and includes the actual response body. Worth grepping for
+this same <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">response</span> <span class="pre">else</span> <span class="pre">...</span></code> pattern if it’s ever copied elsewhere.</p></li>
+</ul>
+</section>
+<section id="metrics-and-details">
+<h2>Metrics and details<a class="headerlink" href="#metrics-and-details" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/update_product/runs</span></code> returns, per run:</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Key</p></th>
@@ -536,14 +703,44 @@ consistently broken <code class="docutils literal notranslate"><span class="pre"
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">record_id</span></code></p></td>
-<td><p>The Model record this run was for</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.variants_created</span></code></p></td>
+<td><p>How many Shopify variants were newly created this run</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stdout</span></code> / <code class="docutils literal notranslate"><span class="pre">stderr</span></code></p></td>
-<td><p>Raw output from <code class="docutils literal notranslate"><span class="pre">Update-Product/main.py</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.prices_updated</span></code> / <code class="docutils literal notranslate"><span class="pre">metrics.quantities_updated</span></code></p></td>
+<td><p>How many existing variants had their price/inventory changed</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">error</span></code></p></td>
-<td><p>Present on failure: the subprocess’s stderr, or a generic message if the process never started</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.metafields_updated</span></code></p></td>
+<td><p>How many of the two metafields were actually written (0 if both already matched)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.documentation_updated</span></code></p></td>
+<td><p>1 when a documentation PDF was uploaded this run, else 0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.documentation_status</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uploaded</span></code> / <code class="docutils literal notranslate"><span class="pre">unchanged</span></code> / <code class="docutils literal notranslate"><span class="pre">absent</span></code> (no PDF in Airtable, Shopify untouched) / <code class="docutils literal notranslate"><span class="pre">failed</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.documentation_error</span></code></p></td>
+<td><p>Present when <code class="docutils literal notranslate"><span class="pre">documentation_status</span></code> is <code class="docutils literal notranslate"><span class="pre">failed</span></code> (the run is then a <code class="docutils literal notranslate"><span class="pre">failure</span></code> too)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.model_id</span></code></p></td>
+<td><p>The Model this run resolved to, regardless of entry mode</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.record_id</span></code></p></td>
+<td><p>The Variation id, only when that was the entry mode used (absent for <code class="docutils literal notranslate"><span class="pre">model_id</span></code> mode)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.title</span></code></p></td>
+<td><p>The Model’s name, present on every outcome</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.description_updated</span></code></p></td>
+<td><p>Whether the product description actually needed (and got) a sync this run</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.shopify_product_id</span></code> / <code class="docutils literal notranslate"><span class="pre">details.shopify_product_url</span></code> / <code class="docutils literal notranslate"><span class="pre">details.airtable_listing_url</span></code></p></td>
+<td><p>Present on success and on the per-Shopify-id lock skip – links to the product this run was about</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.error</span></code></p></td>
+<td><p>Present on failure, or on a lock-collision skip</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.airtable_model_url</span></code> / <code class="docutils literal notranslate"><span class="pre">details.airtable_variation_url</span></code> / <code class="docutils literal notranslate"><span class="pre">details.airtable_unit_url</span></code></p></td>
+<td><p>Best-effort links to the Airtable record a validation failure is actually about – same convention as <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code></p></td>
 </tr>
 </tbody>
 </table>
@@ -551,12 +748,15 @@ consistently broken <code class="docutils literal notranslate"><span class="pre"
 <section id="where-to-look">
 <h2>Where to look<a class="headerlink" href="#where-to-look" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p><strong>Trigger:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/internal/scripts/update_product/run?record_id=recXXX</span></code>.</p></li>
-<li><p><strong>Status/history:</strong> <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/status/{task_id}</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/update_product/runs</span></code>.</p></li>
-<li><p><strong>Logs:</strong> <code class="docutils literal notranslate"><span class="pre">structlog</span></code>, logger <code class="docutils literal notranslate"><span class="pre">api.tasks</span></code>; <code class="docutils literal notranslate"><span class="pre">Update-Product</span></code>’s own stdout/stderr is
-captured into the run’s <code class="docutils literal notranslate"><span class="pre">details</span></code>, not this API’s log files.</p></li>
-<li><p><strong>Source:</strong> <code class="docutils literal notranslate"><span class="pre">api/scripts/update_product.py</span></code>. The actual update logic is in the
-<code class="docutils literal notranslate"><span class="pre">Update-Product</span></code> repository, outside this one.</p></li>
+<li><p><strong>Trigger/history:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/internal/scripts/update_product/run?record_id=recXXX</span></code>
+(or <code class="docutils literal notranslate"><span class="pre">?model_id=recXXX</span></code>), <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/status/{task_id}</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/update_product/runs</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/update_product/current</span></code>
+(live stage while running).</p></li>
+<li><p><strong>Logs:</strong> <code class="docutils literal notranslate"><span class="pre">structlog</span></code>, logger <code class="docutils literal notranslate"><span class="pre">api.scripts.update_product</span></code> (business logic) and
+<code class="docutils literal notranslate"><span class="pre">api.tasks</span></code> (task lifecycle).</p></li>
+<li><p><strong>Source:</strong> <code class="docutils literal notranslate"><span class="pre">api/scripts/update_product.py</span></code>; shared helpers with
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code> (the exception class, the Airtable cache, link builders,
+unit/spec aggregation) live in <code class="docutils literal notranslate"><span class="pre">api/scripts/_shopify_links.py</span></code>.</p></li>
+<li><p><strong>Tests:</strong> <code class="docutils literal notranslate"><span class="pre">tests/test_update_product.py</span></code>.</p></li>
 </ul>
 </section>
 </section>
@@ -566,7 +766,7 @@ captured into the run’s <code class="docutils literal notranslate"><span class
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="scripts.html" class="btn btn-neutral float-left" title="Scripts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="shopify_catalog_reconciliation.html" class="btn btn-neutral float-right" title="Shopify Catalog Reconciliation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="create_product_shopify.html" class="btn btn-neutral float-right" title="Create Product Shopify" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

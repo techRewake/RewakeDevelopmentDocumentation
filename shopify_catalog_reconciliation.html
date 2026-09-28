@@ -378,7 +378,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Airtable Catalog Stats" href="airtable_catalog_stats.html" />
-    <link rel="prev" title="Update Product" href="update_product.html" /> 
+    <link rel="prev" title="Create Product Shopify" href="create_product_shopify.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -408,6 +408,7 @@ window.runMermaid = runMermaid;</script>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="scripts.html">Scripts</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="update_product.html">Update Product</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_product_shopify.html">Create Product Shopify</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Shopify Catalog Reconciliation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#what-it-does">What it does</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#why-the-matching-is-value-based-not-id-based">Why the matching is value-based, not ID-based</a></li>
@@ -469,9 +470,6 @@ window.runMermaid = runMermaid;</script>
 <tr class="row-odd"><td><p><strong>Writes</strong></p></td>
 <td><p>nothing – strictly read-only</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>Origin</strong></p></td>
-<td><p>ported from the RewakeMonitor proof of concept, where this logic was developed and validated against real production data</p></td>
-</tr>
 </tbody>
 </table>
 <section id="what-it-does">
@@ -496,8 +494,8 @@ Variations that are genuinely different Shopify variants. There is no Airtable f
 holding a real Shopify variant id at all.</p>
 <p>Instead, a Shopify variant is identified by its <code class="docutils literal notranslate"><span class="pre">selectedOptions</span></code> <strong>values</strong> (the option
 <em>names</em> vary per product type – a pipette’s size option isn’t named the same as a
-fridge’s – so matching is name-agnostic, value-only). Those literal value strings do
-match Airtable exactly:</p>
+fridge’s – so matching is name-agnostic, value-only). Those literal value strings
+match Airtable, once both sides are whitespace-normalized:</p>
 <ul class="simple">
 <li><p>a Variation’s own <code class="docutils literal notranslate"><span class="pre">Variant_value</span></code> (a size/range, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;5</span> <span class="pre">-</span> <span class="pre">50&quot;</span></code>), plus</p></li>
 <li><p>a Unit’s own <code class="docutils literal notranslate"><span class="pre">Etat</span> <span class="pre">esthétique</span></code> (condition, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;Très</span> <span class="pre">bon&quot;</span></code>)</p></li>
@@ -509,8 +507,14 @@ single variant – and a unit that’s “A vendre” through a different channe
 excluded from all three checks.</p>
 <p>This was two real, confirmed production bugs (ID-based matching finding 100% of
 variations “missing”; then a scoping bug over-flagging units sold through other
-channels) before this design – see the RewakeMonitor repo’s own copy of this document
-for the full story.</p>
+channels) before this design – and a third since: <code class="docutils literal notranslate"><span class="pre">Variant_value</span></code> is manually-entered
+free text and can carry incidental whitespace (a real <code class="docutils literal notranslate"><span class="pre">&quot;150x75</span> <span class="pre">&quot;</span></code> in Airtable) that
+Shopify itself trims on save (<code class="docutils literal notranslate"><span class="pre">&quot;150x75&quot;</span></code>); comparing the raw, un-normalized values meant
+a genuinely-existing variant was reported as missing. Both <code class="docutils literal notranslate"><span class="pre">Variation.variant_values</span></code>
+(<code class="docutils literal notranslate"><span class="pre">api/domain/catalog.py</span></code>) and <code class="docutils literal notranslate"><span class="pre">ShopifyVariant.option_values</span></code>
+(<code class="docutils literal notranslate"><span class="pre">api/integrations/shopify.py</span></code>) now strip before comparing – the exact same class of
+bug independently found and fixed in <code class="docutils literal notranslate"><span class="pre">update_product.py</span></code>’s own (separate) variant
+matching, see <code class="docutils literal notranslate"><span class="pre">docs/update_product.md</span></code>.</p>
 </section>
 <section id="data-it-fetches">
 <h2>Data it fetches<a class="headerlink" href="#data-it-fetches" title="Link to this heading"></a></h2>
@@ -602,16 +606,45 @@ last time.</p></li>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">a_vendre_quantity_mismatches</span></code></p></td>
 <td><p>(Variation, condition) pairs where the variant exists but its quantity is wrong</p></td>
 </tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">documentation_missing_in_shopify</span></code></p></td>
+<td><p>Found Models with a <code class="docutils literal notranslate"><span class="pre">Documentation</span></code> PDF in Airtable but no “PDF Descriptif” on Shopify</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">documentation_outdated_in_shopify</span></code></p></td>
+<td><p>Found Models whose Shopify PDF wasn’t uploaded from Airtable’s current attachment (replaced in Airtable, or set by hand – see <code class="docutils literal notranslate"><span class="pre">docs/update_product.md</span></code>)</p></td>
+</tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">models_added_since_last_run</span></code> / <code class="docutils literal notranslate"><span class="pre">variations_added_since_last_run</span></code></p></td>
 <td><p>Catalog growth since the previous run</p></td>
 </tr>
 </tbody>
 </table>
 <p><code class="docutils literal notranslate"><span class="pre">details</span></code> in the same response carries the actual named records behind each count above
-(model/variation id + name, capped at 100 each) – unlike the RewakeMonitor original,
-these aren’t yet enriched with a direct Airtable web-UI link; that’s a small,
-straightforward follow-up (<code class="docutils literal notranslate"><span class="pre">api.domain.catalog.record_url</span></code> already exists and is used
-elsewhere, just not wired into this script’s <code class="docutils literal notranslate"><span class="pre">details</span></code> yet).</p>
+(model/variation id + name + an Airtable web-UI link via <code class="docutils literal notranslate"><span class="pre">record_url</span></code>), uncapped – the
+frontend acts on these lists directly (a per-model “create on Shopify” button, and one
+that bulk-creates every missing model), so silently dropping entries past some cap would
+mean those specific models could never be created via the dashboard at all, not just a
+display inconvenience.</p>
+<p><code class="docutils literal notranslate"><span class="pre">attach_creation_attempts</span></code> (called from <code class="docutils literal notranslate"><span class="pre">run()</span></code>, right after <code class="docutils literal notranslate"><span class="pre">attach_airtable_urls</span></code>) then
+cross-references each <code class="docutils literal notranslate"><span class="pre">models_missing_in_shopify</span></code> entry against
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code>’s own run history (via <code class="docutils literal notranslate"><span class="pre">RunStore</span></code>, ~1000 runs kept – see
+<code class="docutils literal notranslate"><span class="pre">docs/architecture.rst</span></code>), and adds <code class="docutils literal notranslate"><span class="pre">entry[&quot;last_creation_attempt&quot;]</span></code> (<code class="docutils literal notranslate"><span class="pre">status</span></code>, <code class="docutils literal notranslate"><span class="pre">error</span></code>,
+<code class="docutils literal notranslate"><span class="pre">skipped_reason</span></code>, <code class="docutils literal notranslate"><span class="pre">finished_at</span></code>) when that Model has already been attempted. A Model
+showing up as “missing” isn’t necessarily untried – it might already be failing for a
+knowable reason (bad Airtable data, a stale Shopify desync, an image upload conflict),
+and that’s a very different situation from “nobody has tried creating it yet”. This is
+a read-only lookup against Redis (a second script’s stored history, not a mutation of
+anything) and, like <code class="docutils literal notranslate"><span class="pre">attach_airtable_urls</span></code>, is wrapped so it can never fail the
+reconciliation run itself – a broken/unreachable RunStore just means no entry gets
+<code class="docutils literal notranslate"><span class="pre">last_creation_attempt</span></code>, not a failed run.</p>
+<p>The documentation lists only cover <em>relevant</em> Models that were found on Shopify (a Model
+missing from Shopify entirely is already <code class="docutils literal notranslate"><span class="pre">models_missing_in_shopify</span></code>). The Shopify side
+comes from the same bulk GraphQL read (two aliased <code class="docutils literal notranslate"><span class="pre">metafield(...)</span></code> fields per product).
+<code class="docutils literal notranslate"><span class="pre">attach_documentation_attempts</span></code> adds <code class="docutils literal notranslate"><span class="pre">last_update_attempt</span></code> to the missing/outdated
+entries from <code class="docutils literal notranslate"><span class="pre">update_product</span></code>’s history, matched by <code class="docutils literal notranslate"><span class="pre">details.model_id</span></code>. It only counts
+runs that actually tried a documentation sync (a failure, a skip, or a success with
+<code class="docutils literal notranslate"><span class="pre">documentation_status:</span> <span class="pre">&quot;uploaded&quot;</span></code>). The dashboard’s “Envoyer toutes les documentations
+manquantes” / “Remplacer toutes les documentations obsolètes” buttons fan out
+<code class="docutils literal notranslate"><span class="pre">update_product?model_id=...</span></code> over those lists, 3 at a time. A run counts as updated
+only when it actually uploaded a PDF.</p>
 </section>
 <section id="where-to-look">
 <h2>Where to look<a class="headerlink" href="#where-to-look" title="Link to this heading"></a></h2>
@@ -621,10 +654,9 @@ elsewhere, just not wired into this script’s <code class="docutils literal not
 <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code>.</p></li>
 <li><p><strong>Logs:</strong> <code class="docutils literal notranslate"><span class="pre">structlog</span></code>, logger <code class="docutils literal notranslate"><span class="pre">api.tasks</span></code> (stdout, or the rotating file at
 <code class="docutils literal notranslate"><span class="pre">api/constants.py</span></code>’s <code class="docutils literal notranslate"><span class="pre">LOG_FILE</span></code>).</p></li>
-<li><p><strong>Dashboards/alerting:</strong> none yet for this API – RewakeObserve’s Grafana already has
-the two dashboards this exact logic feeds in RewakeMonitor; wiring a <code class="docutils literal notranslate"><span class="pre">/metrics</span></code>
-endpoint here so Prometheus can scrape it is a clear, not-yet-done next step (see
-<code class="docutils literal notranslate"><span class="pre">docs/development.rst</span></code>).</p></li>
+<li><p><strong>Dashboards/alerting:</strong> <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/metrics</span></code> (<code class="docutils literal notranslate"><span class="pre">api/routes/metrics.py</span></code>) exposes this run’s
+metrics as <code class="docutils literal notranslate"><span class="pre">rewake_api_script_metric{script=&quot;shopify_catalog_reconciliation&quot;,</span> <span class="pre">...}</span></code>
+for Prometheus; RewakeObserve’s Grafana dashboards query that series directly.</p></li>
 <li><p><strong>Source:</strong> <code class="docutils literal notranslate"><span class="pre">api/scripts/shopify_catalog_reconciliation.py</span></code>, <code class="docutils literal notranslate"><span class="pre">api/domain/catalog.py</span></code>,
 <code class="docutils literal notranslate"><span class="pre">api/integrations/shopify.py</span></code>.</p></li>
 </ul>
@@ -635,7 +667,7 @@ endpoint here so Prometheus can scrape it is a clear, not-yet-done next step (se
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="update_product.html" class="btn btn-neutral float-left" title="Update Product" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="create_product_shopify.html" class="btn btn-neutral float-left" title="Create Product Shopify" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="airtable_catalog_stats.html" class="btn btn-neutral float-right" title="Airtable Catalog Stats" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

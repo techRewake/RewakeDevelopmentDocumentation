@@ -8,7 +8,6 @@
 | **Schedule** | every hour (`SHOPIFY_CATALOG_RECONCILIATION_INTERVAL_SECONDS`, default `3600`) -- also runnable on demand |
 | **Reads** | Airtable (Model, Variation, Toutes les unités, Annonces Shopify) + Shopify (Products, Variants) |
 | **Writes** | nothing -- strictly read-only |
-| **Origin** | ported from the RewakeMonitor proof of concept, where this logic was developed and validated against real production data |
 
 ## What it does
 
@@ -33,8 +32,8 @@ holding a real Shopify variant id at all.
 
 Instead, a Shopify variant is identified by its `selectedOptions` **values** (the option
 *names* vary per product type -- a pipette's size option isn't named the same as a
-fridge's -- so matching is name-agnostic, value-only). Those literal value strings do
-match Airtable exactly:
+fridge's -- so matching is name-agnostic, value-only). Those literal value strings
+match Airtable, once both sides are whitespace-normalized:
 
 - a Variation's own `Variant_value` (a size/range, e.g. `"5 - 50"`), plus
 - a Unit's own `Etat esthétique` (condition, e.g. `"Très bon"`)
@@ -47,8 +46,14 @@ excluded from all three checks.
 
 This was two real, confirmed production bugs (ID-based matching finding 100% of
 variations "missing"; then a scoping bug over-flagging units sold through other
-channels) before this design -- see the RewakeMonitor repo's own copy of this document
-for the full story.
+channels) before this design -- and a third since: `Variant_value` is manually-entered
+free text and can carry incidental whitespace (a real `"150x75 "` in Airtable) that
+Shopify itself trims on save (`"150x75"`); comparing the raw, un-normalized values meant
+a genuinely-existing variant was reported as missing. Both `Variation.variant_values`
+(`api/domain/catalog.py`) and `ShopifyVariant.option_values`
+(`api/integrations/shopify.py`) now strip before comparing -- the exact same class of
+bug independently found and fixed in `update_product.py`'s own (separate) variant
+matching, see `docs/update_product.md`.
 
 ## Data it fetches
 
@@ -121,13 +126,40 @@ flowchart LR
 | `a_vendre_units_total` | Shopify-bound "A vendre" units (excludes other sales channels) |
 | `a_vendre_units_missing_variant` | (Variation, condition) pairs with stock but no matching Shopify variant at all |
 | `a_vendre_quantity_mismatches` | (Variation, condition) pairs where the variant exists but its quantity is wrong |
+| `documentation_missing_in_shopify` | Found Models with a `Documentation` PDF in Airtable but no "PDF Descriptif" on Shopify |
+| `documentation_outdated_in_shopify` | Found Models whose Shopify PDF wasn't uploaded from Airtable's current attachment (replaced in Airtable, or set by hand -- see `docs/update_product.md`) |
 | `models_added_since_last_run` / `variations_added_since_last_run` | Catalog growth since the previous run |
 
 `details` in the same response carries the actual named records behind each count above
-(model/variation id + name, capped at 100 each) -- unlike the RewakeMonitor original,
-these aren't yet enriched with a direct Airtable web-UI link; that's a small,
-straightforward follow-up (`api.domain.catalog.record_url` already exists and is used
-elsewhere, just not wired into this script's `details` yet).
+(model/variation id + name + an Airtable web-UI link via `record_url`), uncapped -- the
+frontend acts on these lists directly (a per-model "create on Shopify" button, and one
+that bulk-creates every missing model), so silently dropping entries past some cap would
+mean those specific models could never be created via the dashboard at all, not just a
+display inconvenience.
+
+`attach_creation_attempts` (called from `run()`, right after `attach_airtable_urls`) then
+cross-references each `models_missing_in_shopify` entry against
+`create_product_shopify`'s own run history (via `RunStore`, ~1000 runs kept -- see
+`docs/architecture.rst`), and adds `entry["last_creation_attempt"]` (`status`, `error`,
+`skipped_reason`, `finished_at`) when that Model has already been attempted. A Model
+showing up as "missing" isn't necessarily untried -- it might already be failing for a
+knowable reason (bad Airtable data, a stale Shopify desync, an image upload conflict),
+and that's a very different situation from "nobody has tried creating it yet". This is
+a read-only lookup against Redis (a second script's stored history, not a mutation of
+anything) and, like `attach_airtable_urls`, is wrapped so it can never fail the
+reconciliation run itself -- a broken/unreachable RunStore just means no entry gets
+`last_creation_attempt`, not a failed run.
+
+The documentation lists only cover *relevant* Models that were found on Shopify (a Model
+missing from Shopify entirely is already `models_missing_in_shopify`). The Shopify side
+comes from the same bulk GraphQL read (two aliased `metafield(...)` fields per product).
+`attach_documentation_attempts` adds `last_update_attempt` to the missing/outdated
+entries from `update_product`'s history, matched by `details.model_id`. It only counts
+runs that actually tried a documentation sync (a failure, a skip, or a success with
+`documentation_status: "uploaded"`). The dashboard's "Envoyer toutes les documentations
+manquantes" / "Remplacer toutes les documentations obsolètes" buttons fan out
+`update_product?model_id=...` over those lists, 3 at a time. A run counts as updated
+only when it actually uploaded a PDF.
 
 ## Where to look
 
@@ -139,9 +171,8 @@ elsewhere, just not wired into this script's `details` yet).
   `docker-compose.yml`.
 - **Logs:** `structlog`, logger `api.tasks` (stdout, or the rotating file at
   `api/constants.py`'s `LOG_FILE`).
-- **Dashboards/alerting:** none yet for this API -- RewakeObserve's Grafana already has
-  the two dashboards this exact logic feeds in RewakeMonitor; wiring a `/metrics`
-  endpoint here so Prometheus can scrape it is a clear, not-yet-done next step (see
-  `docs/development.rst`).
+- **Dashboards/alerting:** `GET /metrics` (`api/routes/metrics.py`) exposes this run's
+  metrics as `rewake_api_script_metric{script="shopify_catalog_reconciliation", ...}`
+  for Prometheus; RewakeObserve's Grafana dashboards query that series directly.
 - **Source:** `api/scripts/shopify_catalog_reconciliation.py`, `api/domain/catalog.py`,
   `api/integrations/shopify.py`.

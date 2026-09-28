@@ -8,7 +8,6 @@
 | **Schedule** | daily at `AIRTABLE_CATALOG_STATS_HOUR`:`AIRTABLE_CATALOG_STATS_MINUTE` (default `20:42`, `Europe/Paris`) -- also runnable on demand |
 | **Reads** | Airtable (Model, Variation, Toutes les unités) only -- no Shopify calls |
 | **Writes** | nothing -- strictly read-only |
-| **Origin** | ported from the RewakeMonitor proof of concept |
 
 ## What it does
 
