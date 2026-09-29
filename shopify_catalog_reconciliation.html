@@ -606,13 +606,16 @@ last time.</p></li>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">a_vendre_quantity_mismatches</span></code></p></td>
 <td><p>(Variation, condition) pairs where the variant exists but its quantity is wrong</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">documentation_missing_in_shopify</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">documentation_missing_in_airtable</span></code></p></td>
+<td><p>Relevant Models (on Shopify yet or not) with no PDF at all in their Airtable <code class="docutils literal notranslate"><span class="pre">Documentation</span></code> field – the list of documentation still to collect</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">documentation_missing_in_shopify</span></code></p></td>
 <td><p>Found Models with a <code class="docutils literal notranslate"><span class="pre">Documentation</span></code> PDF in Airtable but no “PDF Descriptif” on Shopify</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">documentation_outdated_in_shopify</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">documentation_outdated_in_shopify</span></code></p></td>
 <td><p>Found Models whose Shopify PDF wasn’t uploaded from Airtable’s current attachment (replaced in Airtable, or set by hand – see <code class="docutils literal notranslate"><span class="pre">docs/update_product.md</span></code>)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">models_added_since_last_run</span></code> / <code class="docutils literal notranslate"><span class="pre">variations_added_since_last_run</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">models_added_since_last_run</span></code> / <code class="docutils literal notranslate"><span class="pre">variations_added_since_last_run</span></code></p></td>
 <td><p>Catalog growth since the previous run</p></td>
 </tr>
 </tbody>

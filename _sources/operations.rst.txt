@@ -8,7 +8,8 @@ Copy ``.env.example`` to ``.env``. See :doc:`development` for how to obtain
 each credential locally.
 
 - **Tokens** (:doc:`authentication`): ``ADMIN_TOKEN``, ``HELLOPRO_TOKEN``,
-  ``MACHINIO_TOKEN``, ``APP_TOKEN``.
+  ``MACHINIO_TOKEN``, ``APP_TOKEN``, ``AIRTABLE_AUTOMATION_TOKEN`` (Airtable
+  automations -> ``/internal/scripts/*`` only).
 - **Airtable**: ``AIRTABLE_TOKEN``, ``AIRTABLE_BASE_ID`` -- the real base;
   there is no separate Airtable sandbox today (see :doc:`development`).
 - **Google**: ``GOOGLE_APPLICATION_CREDENTIALS`` (Gmail draft creation).
@@ -69,6 +70,21 @@ and no credential is ever read or stored by it. ``docker-compose.yml``'s
 ``api``/``worker`` services declare both ``image:`` (what a real deploy
 pulls) and ``build: .`` (what local dev still uses via ``--build``), so
 either workflow works from the same file.
+
+Release notes
+~~~~~~~~~~~~~
+
+Once the image is pushed, the ``release`` job publishes a GitHub Release
+tagged with the same ``sha-<short hash>`` (so each release is exactly one
+deployable image, and its page shows the ``deploy.sh`` command for it). Its
+notes are rendered by ``scripts/release/release_notes.py`` from the commits
+since the previous ``sha-*`` release, grouped by Conventional Commits type
+(``feat``, ``fix``, ``docs``, ``chore``...; anything unprefixed goes under
+"Autres changements"). A commit that requires action at deploy time -- a
+removed or renamed environment variable, a new Shopify scope -- should say
+so in a ``BREAKING CHANGE:`` footer (or a ``type!:`` subject): it's then
+listed first, under "Changements cassants". Releases run one at a time, in
+push order; re-running a workflow never overwrites an existing release.
 
 ``docker-compose.yml`` runs four services from the same image: ``api``
 (port 3002, unchanged), ``redis``, ``worker`` (``celery -A api.celery_app

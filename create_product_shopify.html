@@ -413,6 +413,7 @@ window.runMermaid = runMermaid;</script>
 <li class="toctree-l3"><a class="reference internal" href="#documentation-pdf">Documentation PDF</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#idempotence-two-layers">Idempotence (two layers)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#data-it-touches">Data it touches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#triggering-from-airtable">Triggering from Airtable</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#how-it-works">How it works</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#deliberate-deviations-from-the-source-cloud-function">Deliberate deviations from the source Cloud Function</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#known-risks-things-worth-reviewing">Known risks / things worth reviewing</a></li>
@@ -568,6 +569,31 @@ triggers for the same record, one rejected in 5ms, the other ran normally to com
     TASK --&gt; RUNS[(&quot;Redis run history&lt;br/&gt;GET /internal/scripts/create_product_shopify/runs&quot;)]
     TASK --&gt; LOG[(&quot;structlog (api.tasks)&lt;br/&gt;-&gt; stdout / rotating file, `stage` field per checkpoint&quot;)]
     </pre></section>
+<section id="triggering-from-airtable">
+<h2>Triggering from Airtable<a class="headerlink" href="#triggering-from-airtable" title="Link to this heading"></a></h2>
+<p>An Airtable automation (“Run script” action, input <code class="docutils literal notranslate"><span class="pre">model_id</span></code> = the Model’s
+record id) calls the API directly with <code class="docutils literal notranslate"><span class="pre">AIRTABLE_AUTOMATION_TOKEN</span></code> – it
+replaces the former queue manager -&gt; Cloud Tasks -&gt; Cloud Function chain
+(Celery is the queue now, with its own retries and per-<code class="docutils literal notranslate"><span class="pre">record_id</span></code> lock):</p>
+<div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">inputConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">input</span><span class="p">.</span><span class="nx">config</span><span class="p">();</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">model_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">inputConfig</span><span class="p">.</span><span class="nx">model_id</span><span class="p">[</span><span class="mf">0</span><span class="p">];</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">model_id</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s2">&quot;Model ID manquant&quot;</span><span class="p">);</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span>
+<span class="w">  </span><span class="sb">`https://api.rewake.fr/internal/scripts/create_product_shopify/run?record_id=</span><span class="si">${</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">model_id</span><span class="p">)</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">method</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;POST&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">headers</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Authorization</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Bearer &lt;AIRTABLE_AUTOMATION_TOKEN&gt;&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+<span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">response</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="sb">`Erreur API: </span><span class="si">${</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="si">}</span><span class="sb"> - </span><span class="si">${</span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">()</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;✅ Tâche ajoutée:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">task_id</span><span class="p">,</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">status</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The response only confirms the run was queued; its outcome is in
+<code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/create_product_shopify/runs</span></code> (and the alert email on
+failure). See <a class="reference internal" href="authentication.html"><span class="std std-doc">Authentification</span></a> for the token’s scope.</p>
+</section>
 <section id="how-it-works">
 <h2>How it works<a class="headerlink" href="#how-it-works" title="Link to this heading"></a></h2>
 <ol class="arabic simple">

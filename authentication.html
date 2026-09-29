@@ -56,6 +56,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#token-seul-admin-token">Token seul (ADMIN_TOKEN)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#token-origin-autres-tokens">Token + Origin (autres tokens)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#token-sans-origin-autres-tokens">Token sans Origin (autres tokens)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#automatisation-airtable-airtable-automation-token">Automatisation Airtable (AIRTABLE_AUTOMATION_TOKEN)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#origin-sans-token">Origin sans Token</a></li>
 </ul>
 </li>
@@ -117,6 +118,10 @@
 <td><p>Token dédié à l’app interne</p></td>
 <td><p>Routes <code class="docutils literal notranslate"><span class="pre">/internal/*</span></code> uniquement</p></td>
 </tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AIRTABLE_AUTOMATION_TOKEN</span></code></p></td>
+<td><p>Token envoyé par les automatisations Airtable (≠ <code class="docutils literal notranslate"><span class="pre">AIRTABLE_TOKEN</span></code>, que l’API envoie à Airtable)</p></td>
+<td><p>Routes <code class="docutils literal notranslate"><span class="pre">/internal/scripts/*</span></code> uniquement</p></td>
+</tr>
 </tbody>
 </table>
 <blockquote>
@@ -155,6 +160,9 @@ Les tokens doivent être définis dans <code class="docutils literal notranslate
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/internal/*</span></code></p></td>
 <td><p>✅ Oui (<code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide)</p></td>
 </tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/internal/scripts/*</span></code></p></td>
+<td><p>✅ Oui avec <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code>, ❌ Non avec <code class="docutils literal notranslate"><span class="pre">AIRTABLE_AUTOMATION_TOKEN</span></code></p></td>
+</tr>
 </tbody>
 </table>
 <blockquote>
@@ -188,6 +196,21 @@ Les tokens doivent être définis dans <code class="docutils literal notranslate
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer HELLOPRO_TOKEN&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">     </span>http://localhost:8000/hellopro/csv
 <span class="c1"># ❌ 403 - Origin manquant</span>
+</pre></div>
+</div>
+</section>
+<section id="automatisation-airtable-airtable-automation-token">
+<h3>Automatisation Airtable (AIRTABLE_AUTOMATION_TOKEN)<a class="headerlink" href="#automatisation-airtable-airtable-automation-token" title="Link to this heading"></a></h3>
+<p>Les automatisations Airtable tournent sur les serveurs d’Airtable, sans
+<code class="docutils literal notranslate"><span class="pre">Origin</span></code>/<code class="docutils literal notranslate"><span class="pre">Referer</span></code> rewake.fr : ce token n’a donc pas de vérification
+d’origine, mais n’ouvre que <code class="docutils literal notranslate"><span class="pre">/internal/scripts/*</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer AIRTABLE_AUTOMATION_TOKEN&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="s2">&quot;http://localhost:8000/internal/scripts/create_product_shopify/run?record_id=recXXX&quot;</span>
+<span class="c1"># ✅ 200 - {&quot;task_id&quot;: ..., &quot;status&quot;: &quot;queued&quot;, ...}</span>
+
+curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer AIRTABLE_AUTOMATION_TOKEN&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>http://localhost:8000/internal/backups
+<span class="c1"># ❌ 403 - hors de /internal/scripts/*</span>
 </pre></div>
 </div>
 </section>

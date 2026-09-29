@@ -126,6 +126,7 @@ flowchart LR
 | `a_vendre_units_total` | Shopify-bound "A vendre" units (excludes other sales channels) |
 | `a_vendre_units_missing_variant` | (Variation, condition) pairs with stock but no matching Shopify variant at all |
 | `a_vendre_quantity_mismatches` | (Variation, condition) pairs where the variant exists but its quantity is wrong |
+| `documentation_missing_in_airtable` | Relevant Models (on Shopify yet or not) with no PDF at all in their Airtable `Documentation` field -- the list of documentation still to collect |
 | `documentation_missing_in_shopify` | Found Models with a `Documentation` PDF in Airtable but no "PDF Descriptif" on Shopify |
 | `documentation_outdated_in_shopify` | Found Models whose Shopify PDF wasn't uploaded from Airtable's current attachment (replaced in Airtable, or set by hand -- see `docs/update_product.md`) |
 | `models_added_since_last_run` / `variations_added_since_last_run` | Catalog growth since the previous run |

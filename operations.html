@@ -48,7 +48,10 @@
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Operations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#deployment">Deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deployment">Deployment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#release-notes">Release notes</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#logging">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ci-cd">CI/CD</a></li>
 </ul>
@@ -89,7 +92,8 @@
 each credential locally.</p>
 <ul class="simple">
 <li><p><strong>Tokens</strong> (<a class="reference internal" href="authentication.html"><span class="doc">Authentification</span></a>): <code class="docutils literal notranslate"><span class="pre">ADMIN_TOKEN</span></code>, <code class="docutils literal notranslate"><span class="pre">HELLOPRO_TOKEN</span></code>,
-<code class="docutils literal notranslate"><span class="pre">MACHINIO_TOKEN</span></code>, <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code>.</p></li>
+<code class="docutils literal notranslate"><span class="pre">MACHINIO_TOKEN</span></code>, <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code>, <code class="docutils literal notranslate"><span class="pre">AIRTABLE_AUTOMATION_TOKEN</span></code> (Airtable
+automations -&gt; <code class="docutils literal notranslate"><span class="pre">/internal/scripts/*</span></code> only).</p></li>
 <li><p><strong>Airtable</strong>: <code class="docutils literal notranslate"><span class="pre">AIRTABLE_TOKEN</span></code>, <code class="docutils literal notranslate"><span class="pre">AIRTABLE_BASE_ID</span></code> – the real base;
 there is no separate Airtable sandbox today (see <a class="reference internal" href="development.html"><span class="doc">Development</span></a>).</p></li>
 <li><p><strong>Google</strong>: <code class="docutils literal notranslate"><span class="pre">GOOGLE_APPLICATION_CREDENTIALS</span></code> (Gmail draft creation).</p></li>
@@ -145,6 +149,19 @@ and no credential is ever read or stored by it. <code class="docutils literal no
 <code class="docutils literal notranslate"><span class="pre">api</span></code>/<code class="docutils literal notranslate"><span class="pre">worker</span></code> services declare both <code class="docutils literal notranslate"><span class="pre">image:</span></code> (what a real deploy
 pulls) and <code class="docutils literal notranslate"><span class="pre">build:</span> <span class="pre">.</span></code> (what local dev still uses via <code class="docutils literal notranslate"><span class="pre">--build</span></code>), so
 either workflow works from the same file.</p>
+<section id="release-notes">
+<h3>Release notes<a class="headerlink" href="#release-notes" title="Link to this heading"></a></h3>
+<p>Once the image is pushed, the <code class="docutils literal notranslate"><span class="pre">release</span></code> job publishes a GitHub Release
+tagged with the same <code class="docutils literal notranslate"><span class="pre">sha-&lt;short</span> <span class="pre">hash&gt;</span></code> (so each release is exactly one
+deployable image, and its page shows the <code class="docutils literal notranslate"><span class="pre">deploy.sh</span></code> command for it). Its
+notes are rendered by <code class="docutils literal notranslate"><span class="pre">scripts/release/release_notes.py</span></code> from the commits
+since the previous <code class="docutils literal notranslate"><span class="pre">sha-*</span></code> release, grouped by Conventional Commits type
+(<code class="docutils literal notranslate"><span class="pre">feat</span></code>, <code class="docutils literal notranslate"><span class="pre">fix</span></code>, <code class="docutils literal notranslate"><span class="pre">docs</span></code>, <code class="docutils literal notranslate"><span class="pre">chore</span></code>…; anything unprefixed goes under
+“Autres changements”). A commit that requires action at deploy time – a
+removed or renamed environment variable, a new Shopify scope – should say
+so in a <code class="docutils literal notranslate"><span class="pre">BREAKING</span> <span class="pre">CHANGE:</span></code> footer (or a <code class="docutils literal notranslate"><span class="pre">type!:</span></code> subject): it’s then
+listed first, under “Changements cassants”. Releases run one at a time, in
+push order; re-running a workflow never overwrites an existing release.</p>
 <p><code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> runs four services from the same image: <code class="docutils literal notranslate"><span class="pre">api</span></code>
 (port 3002, unchanged), <code class="docutils literal notranslate"><span class="pre">redis</span></code>, <code class="docutils literal notranslate"><span class="pre">worker</span></code> (<code class="docutils literal notranslate"><span class="pre">celery</span> <span class="pre">-A</span> <span class="pre">api.celery_app</span>
 <span class="pre">worker</span></code>), and <code class="docutils literal notranslate"><span class="pre">beat</span></code> (<code class="docutils literal notranslate"><span class="pre">celery</span> <span class="pre">-A</span> <span class="pre">api.celery_app</span> <span class="pre">beat</span></code> – required once
@@ -153,6 +170,7 @@ any registered script has a real <code class="docutils literal notranslate"><spa
 container command uses <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span> <span class="pre">--no-sync</span></code>, so nothing tries to reach the
 network at startup – the image is built once with <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">sync</span> <span class="pre">--frozen</span>
 <span class="pre">--no-dev</span></code> and run exactly as built.</p>
+</section>
 </section>
 <section id="logging">
 <h2>Logging<a class="headerlink" href="#logging" title="Link to this heading"></a></h2>

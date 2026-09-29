@@ -11,6 +11,7 @@ Le système d'authentification de l'API Rewake repose sur des **tokens Bearer** 
 | `ADMIN_TOKEN` | Token administrateur | **Toutes les routes**, contourne la vérification d'origine |
 | `HELLOPRO_TOKEN` | Token dédié HelloPro | Routes `/hellopro/*` uniquement |
 | `APP_TOKEN` | Token dédié à l'app interne | Routes `/internal/*` uniquement |
+| `AIRTABLE_AUTOMATION_TOKEN` | Token envoyé par les automatisations Airtable (≠ `AIRTABLE_TOKEN`, que l'API envoie à Airtable) | Routes `/internal/scripts/*` uniquement |
 
 > [!WARNING] 
 > Les tokens doivent être définis dans `.env` et **ne jamais être commités**.
@@ -36,6 +37,7 @@ Accès **automatique** à toutes les routes, **sans vérification d'origine/refe
 |-------|---------------------|
 | `/hellopro/*` | ❌ Non (seulement `HELLOPRO_TOKEN` requis) |
 | `/internal/*` | ✅ Oui (`APP_TOKEN` **ET** origine/referer valide) |
+| `/internal/scripts/*` | ✅ Oui avec `APP_TOKEN`, ❌ Non avec `AIRTABLE_AUTOMATION_TOKEN` |
 
 > [!IMPORTANT] 
 > `ADMIN_TOKEN` contourne toujours la vérification d'origine sur toutes les routes.
@@ -64,6 +66,20 @@ curl -H "Authorization: Bearer HELLOPRO_TOKEN" \
 curl -H "Authorization: Bearer HELLOPRO_TOKEN" \
      http://localhost:8000/hellopro/csv
 # ❌ 403 - Origin manquant
+```
+
+### Automatisation Airtable (AIRTABLE_AUTOMATION_TOKEN)
+Les automatisations Airtable tournent sur les serveurs d'Airtable, sans
+`Origin`/`Referer` rewake.fr : ce token n'a donc pas de vérification
+d'origine, mais n'ouvre que `/internal/scripts/*`.
+```bash
+curl -X POST -H "Authorization: Bearer AIRTABLE_AUTOMATION_TOKEN" \
+     "http://localhost:8000/internal/scripts/create_product_shopify/run?record_id=recXXX"
+# ✅ 200 - {"task_id": ..., "status": "queued", ...}
+
+curl -H "Authorization: Bearer AIRTABLE_AUTOMATION_TOKEN" \
+     http://localhost:8000/internal/backups
+# ❌ 403 - hors de /internal/scripts/*
 ```
 
 ### Origin sans Token

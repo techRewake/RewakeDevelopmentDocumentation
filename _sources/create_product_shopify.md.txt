@@ -101,6 +101,33 @@ flowchart LR
     TASK --> LOG[("structlog (api.tasks)<br/>-> stdout / rotating file, `stage` field per checkpoint")]
 ```
 
+## Triggering from Airtable
+
+An Airtable automation ("Run script" action, input `model_id` = the Model's
+record id) calls the API directly with `AIRTABLE_AUTOMATION_TOKEN` -- it
+replaces the former queue manager -> Cloud Tasks -> Cloud Function chain
+(Celery is the queue now, with its own retries and per-`record_id` lock):
+
+```js
+let inputConfig = input.config();
+let model_id = inputConfig.model_id[0];
+if (!model_id) throw new Error("Model ID manquant");
+
+let response = await fetch(
+  `https://api.rewake.fr/internal/scripts/create_product_shopify/run?record_id=${encodeURIComponent(model_id)}`,
+  { method: "POST", headers: { Authorization: "Bearer <AIRTABLE_AUTOMATION_TOKEN>" } }
+);
+if (!response.ok) {
+  throw new Error(`Erreur API: ${response.status} - ${await response.text()}`);
+}
+let result = await response.json();
+console.log("✅ Tâche ajoutée:", result.task_id, result.status);
+```
+
+The response only confirms the run was queued; its outcome is in
+`GET /internal/scripts/create_product_shopify/runs` (and the alert email on
+failure). See [Authentification](./authentication.md) for the token's scope.
+
 ## How it works
 
 1. `POST /internal/scripts/create_product_shopify/run?record_id=recXXXXXXXXXXXXXX`
