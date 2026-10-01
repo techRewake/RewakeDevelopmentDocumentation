@@ -60,6 +60,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#internal-contact-check"><code class="docutils literal notranslate"><span class="pre">/internal/contact/check</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#internal-contact-update-id"><code class="docutils literal notranslate"><span class="pre">/internal/contact/update/{id}</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#internal-contact-create"><code class="docutils literal notranslate"><span class="pre">/internal/contact/create</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-affaire-user-all"><code class="docutils literal notranslate"><span class="pre">/internal/affaire/user/all</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-affaire-origine-all"><code class="docutils literal notranslate"><span class="pre">/internal/affaire/origine/all</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-affaire-create"><code class="docutils literal notranslate"><span class="pre">/internal/affaire/create</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#internal-backups"><code class="docutils literal notranslate"><span class="pre">/internal/backups/</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#internal-fees-distritec"><code class="docutils literal notranslate"><span class="pre">/internal/fees/distritec</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#internal-logs"><code class="docutils literal notranslate"><span class="pre">/internal/logs/</span></code></a></li>
@@ -294,6 +297,113 @@
 </div>
 </li>
 <li><p><strong>Erreurs</strong> : <code class="docutils literal notranslate"><span class="pre">422</span></code> si aucun champ fourni, <code class="docutils literal notranslate"><span class="pre">500</span></code> si erreur Airtable</p></li>
+</ul>
+</section>
+<section id="internal-affaire-user-all">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/affaire/user/all</span></code><a class="headerlink" href="#internal-affaire-user-all" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">GET</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : Liste les employés Rewake pour alimenter le sélecteur
+“Utilisateur” de l’extension Chrome. La réponse est un dict
+<code class="docutils literal notranslate"><span class="pre">{nom:</span> <span class="pre">record_id}</span></code> — <code class="docutils literal notranslate"><span class="pre">toOptionList()</span></code> en fait <code class="docutils literal notranslate"><span class="pre">{label:</span> <span class="pre">nom,</span> <span class="pre">value:</span> <span class="pre">record_id}</span></code>,
+et c’est le <code class="docutils literal notranslate"><span class="pre">record_id</span></code> qui est renvoyé comme <code class="docutils literal notranslate"><span class="pre">utilisateur_id</span></code> à
+<code class="docutils literal notranslate"><span class="pre">/internal/affaire/create</span></code>. L’extension n’affiche que le label.</p></li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;Marie-C&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;recUzdhKEe8ugB3qJy&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;Youri Remy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rec9FPiDjDLS83Ku6&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="internal-affaire-origine-all">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/affaire/origine/all</span></code><a class="headerlink" href="#internal-affaire-origine-all" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">GET</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : Liste les valeurs possibles du champ “Origine de l’affaire”
+de la table Airtable “Affaires”. C’est un <code class="docutils literal notranslate"><span class="pre">singleSelect</span></code> : il n’a pas de record
+associé, donc la réponse est une liste de strings et la valeur soumise à
+<code class="docutils literal notranslate"><span class="pre">/internal/affaire/create</span></code> est le libellé de l’option.</p></li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;Prospection mail&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Enchère&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Inbound - site web&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;HelloPro&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="internal-affaire-create">
+<h3><code class="docutils literal notranslate"><span class="pre">/internal/affaire/create</span></code><a class="headerlink" href="#internal-affaire-create" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">POST</span></code></p></li>
+<li><p><strong>Accès</strong> : <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>ET</strong> origine/referer valide</p></li>
+<li><p><strong>Description</strong> : Crée un record dans la table Airtable “Affaires” puis, si
+une date de relance a été fournie, une activité <code class="docutils literal notranslate"><span class="pre">relance</span></code> dans la table
+“Activité” liée à cette affaire. <code class="docutils literal notranslate"><span class="pre">Client</span></code> pointe sur la table “Personne”,
+<code class="docutils literal notranslate"><span class="pre">Entreprise</span></code> sur “Entreprise” et <code class="docutils literal notranslate"><span class="pre">Propriétaire</span></code> sur “Employé Rewake”, tous
+trois en lien — d’où l’écriture sous forme de liste de record ids.</p></li>
+<li><p><strong>Request Body</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;contact_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;recXXX&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;entreprise&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Rewake&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;utilisateur_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;recYYY&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;nom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Remplacement ascenseur&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;origine&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Enchère&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;date_relance&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-10-01&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">entreprise</span></code> est le <strong>nom</strong> de la société (<code class="docutils literal notranslate"><span class="pre">best_match.entreprise</span></code> renvoyé par
+<code class="docutils literal notranslate"><span class="pre">/internal/contact/check</span></code>), pas son record id : la route le résout via la
+table “Entreprise”.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">origine</span></code> est le libellé d’une valeur du <code class="docutils literal notranslate"><span class="pre">singleSelect</span></code>
+“Origine de l’affaire”.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">date_relance</span></code> sort d’un <code class="docutils literal notranslate"><span class="pre">&lt;input</span> <span class="pre">type=&quot;date&quot;&gt;</span></code> (format <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code>). La
+table “Affaires” n’a pas de champ de relance : la date sert à créer
+l’activité. <strong>Si elle est vide, l’activité n’est pas créée</strong> — une relance
+sans date n’a rien à faire dans le planning.</p></li>
+</ul>
+</li>
+<li><p><strong>Activité créée</strong> (table “Activité”) :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;Name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;relance&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;Quand ?&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-10-01&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;Affaire&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;recZZZ&quot;</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;Propriétaire&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;recYYY&quot;</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;Entreprise&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;recWWW&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Le champ <code class="docutils literal notranslate"><span class="pre">Type</span></code> est laissé vide.</p>
+</li>
+<li><p><strong>Réponse</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;recZZZ&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;fields&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;Nom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Remplacement ascenseur&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;Origine de l&#39;affaire&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Enchère&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;Client&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;recXXX&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;Entreprise&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;recWWW&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;Propriétaire&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;recYYY&quot;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Erreurs</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">422</span></code> si <code class="docutils literal notranslate"><span class="pre">nom</span></code> est vide, si <code class="docutils literal notranslate"><span class="pre">origine</span></code> n’est pas une valeur du <code class="docutils literal notranslate"><span class="pre">singleSelect</span></code>,
+si <code class="docutils literal notranslate"><span class="pre">entreprise</span></code> ne correspond à aucune Entreprise, si <code class="docutils literal notranslate"><span class="pre">utilisateur_id</span></code>
+n’est pas un employé connu, ou si <code class="docutils literal notranslate"><span class="pre">date_relance</span></code> n’est pas en <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">500</span></code> si erreur Airtable. Si l’activité de relance échoue alors que l’affaire
+a bien été créée, <strong>l’affaire est supprimée</strong> avant de renvoyer le <code class="docutils literal notranslate"><span class="pre">500</span></code>, pour
+ne pas laisser de doublon si l’utilisateur réessaie.</p></li>
+</ul>
+</li>
 </ul>
 </section>
 <section id="internal-backups">

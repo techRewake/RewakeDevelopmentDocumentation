@@ -153,6 +153,94 @@ Liste complète des endpoints de l'API Rewake avec leurs règles d'accès et exe
   ```
 - **Erreurs** : `422` si aucun champ fourni, `500` si erreur Airtable
 
+### `/internal/affaire/user/all`
+- **Méthode** : `GET`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : Liste les employés Rewake pour alimenter le sélecteur
+  "Utilisateur" de l'extension Chrome. La réponse est un dict
+  `{nom: record_id}` — `toOptionList()` en fait `{label: nom, value: record_id}`,
+  et c'est le `record_id` qui est renvoyé comme `utilisateur_id` à
+  `/internal/affaire/create`. L'extension n'affiche que le label.
+- **Réponse** :
+  ```json
+  {
+    "Marie-C": "recUzdhKEe8ugB3qJy",
+    "Youri Remy": "rec9FPiDjDLS83Ku6"
+  }
+  ```
+
+### `/internal/affaire/origine/all`
+- **Méthode** : `GET`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : Liste les valeurs possibles du champ "Origine de l'affaire"
+  de la table Airtable "Affaires". C'est un `singleSelect` : il n'a pas de record
+  associé, donc la réponse est une liste de strings et la valeur soumise à
+  `/internal/affaire/create` est le libellé de l'option.
+- **Réponse** :
+  ```json
+  ["Prospection mail", "Enchère", "Inbound - site web", "HelloPro", "..."]
+  ```
+
+### `/internal/affaire/create`
+- **Méthode** : `POST`
+- **Accès** : `APP_TOKEN` **ET** origine/referer valide
+- **Description** : Crée un record dans la table Airtable "Affaires" puis, si
+  une date de relance a été fournie, une activité `relance` dans la table
+  "Activité" liée à cette affaire. `Client` pointe sur la table "Personne",
+  `Entreprise` sur "Entreprise" et `Propriétaire` sur "Employé Rewake", tous
+  trois en lien — d'où l'écriture sous forme de liste de record ids.
+- **Request Body** :
+  ```json
+  {
+    "contact_id": "recXXX",
+    "entreprise": "Rewake",
+    "utilisateur_id": "recYYY",
+    "nom": "Remplacement ascenseur",
+    "origine": "Enchère",
+    "date_relance": "2026-10-01"
+  }
+  ```
+  - `entreprise` est le **nom** de la société (`best_match.entreprise` renvoyé par
+    `/internal/contact/check`), pas son record id : la route le résout via la
+    table "Entreprise".
+  - `origine` est le libellé d'une valeur du `singleSelect`
+    "Origine de l'affaire".
+  - `date_relance` sort d'un `<input type="date">` (format `YYYY-MM-DD`). La
+    table "Affaires" n'a pas de champ de relance : la date sert à créer
+    l'activité. **Si elle est vide, l'activité n'est pas créée** — une relance
+    sans date n'a rien à faire dans le planning.
+- **Activité créée** (table "Activité") :
+  ```json
+  {
+    "Name": "relance",
+    "Quand ?": "2026-10-01",
+    "Affaire": ["recZZZ"],
+    "Propriétaire": ["recYYY"],
+    "Entreprise": ["recWWW"]
+  }
+  ```
+  Le champ `Type` est laissé vide.
+- **Réponse** :
+  ```json
+  {
+    "id": "recZZZ",
+    "fields": {
+      "Nom": "Remplacement ascenseur",
+      "Origine de l'affaire": "Enchère",
+      "Client": ["recXXX"],
+      "Entreprise": ["recWWW"],
+      "Propriétaire": ["recYYY"]
+    }
+  }
+  ```
+- **Erreurs** :
+  - `422` si `nom` est vide, si `origine` n'est pas une valeur du `singleSelect`,
+    si `entreprise` ne correspond à aucune Entreprise, si `utilisateur_id`
+    n'est pas un employé connu, ou si `date_relance` n'est pas en `YYYY-MM-DD`
+  - `500` si erreur Airtable. Si l'activité de relance échoue alors que l'affaire
+    a bien été créée, **l'affaire est supprimée** avant de renvoyer le `500`, pour
+    ne pas laisser de doublon si l'utilisateur réessaie.
+
 ### `/internal/backups/`
 - **Méthode** : `GET`
 - **Accès** : `APP_TOKEN` **ET** origine/referer valide

@@ -409,8 +409,10 @@ window.runMermaid = runMermaid;</script>
 <li class="toctree-l1 current"><a class="reference internal" href="scripts.html">Scripts</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Update Product</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#what-it-does">What it does</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#triggering-from-airtable">Triggering from Airtable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#images">Images</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#documentation-pdf">Documentation PDF</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#idempotence-and-locking-two-layers">Idempotence and locking (two layers)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#locking-runs-for-one-model-never-overlap-and-never-get-dropped">Locking: runs for one Model never overlap, and never get dropped</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#data-it-touches">Data it touches</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#how-it-works">How it works</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#deliberate-deviations-from-the-source-update-product">Deliberate deviations from the source (<code class="docutils literal notranslate"><span class="pre">Update-Product</span></code>)</a></li>
@@ -471,7 +473,7 @@ window.runMermaid = runMermaid;</script>
 <td><p>Airtable</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>Writes</strong></p></td>
-<td><p><strong>Shopify</strong> – the other script here that writes anything, alongside <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> (which creates a brand-new listing; this one only ever updates one that already exists)</p></td>
+<td><p><strong>Shopify</strong> – the other script here that writes anything, alongside <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> (which creates a brand-new listing; this one only ever updates one that already exists, or deletes it when <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> is “Non”) – and deletes the “Annonces Shopify” record in that case</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>Origin</strong></p></td>
 <td><p>ported in-process from a sibling project (<code class="docutils literal notranslate"><span class="pre">Update-Product</span></code>, a separate git repository) that this script previously shelled out to as a subprocess – see “Deliberate deviations” below</p></td>
@@ -480,27 +482,97 @@ window.runMermaid = runMermaid;</script>
 </table>
 <section id="what-it-does">
 <h2>What it does<a class="headerlink" href="#what-it-does" title="Link to this heading"></a></h2>
-<p>Syncs an existing Shopify product from Airtable: description, two metafields
-(<code class="docutils literal notranslate"><span class="pre">custom.long_description</span></code>, <code class="docutils literal notranslate"><span class="pre">custom.main_table</span></code> – the exact same keys
-<code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> writes at creation time, so a product’s content stays
-consistent regardless of which script last touched it), and per-variant price and
-inventory quantity. Creates a missing Shopify variant along the way if Airtable now
-has stock for a combination that didn’t exist on Shopify yet – not gated behind a
-permission flag, since that’s a routine, expected part of “update”, not an edge case to
-block.</p>
+<p>Syncs an existing Shopify product from Airtable. <strong>Airtable is the source of truth</strong>
+for everything it writes:</p>
+<ul class="simple">
+<li><p><strong>Product:</strong> title (<code class="docutils literal notranslate"><span class="pre">Name</span></code>), description (<code class="docutils literal notranslate"><span class="pre">Short</span> <span class="pre">description</span></code>), vendor (<code class="docutils literal notranslate"><span class="pre">Marque</span></code>,
+or <code class="docutils literal notranslate"><span class="pre">Sans</span> <span class="pre">marque</span></code>), product type (the Type’s <code class="docutils literal notranslate"><span class="pre">Name</span></code>), and status (the linked
+“Annonces Shopify” record’s <code class="docutils literal notranslate"><span class="pre">Status</span></code>: <code class="docutils literal notranslate"><span class="pre">active</span></code>/<code class="docutils literal notranslate"><span class="pre">draft</span></code>/<code class="docutils literal notranslate"><span class="pre">archived</span></code>; left as is when
+empty, a failure when it’s anything else).</p></li>
+<li><p><strong>Metafields:</strong> the same set <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> writes – <code class="docutils literal notranslate"><span class="pre">long_description</span></code>,
+<code class="docutils literal notranslate"><span class="pre">reconditionnement</span></code>, <code class="docutils literal notranslate"><span class="pre">livraison</span></code>, <code class="docutils literal notranslate"><span class="pre">garantie</span></code>, <code class="docutils literal notranslate"><span class="pre">main_table</span></code> – plus the family
+“filter” metafields (<code class="docutils literal notranslate"><span class="pre">FAMILY_FILTER_METAFIELDS</span></code>, currently only <code class="docutils literal notranslate"><span class="pre">Balances</span></code>). A
+filter spec Airtable doesn’t have is listed in <code class="docutils literal notranslate"><span class="pre">details.filter_specs_missing</span></code> (no
+alert email – this script runs on every stock change).</p></li>
+<li><p><strong>Images:</strong> the Model’s <code class="docutils literal notranslate"><span class="pre">Photo</span> <span class="pre">neuve</span></code>, then the <code class="docutils literal notranslate"><span class="pre">Photos</span> <span class="pre">marketplace</span></code> of its first
+sellable unit that has any – the same images <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> uploads (see
+“Images” below).</p></li>
+<li><p><strong>Documentation PDF:</strong> see below.</p></li>
+<li><p><strong>Options and variants:</strong> the product is reconciled to Airtable, never just
+patched. Options: “État esthétique”, plus the size option (the Variation’s
+<code class="docutils literal notranslate"><span class="pre">Variant_value</span></code>; label from the Type, see <code class="docutils literal notranslate"><span class="pre">_variant_option_name</span></code>) whenever <em>any</em> of
+the Model’s Variations has a <code class="docutils literal notranslate"><span class="pre">Variant_value</span></code> – with or without stock right now,
+since that’s what reconciliation matches a variant against. Variants: exactly one
+per sellable (condition[, variant value]) combination, with Airtable’s price,
+weight and stock – a missing one is <strong>created</strong>, one with nothing left to sell is
+<strong>deleted</strong>. When the options change (e.g. a product created without the size
+option), every variant is recreated under the new options. Shopify requires at
+least one variant, so when the whole Model has nothing left to sell, the existing
+variants are kept and <strong>set to a zero stock</strong>.</p></li>
+</ul>
+<p>When the Model’s <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> is <strong>“Non”</strong>, the run instead <strong>deletes the
+Shopify product and its “Annonces Shopify” record</strong> (every linked one). A product
+already gone from Shopify (404) still has its listing deleted; any other Shopify
+error stops before the listing is deleted, so a retry still knows what to delete. An
+empty <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> is a failure – deleting a live product over an unfilled
+field would be too destructive a guess.</p>
 <p>Two entry modes, both real (nothing here previews or dry-runs):</p>
 <ul class="simple">
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">record_id</span></code></strong> (a Variation id, the default/existing convention): resolves that
 Variation’s parent Model, then updates the whole product. Shopify variants all belong
 to one product per Model anyway, so “update one variation” and “update its model”
-converge on the same write – this has always been true, even before this script had
-an explicit <code class="docutils literal notranslate"><span class="pre">model_id</span></code> mode.</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">model_id</span></code></strong> (new): the identical pipeline, entered directly from a Model id –
-useful when reconciliation, or a human, already knows the Model rather than one of
-its Variations.</p></li>
+converge on the same write.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">model_id</span></code></strong>: the identical pipeline, entered directly from a Model id – what the
+Airtable automations use (see “Triggering from Airtable”).</p></li>
 </ul>
 <p>Nothing here creates a brand-new Shopify listing – see <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> for
 that. A Model with no Shopify product yet (<code class="docutils literal notranslate"><span class="pre">Aucun</span> <span class="pre">produit</span> <span class="pre">Shopify</span> <span class="pre">associé</span> <span class="pre">à</span> <span class="pre">ce</span> <span class="pre">modèle</span></code>) is a validation failure here, not something this script will fix.</p>
+</section>
+<section id="triggering-from-airtable">
+<h2>Triggering from Airtable<a class="headerlink" href="#triggering-from-airtable" title="Link to this heading"></a></h2>
+<p>The four automations that used to call the queue manager (“Update fiche shopify
+(vendus)”, “(Pas a vendre)”, “(modifs)”, “Update quantité shopify (entry)”) all run the
+same script (“Run script” action, input <code class="docutils literal notranslate"><span class="pre">model_id</span></code> = the Model’s record id), with
+<code class="docutils literal notranslate"><span class="pre">AIRTABLE_AUTOMATION_TOKEN</span></code>:</p>
+<div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">inputConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">input</span><span class="p">.</span><span class="nx">config</span><span class="p">();</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">API_URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://api.rewake.fr/internal/scripts/update_product/run&quot;</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">API_TOKEN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&lt;AIRTABLE_AUTOMATION_TOKEN&gt;&quot;</span><span class="p">;</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="nx">model_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">inputConfig</span><span class="p">.</span><span class="nx">model_id</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nx">inputConfig</span><span class="p">.</span><span class="nx">model_id</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nx">inputConfig</span><span class="p">.</span><span class="nx">model_id</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">model_id</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s2">&quot;Model ID manquant&quot;</span><span class="p">);</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">API_URL</span><span class="si">}</span><span class="sb">?model_id=</span><span class="si">${</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">model_id</span><span class="p">)</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">method</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">headers</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Authorization</span><span class="o">:</span><span class="w"> </span><span class="sb">`Bearer </span><span class="si">${</span><span class="nx">API_TOKEN</span><span class="si">}</span><span class="sb">`</span><span class="w"> </span><span class="p">}</span>
+<span class="p">});</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">response</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="sb">`Erreur API: </span><span class="si">${</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="si">}</span><span class="sb"> - </span><span class="si">${</span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">()</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;✅ Tâche ajoutée:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">task_id</span><span class="p">,</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">status</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The response only confirms the run was queued; its outcome is in
+<code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/update_product/runs</span></code> (and the alert email on failure).</p>
+</section>
+<section id="images">
+<h2>Images<a class="headerlink" href="#images" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Source:</strong> the Model’s <code class="docutils literal notranslate"><span class="pre">Photo</span> <span class="pre">neuve</span></code> (all of them; missing, or any under 300x300px,
+is a failure), then the <code class="docutils literal notranslate"><span class="pre">Photos</span> <span class="pre">marketplace</span></code> of the first sellable unit that has any
+(under 300x300px or duplicating a <code class="docutils literal notranslate"><span class="pre">Photo</span> <span class="pre">neuve</span></code> url: skipped) – shared with
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> via <code class="docutils literal notranslate"><span class="pre">_marketplace_photo_attachments</span></code>.</p></li>
+<li><p><strong>Change detection:</strong> the Airtable attachment ids the Shopify images came from are
+recorded, in order, in the <code class="docutils literal notranslate"><span class="pre">custom.images_airtable_ids</span></code> metafield. Images are
+replaced only when that differs from Airtable’s current list, or when Shopify’s image
+count no longer matches. A product whose images predate this (no recorded ids) has
+them replaced once.</p></li>
+<li><p><strong>Replacement:</strong> new images are uploaded first (in order, with their position); the
+old ones are deleted only once every upload worked. A failed upload deletes what it
+added and leaves the old images in place.</p></li>
+<li><p><strong>Worth knowing:</strong> the marketplace photos follow the <em>first sellable</em> unit – when
+that unit is sold, the next one’s photos replace them on the next update.</p></li>
+</ul>
 </section>
 <section id="documentation-pdf">
 <h2>Documentation PDF<a class="headerlink" href="#documentation-pdf" title="Link to this heading"></a></h2>
@@ -526,27 +598,30 @@ source id, so it is replaced once by Airtable’s, then stays stable.</p></li>
 elsewhere).</p></li>
 <li><p><strong>Scopes:</strong> the Shopify app needs <code class="docutils literal notranslate"><span class="pre">write_files</span></code> and <code class="docutils literal notranslate"><span class="pre">read_files</span></code> (confirmed missing on
 the RewakeDev token on 2026-09-28 – <code class="docutils literal notranslate"><span class="pre">fileCreate</span></code> answers ACCESS_DENIED without them).</p></li>
-<li><p><strong>Failure handling:</strong> runs inside the per-Shopify-product lock, before variants. A
+<li><p><strong>Failure handling:</strong> runs inside the per-Model lock, after variants. A
 failed upload doesn’t stop the rest of the sync, but turns the run into a <code class="docutils literal notranslate"><span class="pre">failure</span></code>
 afterwards (same rule as a failed variant creation: it’s what reconciliation’s
 documentation bulk action runs this script for).</p></li>
 </ul>
 </section>
-<section id="idempotence-and-locking-two-layers">
-<h2>Idempotence and locking (two layers)<a class="headerlink" href="#idempotence-and-locking-two-layers" title="Link to this heading"></a></h2>
+<section id="locking-runs-for-one-model-never-overlap-and-never-get-dropped">
+<h2>Locking: runs for one Model never overlap, and never get dropped<a class="headerlink" href="#locking-runs-for-one-model-never-overlap-and-never-get-dropped" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p>The per-<code class="docutils literal notranslate"><span class="pre">record_id</span></code> Redis lock in <code class="docutils literal notranslate"><span class="pre">api/tasks.py</span></code> (shared by every script) guards the
-outer request layer – but it’s keyed by whatever the caller passed in (a Variation
-id, or a Model id), and two <em>different</em> keys can resolve to the very same Shopify
-product.</p></li>
-<li><p>A second lock, acquired inside <code class="docutils literal notranslate"><span class="pre">run()</span></code> itself once the real Shopify product id is
-known, keyed by that Shopify product id (<code class="docutils literal notranslate"><span class="pre">RunStore.acquire_lock(&quot;update_product_shopify_id&quot;,</span> <span class="pre">shopify_id)</span></code>) – this is the one that actually matters for correctness. Two
-concurrent triggers that resolve to the same product (different Variations of one
-Model, or a Variation and its own Model triggered at the same time) collide here and
-the second is rejected with <code class="docutils literal notranslate"><span class="pre">status=&quot;skipped&quot;</span></code>, not a race on Shopify. This mirrors
-<code class="docutils literal notranslate"><span class="pre">Update-Product</span></code>’s own <code class="docutils literal notranslate"><span class="pre">fcntl</span></code> file lock, which existed for exactly this reason –
-see “Deliberate deviations” below.</p></li>
+outer request layer – keyed by whatever the caller passed in as <code class="docutils literal notranslate"><span class="pre">record_id</span></code>.
+<code class="docutils literal notranslate"><span class="pre">update_product</span></code> sets <code class="docutils literal notranslate"><span class="pre">requeue_when_locked</span></code>, so a run that finds it held is put
+back on the queue instead of being skipped.</p></li>
+<li><p>A second lock, acquired inside <code class="docutils literal notranslate"><span class="pre">run()</span></code> once the Model is resolved, keyed by the
+Model id (<code class="docutils literal notranslate"><span class="pre">RunStore.acquire_lock(&quot;update_product_model&quot;,</span> <span class="pre">model_id)</span></code>) – the one that
+actually matters, since a Variation id and a Model id (or two Variations of one
+Model) resolve to the same Shopify product. A run that finds it held raises
+<code class="docutils literal notranslate"><span class="pre">RequeueLater</span></code>, and <code class="docutils literal notranslate"><span class="pre">api/tasks.py</span></code> puts it back on the queue (5s countdown, up to
+<code class="docutils literal notranslate"><span class="pre">REQUEUE_MAX_RETRIES</span></code> = 120 times, then a <code class="docutils literal notranslate"><span class="pre">failure</span></code> run is recorded).</p></li>
 </ol>
+<p>Every Airtable read happens after the Model lock is acquired, with a fresh cache – a
+run that waited its turn syncs Airtable’s <em>latest</em> state, not what it saw when it was
+triggered. A waiting run isn’t recorded in the run history; only the run that actually
+happens is.</p>
 </section>
 <section id="data-it-touches">
 <h2>Data it touches<a class="headerlink" href="#data-it-touches" title="Link to this heading"></a></h2>
@@ -555,7 +630,7 @@ see “Deliberate deviations” below.</p></li>
     CALLER[[&quot;POST /internal/scripts/update_product/run?record_id=...&lt;br/&gt;or ?model_id=...&quot;]]
     TASK[[&quot;api.tasks.run_script (Celery)&lt;br/&gt;per-record_id Redis lock&quot;]]
     SCRIPT[[&quot;api.scripts.update_product&lt;br/&gt;(in-process)&quot;]]
-    LOCK[(&quot;Redis: per-Shopify-product-id lock&quot;)]
+    LOCK[(&quot;Redis: per-Model lock&lt;br/&gt;(busy -&gt; requeued)&quot;)]
     AT[(&quot;Airtable&lt;br/&gt;Model + Variation + Unit records&quot;)]
     SH[(&quot;Shopify&lt;br/&gt;product/metafield/variant/inventory writes&quot;)]
 
@@ -572,38 +647,37 @@ see “Deliberate deviations” below.</p></li>
 <ol class="arabic simple">
 <li><p>Resolve the Model: <code class="docutils literal notranslate"><span class="pre">record_id</span></code> mode verifies the id really belongs to the
 <code class="docutils literal notranslate"><span class="pre">Variation</span></code> table (Airtable’s single-record GET doesn’t validate that – see
-<code class="docutils literal notranslate"><span class="pre">_assert_belongs_to_table</span></code>, the same “confirmed the hard way” gotcha
-<code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code>’s equivalent checks already document), then reads its
-<code class="docutils literal notranslate"><span class="pre">Model</span></code> link field; <code class="docutils literal notranslate"><span class="pre">model_id</span></code> mode verifies the id belongs to <code class="docutils literal notranslate"><span class="pre">Model</span></code> directly.</p></li>
-<li><p>Validate: the Model must still be <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code>, must already have a Shopify
-product linked (via <code class="docutils literal notranslate"><span class="pre">Annonces</span> <span class="pre">Shopify</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">ID_shopify</span></code>, the exact same
-<code class="docutils literal notranslate"><span class="pre">_resolve_listing_ids</span></code> helper <code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code> uses – confirmed against
-the live Airtable schema that Variation’s own <code class="docutils literal notranslate"><span class="pre">ShopifyID</span></code>/<code class="docutils literal notranslate"><span class="pre">Status</span> <span class="pre">Shopify</span></code> lookup
-fields resolve through this identical two-hop chain, so there’s no need to read them
-separately), and must have at least one sellable unit (reusing
-<code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code>’s own <code class="docutils literal notranslate"><span class="pre">_collect_sellable_units</span></code>/<code class="docutils literal notranslate"><span class="pre">_build_variant_rows</span></code> –
-the same aggregation, so both scripts always agree on what a product’s variants
-<em>should</em> look like).</p></li>
-<li><p>Acquire the per-Shopify-product-id lock (see above), then: fetch the live product,
-sync description and metafields (diffed against current values first – a no-op
-write is never sent), then for every desired (état esthétique, variant value)
-combination: create the Shopify variant if missing, update its price if different,
-push inventory if the quantity differs. Matching an Airtable variant row to a live
-Shopify variant is <strong>positional</strong> – option 1 is always “État esthétique” (position
-1, fixed at creation time by <code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code>’s own <code class="docutils literal notranslate"><span class="pre">_create_variants</span></code>),
-option 2 (if the product actually has one, read from the live product’s own
-<code class="docutils literal notranslate"><span class="pre">options</span></code>, not re-derived from Airtable) is the variant value distinguishing sibling
-Variations.</p></li>
-<li><p>A description/metafield/single-variant sync failure is logged and skipped, not fatal
-to the whole run – one Shopify hiccup on one variant shouldn’t block every other
-variant’s sync. The run only reports <code class="docutils literal notranslate"><span class="pre">status=&quot;failure&quot;</span></code> for a genuine validation
-problem (missing data, no linked product) or being completely unable to reach the
-product on Shopify at all.</p></li>
+<code class="docutils literal notranslate"><span class="pre">_assert_belongs_to_table</span></code>), then reads its <code class="docutils literal notranslate"><span class="pre">Model</span></code> link field; <code class="docutils literal notranslate"><span class="pre">model_id</span></code> mode
+verifies the id belongs to <code class="docutils literal notranslate"><span class="pre">Model</span></code> directly.</p></li>
+<li><p>Acquire the per-Model lock (or requeue – see above), then read the Model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> = “Non”: delete the Shopify product(s) and listing(s), done.</p></li>
+<li><p>Validate: a Shopify product is linked (via <code class="docutils literal notranslate"><span class="pre">Annonces</span> <span class="pre">Shopify</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">ID_shopify</span></code>, the
+same <code class="docutils literal notranslate"><span class="pre">_resolve_listing_ids</span></code> helper <code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code> uses), the listing’s
+<code class="docutils literal notranslate"><span class="pre">Status</span></code> is valid, the Type exists, the weight is a number. Collect the sellable
+units with <code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code>’s own <code class="docutils literal notranslate"><span class="pre">_collect_sellable_units</span></code>/
+<code class="docutils literal notranslate"><span class="pre">_build_variant_rows</span></code> (so both scripts agree on what the variants <em>should</em> be) –
+an empty result is fine here: it means zero stock everywhere.</p></li>
+<li><p>Fetch the live product, then sync, in this order: variants (stock first – it’s
+what matters most if anything later fails), product fields, metafields,
+documentation PDF, images. Each step diffs against the live product first – a
+no-op write is never sent. Variants go through one product PUT with the full
+variant list (Shopify REST: a listed variant with an <code class="docutils literal notranslate"><span class="pre">id</span></code> is kept and updated, one
+without is created, an unlisted one is deleted) – which is also what lets the
+options themselves change – then each variant’s stock is pushed. A variant’s
+identity is its option values, stripped, in position order.</p></li>
+<li><p>A failure in any step is collected, not fatal: every other step still runs, then the
+run reports <code class="docutils literal notranslate"><span class="pre">status=&quot;failure&quot;</span></code> with every reason (first 5 in <code class="docutils literal notranslate"><span class="pre">details.error</span></code>) and
+the partial progress. A missing/invalid <code class="docutils literal notranslate"><span class="pre">Photo</span> <span class="pre">neuve</span></code> works the same way: images are
+skipped, everything else syncs, the run fails.</p></li>
 </ol>
 </section>
 <section id="deliberate-deviations-from-the-source-update-product">
 <h2>Deliberate deviations from the source (<code class="docutils literal notranslate"><span class="pre">Update-Product</span></code>)<a class="headerlink" href="#deliberate-deviations-from-the-source-update-product" title="Link to this heading"></a></h2>
 <ul class="simple">
+<li><p><strong>Queued, not skipped, when busy.</strong> An earlier version of this port skipped a run
+that found the product’s lock held (<code class="docutils literal notranslate"><span class="pre">status=&quot;skipped&quot;</span></code>) – but that run could be the
+one carrying the newer Airtable data (a sale triggering two automations at once), so
+it now waits its turn instead.</p></li>
 <li><p><strong>In-process, no subprocess.</strong> The source shelled out to
 <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span> <span class="pre">Update-Product/main.py</span> <span class="pre">&lt;record_id&gt;</span></code>, parsing captured stdout/stderr to guess
 success (<code class="docutils literal notranslate"><span class="pre">stderr</span> <span class="pre">==</span> <span class="pre">&quot;&quot;</span></code>) – unreliable, since <code class="docutils literal notranslate"><span class="pre">Update-Product</span></code> logs structured JSON
@@ -662,6 +736,16 @@ an individual Variation in reconciliation’s cross-reference.</strong>
 <code class="docutils literal notranslate"><span class="pre">record_id</span></code> – a run triggered by <code class="docutils literal notranslate"><span class="pre">model_id</span></code> (or by a <em>different</em> sibling Variation of
 the same Model) has no <code class="docutils literal notranslate"><span class="pre">record_id</span></code> of its own to match on, so it won’t show up as
 “already tried” against a Variation it may well have actually updated.</p></li>
+<li><p><strong>Fixed: a product created without the size option could never get it.</strong>
+Confirmed live (dev store, “RT PCR Thermo Scientific QuantStudio 5”):
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> only added the size option when more than one size had
+stock at creation, and <code class="docutils literal notranslate"><span class="pre">update_product</span></code> read the option count from the live product,
+so its “0.1 mL / Très bon” row matched the existing condition-only “Très bon” variant
+and every run reported success without changing anything – while reconciliation
+kept listing “0.1 mL” as missing. Both scripts now decide the options from Airtable
+(<code class="docutils literal notranslate"><span class="pre">_model_has_variant_values</span></code>), and update restructures a product whose options
+differ. Worth knowing: a product whose option names differ from what Airtable
+implies (e.g. renamed by hand) has all its variants recreated once.</p></li>
 <li><p><strong>No dedicated test against a live Shopify product with a genuinely different
 historical option-1 value.</strong> The positional variant-matching assumes option 1 is
 always literally “État esthétique” (fixed at creation time) – true for everything
@@ -681,9 +765,8 @@ rejection was silently logged and swallowed, with the run still reporting
 <code class="docutils literal notranslate"><span class="pre">status=&quot;success&quot;</span></code>. Both bugs are now fixed: <code class="docutils literal notranslate"><span class="pre">_variant_key_from_row</span></code>/
 <code class="docutils literal notranslate"><span class="pre">_variant_key_from_shopify</span></code> strip both sides before comparing, and a failed variant
 <em>creation</em> now makes the whole run report <code class="docutils literal notranslate"><span class="pre">status=&quot;failure&quot;</span></code> (with the real Shopify
-rejection reason in <code class="docutils literal notranslate"><span class="pre">details.error</span></code>) instead of silently succeeding – a
-price/quantity sync failure on an <em>already-existing</em> variant still stays soft
-(logged only), since that variant remains sellable in the meantime.</p></li>
+rejection reason in <code class="docutils literal notranslate"><span class="pre">details.error</span></code>) instead of silently succeeding. Since then,
+every variant sync failure (price, weight, stock, zero stock) does the same.</p></li>
 <li><p><strong>A <code class="docutils literal notranslate"><span class="pre">requests.Response</span></code> is falsy for any non-2xx status</strong> (<code class="docutils literal notranslate"><span class="pre">Response.__bool__</span></code>
 returns <code class="docutils literal notranslate"><span class="pre">self.ok</span></code>) – code that checks <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">response</span> <span class="pre">else</span> <span class="pre">None</span></code> instead of
 <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">response</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">None</span> <span class="pre">else</span> <span class="pre">None</span></code> silently discards the real status code/body of
@@ -706,38 +789,62 @@ this same <code class="docutils literal notranslate"><span class="pre">if</span>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.variants_created</span></code></p></td>
 <td><p>How many Shopify variants were newly created this run</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.prices_updated</span></code> / <code class="docutils literal notranslate"><span class="pre">metrics.quantities_updated</span></code></p></td>
-<td><p>How many existing variants had their price/inventory changed</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.prices_updated</span></code> / <code class="docutils literal notranslate"><span class="pre">metrics.weights_updated</span></code> / <code class="docutils literal notranslate"><span class="pre">metrics.quantities_updated</span></code></p></td>
+<td><p>How many existing variants had their price/weight/inventory changed</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.metafields_updated</span></code></p></td>
-<td><p>How many of the two metafields were actually written (0 if both already matched)</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.variants_deleted</span></code></p></td>
+<td><p>How many Shopify variants with nothing left to sell were deleted</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.options_updated</span></code></p></td>
+<td><p>1 when the product’s options were changed (variants then all recreated)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.quantities_zeroed</span></code></p></td>
+<td><p>How many variants were set to a zero stock because the whole Model has nothing left to sell</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.metafields_updated</span></code></p></td>
+<td><p>How many metafields were actually written (0 if all already matched)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.images_uploaded</span></code></p></td>
+<td><p>How many images were uploaded this run (0 when unchanged)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.documentation_updated</span></code></p></td>
 <td><p>1 when a documentation PDF was uploaded this run, else 0</p></td>
 </tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.action</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">updated</span></code>, or <code class="docutils literal notranslate"><span class="pre">removed</span></code> (<code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> = “Non”)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.deleted_shopify_product_ids</span></code> / <code class="docutils literal notranslate"><span class="pre">details.deleted_listing_record_ids</span></code></p></td>
+<td><p>What a <code class="docutils literal notranslate"><span class="pre">removed</span></code> run deleted</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.product_fields_updated</span></code></p></td>
+<td><p>Which of <code class="docutils literal notranslate"><span class="pre">title</span></code>/<code class="docutils literal notranslate"><span class="pre">body_html</span></code>/<code class="docutils literal notranslate"><span class="pre">vendor</span></code>/<code class="docutils literal notranslate"><span class="pre">product_type</span></code>/<code class="docutils literal notranslate"><span class="pre">status</span></code> were written</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.description_updated</span></code></p></td>
+<td><p>Whether <code class="docutils literal notranslate"><span class="pre">body_html</span></code> was among them</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.images_status</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uploaded</span></code> / <code class="docutils literal notranslate"><span class="pre">unchanged</span></code> / <code class="docutils literal notranslate"><span class="pre">failed</span></code> / <code class="docutils literal notranslate"><span class="pre">skipped</span></code> (no valid <code class="docutils literal notranslate"><span class="pre">Photo</span> <span class="pre">neuve</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.filter_specs_missing</span></code></p></td>
+<td><p>Family filter specs Airtable doesn’t have (only when some are missing)</p></td>
+</tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.documentation_status</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">uploaded</span></code> / <code class="docutils literal notranslate"><span class="pre">unchanged</span></code> / <code class="docutils literal notranslate"><span class="pre">absent</span></code> (no PDF in Airtable, Shopify untouched) / <code class="docutils literal notranslate"><span class="pre">failed</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.documentation_error</span></code></p></td>
-<td><p>Present when <code class="docutils literal notranslate"><span class="pre">documentation_status</span></code> is <code class="docutils literal notranslate"><span class="pre">failed</span></code> (the run is then a <code class="docutils literal notranslate"><span class="pre">failure</span></code> too)</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.model_id</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.model_id</span></code></p></td>
 <td><p>The Model this run resolved to, regardless of entry mode</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.record_id</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.record_id</span></code></p></td>
 <td><p>The Variation id, only when that was the entry mode used (absent for <code class="docutils literal notranslate"><span class="pre">model_id</span></code> mode)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.title</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.title</span></code></p></td>
 <td><p>The Model’s name, present on every outcome</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.description_updated</span></code></p></td>
-<td><p>Whether the product description actually needed (and got) a sync this run</p></td>
-</tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.shopify_product_id</span></code> / <code class="docutils literal notranslate"><span class="pre">details.shopify_product_url</span></code> / <code class="docutils literal notranslate"><span class="pre">details.airtable_listing_url</span></code></p></td>
-<td><p>Present on success and on the per-Shopify-id lock skip – links to the product this run was about</p></td>
+<td><p>Links to the product this run was about</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.error</span></code></p></td>
-<td><p>Present on failure, or on a lock-collision skip</p></td>
+<td><p>Present on failure</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.airtable_model_url</span></code> / <code class="docutils literal notranslate"><span class="pre">details.airtable_variation_url</span></code> / <code class="docutils literal notranslate"><span class="pre">details.airtable_unit_url</span></code></p></td>
 <td><p>Best-effort links to the Airtable record a validation failure is actually about – same convention as <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code></p></td>
