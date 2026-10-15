@@ -1,0 +1,484 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Rewake
+# This file is distributed under the same license as the Rewake API package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Rewake API \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-15 11:41+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../manuals/reception-produits-images.md:1
+#: ed813edaa3184095bc8061fceac2f0a2
+msgid "Images du manuel « Réception produits »"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md:3
+#: 37a58c881c1c4847bb811fd9b6a36966
+msgid ""
+"Emplacements utilisés par le manuel [Réception produits](./reception-"
+"produits.md). Une image « Provisoire » (colonne « État ») est grise "
+"(numéro et description). Remplacez-la par la vraie capture dans "
+"`docs/manuals/images/reception-produits/`, sous **exactement** le même "
+"nom."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md:8
+#: 39ca63905e824267a30d4d5c2ab192c0
+msgid ""
+"**Captures de l'application** (recommandé) : déposez la capture brute "
+"(téléphone, 1x) dans `images/reception-produits/raw/`, décrivez ses "
+"pastilles dans `frames.json` (cadre cible en pixels de la capture, texte,"
+" côté), puis :"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md:17
+#: 783fb6fbe1e24299a46460060fd574a6
+msgid ""
+"Le script met la capture dans un téléphone, ajoute les pastilles "
+"numérotées et retire la bande du bas où se trouve le badge « N » de "
+"Next.js en développement (mieux : capturer avec `devIndicators: false`). "
+"Images déjà produites ainsi : 02 à 15, 17, 18, 20, 21 et 22."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md:22
+#: 3e05afa5070743ab855a72a9a7c0924a
+msgid ""
+"**À refaire** (colonne « État ») : les captures 05 à 15, 17, 18, 21 et 22"
+" montrent l'ancienne interface (page d'article en 4 étapes, récapitulatif"
+" par ligne attendue). La réception se fait maintenant produit par produit"
+" en 5 étapes (Photos, N° de série, Variante, Mesures, État) ; la colonne "
+"« Contenu attendu » décrit l'écran actuel. Après une nouvelle capture, "
+"mettez à jour `frames.json` (pastilles) et la légende de l'image dans le "
+"manuel, et retirez la mention « Ancienne interface »."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md:30
+#: 7ab0106174c146b7828d23f23b872be5
+msgid ""
+"Pour les générer avec une IA d'images : un prompt par image dans "
+"`docs/manuals/images/reception-produits/PROMPTS.md` (style commun "
+"inclus)."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md:33
+#: 42c6e26e327e46f3856ec3238fb7094d
+msgid ""
+"Conseils : captures sur téléphone (portrait), PNG, largeur ~1080 px ; "
+"entourez en rouge l'élément à toucher ; floutez les noms de clients si "
+"besoin."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md b07882458cb040e0af1a79edb32f05ad
+msgid "Fichier"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 04eea3a6817b4ee2b436488dd4988086
+msgid "Titre"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md e38d4a9b3ac54b0c8dd6a003b142673c
+msgid "Contenu attendu"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 0a5a707d6c7e4f3b8b02e60f90e59595
+#: 765cf9b2291d45f3a6fad7bcb428f77c
+msgid "État"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 3294bb4f5f474e7887c94d4b36fd3ef7
+msgid "00-cycle-article.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md c149864f8d6e4e93b73b7232789375d1
+msgid "Le cycle d'un produit"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 8a483c5ebf4e4f3a9ed6dc20f8e1feab
+msgid ""
+"Schéma : les 5 étapes d'un produit en boucle (photos, n° de série, marque"
+" et modèle, mesures, état), puis « Produit complet » → produit suivant."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 39f4b2ad0d564785bbe744403fc55643
+#: 6881c98f12284d2cb90259dbc692be53 92abed031ac34b629e0eda314930d440
+#: a05b8b231ca942eeb5758bff159afec0 aee76fbad2a44a4081586d8cd9be5759
+msgid "Provisoire"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md d1fe921704624a629ab55389facc859f
+msgid "01-autoriser-camera.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md f5942cc291744ade99f5e8bb2a621908
+msgid "Autoriser la caméra"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md f58d74e1273f40c9bcf44cc1c47a38a0
+msgid ""
+"Capture de la fenêtre du navigateur « Autoriser l'accès à la caméra ? » "
+"avec le bouton « Autoriser » entouré."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 89a6c564eb2b4b168de7a5031053fa97
+msgid "02-tuile-reception.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 51476757e55249cbaf969041ceef18eb
+msgid "La tuile Réception produits"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 1e7dd6ec51f34542861aa15218e02acc
+msgid "Page d'accueil de l'intranet, tuile « 📦 Réception produits » entourée."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 05eb9d6513c742d2bb450e13f7414b65
+#: 40735b207d8e447b9590377233c7abb4 8b4971f35fb34a59a60e701719aa3a96
+#: ab216b95ad9c44ea925bd12ba7020d3d
+msgid "À jour"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 24972dbdd07a4b4d9828267e9eef692e
+msgid "03-accueil-onglets.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md d5ce9e0595714cf1a7077bf59ce75da7
+msgid "L'accueil et ses trois onglets"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 8dfb1266fa284ea0b550a54b613a51de
+msgid ""
+"Accueil « Réception produits » : barre de recherche en haut, les trois "
+"onglets avec leur nombre, et quelques lignes en dessous."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 3c8390e29ad543a98395e0645cb720ac
+msgid "04-reprise-receptionner.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 66de9802223d41cea7d8b1734bc98bcd
+msgid "Réceptionner une reprise"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md aa83a0fac3e84eb2bc0901ac3c7a02d9
+msgid ""
+"Onglet « À réceptionner », une ligne de reprise (nom, entreprise, nombre "
+"d'unités), bouton « Réceptionner » entouré, et une reprise déjà ouverte "
+"avec « Ouvrir »."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 4e465bf24e4745de9eef9869ba081a83
+msgid "05-demarrer-reception.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 14405be972cf4a4b8804da71afe36020
+msgid "Démarrer la réception"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 830bdd3578c24edd9be28529c32fa743
+msgid ""
+"Liste des produits d'une réception qui vient d'être ouverte : « 0/N "
+"produit(s) complet(s) », lignes « À recevoir · touchez pour photographier"
+" », la première entourée."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 1d089cda6afd48a7b5eb2065fc7dfb34
+msgid "À refaire (montre l'encadré « Démarrer la réception », supprimé)"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 8470fce61066490ca74aa7a150b5537f
+msgid "06-camera-article-attendu.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md f7d441bb9e104984b149043b6ab7ff0b
+msgid "La caméra et le produit attendu"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md d4330ef726df4568afba6f0631abf409
+msgid ""
+"Écran caméra : nom du produit en haut avec les 5 étapes, consigne, cadre "
+"de l'étiquette, pastilles Étiquette / Produit entier / +0, gros "
+"déclencheur blanc, « Sans étiquette » et « Importer »."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md a953c90376484e6f9f2f68a0166197d5
+msgid "À refaire (montre la liste des articles et « Imprévu », supprimés)"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 800514626e264a88bdf6860d1f1c0d00
+msgid "07-photo-etiquette.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 993594d7af87463488146d9fc9fe5701
+msgid "Photo de l'étiquette"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md c7b1adda4a1c4347b2f9de297de5193f
+msgid ""
+"Étiquette bien cadrée dans le cadre (texte net, sans reflet) ; à côté, un"
+" exemple raté (flou, reflet) barré d'une croix rouge."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 3811befb8c8248da9d8b322aef2da735
+#: 858b2c39dd284600b2c0b56adb601444 a4de7d3b57e5414ba20cade92f45bbce
+#: b8ac40127a424cc5beeeecdba0c31908 e0426c14e7514910a8bd8cc1004bcb5c
+#: e6da791c6df740eaa8e56716cfa0b417 e7e9f1f005ca43cc934315607d9a614a
+#: fc127487f3a0429884115415a44ea5b5
+msgid "À refaire"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 1d75e761f6114b74b11afffc741df631
+msgid "08-photo-unite-entiere.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 79817bc0225c4412aee395f07c950fb6
+msgid "Photo du produit entier"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 94701b52687d4eba88defe1486b14973
+msgid ""
+"Appareil entier à l'écran, fond dégagé, consigne « Photographiez le "
+"produit entier »."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 334097edb29f498a82b0d0a0b794aef5
+msgid "09-photos-facultatives.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 8688dcb2775b4381959a2287458ad8b4
+msgid "Photos facultatives"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 35bb3d387e8d43c688dae80eb7c82fba
+msgid ""
+"Rangée de pastilles avec leurs icônes, « Arrière » sélectionnée, « "
+"Branchement » cochée ✓."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 73c87e12b8494869804cdd005e746f73
+msgid "10-camera-suite.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 840f9563c8224fbfae8500040f949c4a
+msgid "Passer à la suite"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 6f8ad84f33bd4dfabe58a9a72f1016cb
+msgid "Bas de l'écran caméra : bouton blanc « Suivant : n° de série → » entouré."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md da8df620651145c28c517d1ece5e778f
+msgid "À refaire (montre « Photos seules », supprimé)"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md c52811a593914257899943a4206647de
+msgid "11-page-article.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md f95f5d5e39394fb5a79d2997dee80330
+msgid "L'écran d'un produit"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md bb60e79d155e4ec8af983c640b341e14
+msgid ""
+"Haut de l'écran d'un produit : nom, compteur « 3/5 », les 5 étapes (deux "
+"cochées), la troisième en cours."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 6288ced60b9d421795237095932fa4a5
+msgid "À refaire (montre « Article précédent / suivant », supprimé)"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md e3586748514a425b92000804a6913422
+msgid "12-champs-etiquette.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 3c47323ffadc454a89cfadda56e42c9f
+msgid "N° de série"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 27a8fe6d72904e6e9f953b620102c01a
+msgid ""
+"Étape « N° de série » : photo de l'étiquette, champ pré-rempli « Lu sur "
+"l'étiquette », ligne « L'IA lit : 221209B038 — Utiliser », bouton « "
+"Valider le n° de série »."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md ec855635cde74ab4bc6589217bc9ec02
+msgid "13-reference-deja-liee.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 91bc36dbfb0e4b2cb8d9e2e6830c0e67
+msgid "Référence déjà reliée"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 0927c9d14d4d433aac7625c6e40df6ea
+msgid ""
+"Étape « Marque et modèle » : référence avec le badge « Existe dans "
+"Airtable », boutons « Oui, c'est bien ce produit » (entouré) et « Non, ce"
+" n'est pas ce produit »."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 9fa33dc6c14548858d41881e0b719bec
+msgid "14-suggestions-references.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 5e49376ff47c45fc9f2610c7a49eac3e
+msgid "Proposé par l'IA"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md b653e1180034450b86ad92e9a42515a8
+#, python-format
+msgid ""
+"« Proposé par l'IA » avec « Relancer » : trois références « Existe dans "
+"Airtable » avec 92 %, 41 %, 12 % sûr, la première choisie, bouton « "
+"Choisir cette référence »."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 27ebe31e90a244b989f4f261b6d925d5
+msgid "15-nouvelle-reference.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 55c2dfcdecb243eebda9d6b92d115865
+msgid "Créer une nouvelle référence"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 249c8c9175eb44ad8e241602d55a8d21
+msgid ""
+"Écran « Nouvelle référence » : Marque, Modèle, Type d'équipement (un "
+"badge « nouveau dans Airtable »), « Ajouter une variante », récapitulatif"
+" « Sera créé dans Airtable », bouton « Créer dans Airtable »."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 4bb1039e62894fa1ad45326967e74acd
+msgid "À refaire (montre la case « J'ai vérifié… », supprimée)"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 6ca91ec856914365a5ca57822b7a5662
+msgid "16-mesures.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 440173b6732e4ff493477bc2d975ba1f
+msgid "Mesures"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md da40159dbc41463ca764879312ee91a0
+msgid ""
+"Les 4 champs de mesure, deux en violet « connu (Airtable) », bouton « "
+"Confirmer les valeurs connues », bouton « Valider les mesures » en bas."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 0f4121aff91b468e9d97968c1ffecd83
+msgid "17-etat.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 465c90ed93dc487c8870279644b8c771
+msgid ""
+"Gros boutons « Aspect (esthétique) » et « Fonctionnement » (« Bon » et « "
+"Non testé » par défaut), commentaire atelier, encadré « Pièces incluses "
+"»."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md e38631073dd246f1ad92763e1c0429ca
+msgid "18-accessoires-pieces.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 0c0f15cefe8b44ea80f37dcd9bcededb
+msgid "Accessoires et pièces incluses"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 3d96a59ea0044516bf8600cecfa3f4f9
+msgid ""
+"À gauche, la fenêtre « Quel type de produit ? » avec « Un accessoire » "
+"entouré ; à droite, l'encadré « Pièces incluses » de l'étape État avec « "
+"câble d'alimentation », « spatule »."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md ac683b4c420f4c67b8ed732f594cd231
+msgid "19-article-termine.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 91b6f3fd53924086a6ebd04f5d73c45b
+msgid "Produit complet"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md c2adeeae7bab489abd4c32b002796f28
+msgid ""
+"Écran « Produit complet » : coche verte, les 5 étapes résumées, boutons «"
+" Produit suivant : … » et « Retour à la liste »."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md bef00ad11a594799bc42ce766ec31f74
+msgid "20-reprendre.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 0f6d7b0f0c03457d87e641c99114011c
+msgid "Reprendre une réception"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 147f6a10542242248490ce55ac517651
+msgid ""
+"Onglet « En cours » : une réception avec « Reçus 5/8 » et « Traités 3/5 "
+"», bouton « Reprendre » entouré."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 4474d6c86c3f45a79783766b37c5e354
+msgid "21-recapitulatif.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md e6b0093d3bc84323bdb136c770fa49ca
+msgid "La liste des produits"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 9270d3297be4484db47dda7dcc1068b5
+msgid ""
+"Liste d'une réception : « x/y produit(s) complet(s) » et %, un produit "
+"complet ✓, un « À recevoir », un « Imprévu », un accessoire 🧩, « Dans "
+"Airtable » sous un produit, menu ⋮ ouvert."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md e49bc82cf1534231ad4d3619dea4a943
+msgid "À refaire (montre l'ancien récapitulatif par ligne attendue)"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 305d581ffa8b4a22a88a41c975c6a8c0
+msgid "22-terminer.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 9be24b9e1e5c46779096e9f821ea53eb
+msgid "Terminer"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md ca1b532bed704472956ad1865d5af2c6
+msgid ""
+"Bas de la liste : « Tous les produits sont complets. », bouton « Terminer"
+" la réception » entouré, et la fenêtre « Terminer la réception ? »."
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 16f3371adbed452e98977cae41b7422d
+msgid "À refaire (montre l'encadré « 5. Fin des opérations », supprimé)"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md bd96cda0f6df4144ad6df02b35882a59
+msgid "23-icones-photos.png"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md eaf32ae0bb79403e944575a54b8009b0
+msgid "Icônes des types de photo"
+msgstr ""
+
+#: ../../manuals/reception-produits-images.md 860e4e4690874d8c9520c6e95bfffa47
+msgid "Planche des 11 icônes de types de photo avec leur nom."
+msgstr ""
+

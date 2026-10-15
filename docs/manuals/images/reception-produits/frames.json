@@ -1,0 +1,611 @@
+{
+  "_comment": "Phone frames + stickers for the manual's images: uv run python docs/manuals/tools/phone_frame.py docs/manuals/images/reception-produits/frames.json [out.png ...]. Boxes are [x0, y0, x1, y1] in the raw screenshot's pixels.",
+  "images": [
+    {
+      "out": "02-tuile-reception.png",
+      "raw": "raw/intranet-accueil.png",
+      "stickers": [
+        {
+          "box": [
+            206,
+            274,
+            388,
+            405
+          ],
+          "label": "Réception produits",
+          "side": "right"
+        }
+      ]
+    },
+    {
+      "out": "03-accueil-onglets.png",
+      "raw": "raw/accueil-a-receptionner.png",
+      "stickers": [
+        {
+          "box": [
+            12,
+            194,
+            389,
+            232
+          ],
+          "label": "Rechercher",
+          "side": "left"
+        },
+        {
+          "box": [
+            12,
+            250,
+            389,
+            298
+          ],
+          "label": "Les trois onglets",
+          "side": "right"
+        }
+      ]
+    },
+    {
+      "out": "04-reprise-receptionner.png",
+      "raw": "raw/accueil-a-receptionner.png",
+      "stickers": [
+        {
+          "box": [
+            24,
+            375,
+            376,
+            409
+          ],
+          "label": "Réceptionner",
+          "side": "right"
+        },
+        {
+          "box": [
+            24,
+            484,
+            376,
+            516
+          ],
+          "label": "Déjà ouverte : Ouvrir",
+          "side": "right"
+        }
+      ]
+    },
+    {
+      "out": "05-demarrer-reception.png",
+      "raw": "raw/reception-demarrer.png",
+      "stickers": [
+        {
+          "box": [
+            37,
+            376,
+            363,
+            418
+          ],
+          "label": "Commencer",
+          "side": "right"
+        },
+        {
+          "box": [
+            150,
+            222,
+            250,
+            302
+          ],
+          "label": "Ou touchez la caméra",
+          "side": "left"
+        }
+      ]
+    },
+    {
+      "out": "06-camera-article-attendu.png",
+      "raw": "raw/camera-article.png",
+      "stickers": [
+        {
+          "box": [
+            20,
+            676,
+            390,
+            712
+          ],
+          "label": "L'article attendu",
+          "side": "left"
+        },
+        {
+          "box": [
+            58,
+            211,
+            351,
+            405
+          ],
+          "label": "Cadrez ici",
+          "side": "right"
+        },
+        {
+          "box": [
+            176,
+            757,
+            232,
+            813
+          ],
+          "label": "Déclencheur",
+          "side": "right"
+        },
+        {
+          "box": [
+            354,
+            20,
+            392,
+            56
+          ],
+          "label": "Liste des articles",
+          "side": "right"
+        }
+      ]
+    },
+    {
+      "out": "07-photo-etiquette.png",
+      "raw": "raw/camera-etiquette.png",
+      "stickers": [
+        {
+          "box": [
+            58,
+            211,
+            351,
+            405
+          ],
+          "label": "L'étiquette dans le cadre",
+          "side": "right"
+        },
+        {
+          "box": [
+            176,
+            757,
+            232,
+            813
+          ],
+          "label": "Déclencheur",
+          "side": "left"
+        },
+        {
+          "box": [
+            294,
+            762,
+            390,
+            782
+          ],
+          "label": "Pas d'étiquette ?",
+          "side": "right"
+        }
+      ]
+    },
+    {
+      "out": "08-photo-unite-entiere.png",
+      "raw": "raw/camera-unite-entiere.png",
+      "stickers": [
+        {
+          "box": [
+            58,
+            195,
+            351,
+            487
+          ],
+          "label": "Tout l'appareil",
+          "side": "right"
+        },
+        {
+          "box": [
+            176,
+            757,
+            232,
+            813
+          ],
+          "label": "Déclencheur",
+          "side": "left"
+        },
+        {
+          "box": [
+            322,
+            775,
+            390,
+            795
+          ],
+          "label": "Ou importer une photo",
+          "side": "right"
+        }
+      ]
+    },
+    {
+      "out": "09-photos-facultatives.png",
+      "raw": "raw/camera-photos-facultatives.png",
+      "stickers": [
+        {
+          "box": [
+            165,
+            212,
+            243,
+            290
+          ],
+          "label": "Photo demandée",
+          "side": "right"
+        },
+        {
+          "box": [
+            22,
+            632,
+            331,
+            658
+          ],
+          "label": "Déjà prises ✓",
+          "side": "left"
+        },
+        {
+          "box": [
+            20,
+            668,
+            400,
+            692
+          ],
+          "label": "Choisir le type de photo",
+          "side": "right"
+        },
+        {
+          "box": [
+            176,
+            707,
+            232,
+            763
+          ],
+          "label": "Déclencheur",
+          "side": "left"
+        }
+      ],
+      "crop_to": 817
+    },
+    {
+      "out": "10-camera-suite.png",
+      "raw": "raw/camera-fin-photos.png",
+      "stickers": [
+        {
+          "box": [
+            122,
+            775,
+            386,
+            813
+          ],
+          "label": "Étiquette, mesures, état",
+          "side": "right"
+        },
+        {
+          "box": [
+            21,
+            775,
+            117,
+            813
+          ],
+          "label": "Photos seules",
+          "side": "left"
+        }
+      ],
+      "crop_to": 817
+    },
+    {
+      "out": "11-page-article.png",
+      "raw": "raw/article-haut.png",
+      "stickers": [
+        {
+          "box": [
+            14,
+            222,
+            382,
+            254
+          ],
+          "label": "Trouvé dans… (accessoire)",
+          "side": "right"
+        },
+        {
+          "box": [
+            20,
+            280,
+            388,
+            304
+          ],
+          "label": "Article précédent / suivant",
+          "side": "left"
+        },
+        {
+          "box": [
+            14,
+            311,
+            394,
+            367
+          ],
+          "label": "Les 4 étapes",
+          "side": "right"
+        }
+      ]
+    },
+    {
+      "out": "12-champs-etiquette.png",
+      "raw": "raw/article-suggestions.png",
+      "stickers": [
+        {
+          "box": [
+            34,
+            104,
+            200,
+            122
+          ],
+          "label": "Valeur venue d'Airtable",
+          "side": "left"
+        },
+        {
+          "box": [
+            30,
+            264,
+            376,
+            286
+          ],
+          "label": "Lu par l'IA : Utiliser",
+          "side": "right"
+        }
+      ]
+    },
+    {
+      "out": "13-reference-deja-liee.png",
+      "raw": "raw/article-deja-liee.png",
+      "stickers": [
+        {
+          "box": [
+            36,
+            597,
+            373,
+            692
+          ],
+          "label": "Déjà liée dans Airtable",
+          "side": "left"
+        },
+        {
+          "box": [
+            134,
+            655,
+            222,
+            683
+          ],
+          "label": "Confirmer",
+          "side": "right"
+        }
+      ]
+    },
+    {
+      "out": "14-suggestions-references.png",
+      "raw": "raw/article-suggestions.png",
+      "stickers": [
+        {
+          "box": [
+            53,
+            474,
+            89,
+            498
+          ],
+          "label": "Confiance",
+          "side": "left"
+        },
+        {
+          "box": [
+            288,
+            475,
+            350,
+            496
+          ],
+          "label": "Choisir",
+          "side": "right"
+        },
+        {
+          "box": [
+            270,
+            420,
+            356,
+            442
+          ],
+          "label": "Relancer l'IA",
+          "side": "right"
+        }
+      ]
+    },
+    {
+      "out": "15-nouvelle-reference.png",
+      "raw": "raw/article-nouvelle-reference.png",
+      "stickers": [
+        {
+          "box": [
+            56,
+            152,
+            314,
+            176
+          ],
+          "label": "Marques existantes (%)",
+          "side": "right"
+        },
+        {
+          "box": [
+            56,
+            648,
+            340,
+            684
+          ],
+          "label": "Cocher après vérification",
+          "side": "left"
+        },
+        {
+          "box": [
+            56,
+            693,
+            190,
+            720
+          ],
+          "label": "Créer dans Airtable",
+          "side": "right"
+        }
+      ]
+    },
+    {
+      "out": "17-etat.png",
+      "raw": "raw/article-etat.png",
+      "stickers": [
+        {
+          "box": [
+            27,
+            461,
+            381,
+            495
+          ],
+          "label": "État esthétique",
+          "side": "right"
+        },
+        {
+          "box": [
+            27,
+            516,
+            381,
+            550
+          ],
+          "label": "État fonctionnel",
+          "side": "left"
+        },
+        {
+          "box": [
+            27,
+            561,
+            381,
+            613
+          ],
+          "label": "Commentaire atelier",
+          "side": "right"
+        }
+      ]
+    },
+    {
+      "out": "18-accessoires-pieces.png",
+      "raw": "raw/article-contenu.png",
+      "stickers": [
+        {
+          "box": [
+            27,
+            507,
+            381,
+            542
+          ],
+          "label": "Accessoire : caméra directe",
+          "side": "right"
+        },
+        {
+          "box": [
+            27,
+            626,
+            381,
+            661
+          ],
+          "label": "Pièce incluse : un nom",
+          "side": "left"
+        }
+      ]
+    },
+    {
+      "out": "20-reprendre.png",
+      "raw": "raw/accueil-en-cours.png",
+      "stickers": [
+        {
+          "box": [
+            70,
+            112,
+            320,
+            128
+          ],
+          "label": "Reçus et traités",
+          "side": "left"
+        },
+        {
+          "box": [
+            28,
+            137,
+            380,
+            172
+          ],
+          "label": "Reprendre",
+          "side": "right"
+        }
+      ]
+    },
+    {
+      "out": "21-recapitulatif.png",
+      "raw": "raw/reception-recapitulatif.png",
+      "stickers": [
+        {
+          "box": [
+            40,
+            212,
+            228,
+            233
+          ],
+          "label": "Compteurs",
+          "side": "left"
+        },
+        {
+          "box": [
+            50,
+            258,
+            358,
+            292
+          ],
+          "label": "Ligne attendue : reçue",
+          "side": "right"
+        },
+        {
+          "box": [
+            72,
+            402,
+            356,
+            576
+          ],
+          "label": "Article reçu et ses étapes",
+          "side": "left"
+        },
+        {
+          "box": [
+            86,
+            588,
+            356,
+            756
+          ],
+          "label": "Accessoire trouvé dedans",
+          "side": "right"
+        }
+      ]
+    },
+    {
+      "out": "22-terminer.png",
+      "raw": "raw/reception-page.png",
+      "stickers": [
+        {
+          "box": [
+            32,
+            600,
+            376,
+            632
+          ],
+          "label": "Terminer la réception",
+          "side": "right"
+        },
+        {
+          "box": [
+            278,
+            252,
+            386,
+            280
+          ],
+          "label": "Commencer / article suivant",
+          "side": "right"
+        }
+      ]
+    }
+  ]
+}

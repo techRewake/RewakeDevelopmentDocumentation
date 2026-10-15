@@ -1,0 +1,625 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Rewake
+# This file is distributed under the same license as the Rewake API package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Rewake API \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-15 11:41+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../shopify_catalog_reconciliation.md:1 f618f6281ea34860bbd099e2c60d6c3c
+msgid "Shopify Catalog Reconciliation"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:3 37c913e0f2d04576b194390d360b480d
+msgid ""
+"<img src=\"https://cdn.simpleicons.org/airtable\" alt=\"Airtable\" "
+"width=\"28\" height=\"28\"> <img "
+"src=\"https://cdn.simpleicons.org/shopify\" alt=\"Shopify\" width=\"28\" "
+"height=\"28\">"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md 69605302e96b45f9b655cecaf9c60f52
+msgid "**Module**"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md 89cd7a1a20f54e6cb4b41ea2bc123a9f
+msgid "`api.scripts.shopify_catalog_reconciliation`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md f0686cdf50c04ecda411e17004f5f2d0
+msgid "**Schedule**"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md af12acfd74e445ec883f85c201fe6c61
+msgid ""
+"every hour (`SHOPIFY_CATALOG_RECONCILIATION_INTERVAL_SECONDS`, default "
+"`3600`) -- also runnable on demand"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md e65f2cc68e8744d4b9182346f6fdd2dc
+msgid "**Reads**"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md 0ae691d7fb7549e3bb70dd2e96d47c98
+msgid ""
+"Airtable (Model, Variation, Toutes les unités, Annonces Shopify) + "
+"Shopify (Products, Variants)"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md 579294c5e8ee485d930c8932e765a505
+msgid "**Writes**"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md 69809a00822c47e8971ddaaa022dd808
+msgid "nothing -- strictly read-only"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md e876883b2f464119808acf52b2f906fb
+msgid "**Requires**"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md 1eedb72e19e9402582b96a3cf003c0ad
+msgid ""
+"Airtable (`AIRTABLE_BASE_ID`, `AIRTABLE_TOKEN`) + Shopify "
+"(`SHOPIFY_SHOP_DOMAIN`, `SHOPIFY_CLIENT_ID`, `SHOPIFY_CLIENT_SECRET`) "
+"settings, otherwise the run is recorded as `skipped`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:13 a939cc63934e4b2f98a7e6de620a3d71
+msgid "What it does"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:15 98c8c31acee64b589492dc08ef16bc37
+msgid ""
+"Verifies that Shopify actually reflects what Airtable says should be "
+"sellable, in three checks, from broad to specific:"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:18 7a1e9f69569a4da29d202f79f7a05b45
+msgid "**Every relevant Model exists as a Shopify product.**"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:19 51eb8b3a1d51400a820b980ec1f1dc6f
+msgid ""
+"**Every relevant Variation of a Model found in Shopify exists as a "
+"Shopify variant.**"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:20 9d8206cd830741f888a4b4ae5b5a1be7
+msgid ""
+"**Every \"A vendre\" unit's Shopify variant has the right inventory "
+"quantity.**"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:22 74a41db359b44a46b8bc0ab710f03ef9
+msgid ""
+"\"Relevant\" always means: flagged `to_sell_on_shopify` **and** currently"
+" has at least one unit in stock (`Statut commercial = \"A vendre\"`). A "
+"Model or Variation that's the *kind* of thing sold online but has zero "
+"stock right now is correctly absent from Shopify -- it is never flagged "
+"as \"missing\". Units in an excluded condition (`EXCLUDED_CONDITIONS`: "
+"\"Abimé\", \"Très abimé\", compared ignoring accents and case) are never "
+"put on Shopify by `create_product_shopify`/`update_product`, so they "
+"don't count as stock here either."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:29 4a389dfce8cb4883aa40a79c963f1def
+msgid "It also reports catalog integrity problems, outside those three checks:"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:31 d39f72b12806485a9360b3e9561ff80b
+msgid ""
+"**Prices at 0** on either side. These are A vendre units expected on "
+"Shopify whose `Prix de vente HT` is 0, empty or invalid; "
+"`create_product_shopify` and `update_product` refuse to run on such a "
+"Model. It also reports Shopify variants priced at 0 that Airtable still "
+"has A vendre units for (same Variation and condition), on a product that "
+"isn't archived, since those are meant to be sold. A 0 € variant with no A"
+" vendre stock in Airtable is correct: the sales team sets the price to 0 "
+"when stock runs out."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:38 01bfe4f8d9fa40848f3e45dbe629595a
+msgid ""
+"**Duplicates and orphans**, which break \"one Model = one Annonces "
+"Shopify = one Shopify product\":"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:40 f4bed5bed22b4ddea03c455e55f53350
+msgid ""
+"Shopify products with the same title, e.g. a creation that ran twice. "
+"Each copy shows which Model it belongs to, or none. Different products "
+"can share a name, so a group is only reported when a copy belongs to no "
+"Model or two copies belong to the same Model. Same-title products that "
+"each have their own Model and Annonces Shopify are correct."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:45 12f0dcdbf04549b483aab31b75853c6e
+msgid ""
+"Shopify products that no Annonces Shopify record and no Model refers to, "
+"except drafts (being prepared, not orderable yet). This one is "
+"**informational, not an error**: some products legitimately exist only on"
+" Shopify, and the dashboard lists them (neutral style, low priority) so "
+"they can be identified."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:49 a9f132238e66435cb1e18610b16ef7ea
+msgid "Models linked to more than one Annonces Shopify record."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:50 af82187e7d874e5b9ca0987e87e46537
+msgid "Shopify ids used by more than one Annonces Shopify record."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:51 294361b5e3a949bb9a9ad276a442059e
+msgid ""
+"Units not yet sold whose Variation(s) lead to more than one listing, for "
+"example through a Model with two listings, or a unit linked to Variations"
+" of two Models."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:54 c0cf2d3e80f34c4d8a83014e602b30b6
+msgid ""
+"These are reports only: the run stays `success`, and the script still "
+"changes nothing."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:56 c653977732dc438791309973d5b372f2
+msgid "Why the matching is value-based, not ID-based"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:58 60dd035558cb4675b6bcf7a19dc1022e
+msgid ""
+"Airtable's `Variation.ShopifyID` field is **not a real variant id** -- "
+"confirmed against production data, it always duplicates the parent "
+"Model's own product id, even across Variations that are genuinely "
+"different Shopify variants. There is no Airtable field holding a real "
+"Shopify variant id at all."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:63 3bba8a0d56274a59b28cd857ebd6e10b
+msgid ""
+"Instead, a Shopify variant is identified by its `selectedOptions` "
+"**values** (the option *names* vary per product type -- a pipette's size "
+"option isn't named the same as a fridge's -- so matching is name-"
+"agnostic, value-only). Those literal value strings match Airtable, once "
+"both sides are whitespace-normalized:"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:68 a97c8d4e3b7b4eb086e7406a6175575d
+msgid "a Variation's own `Variant_value` (a size/range, e.g. `\"5 - 50\"`), plus"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:69 3d6f304e60ee414189737ddd761bfe9c
+msgid "a Unit's own `Etat esthétique` (condition, e.g. `\"Très bon\"`)"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:71 8c57afbde45e4881b57a675564e528cf
+msgid ""
+"...together pin down exactly one Shopify variant. So **one Airtable "
+"Variation corresponds to one Shopify variant *per condition it currently "
+"has stock in***, not a single variant -- and a unit that's \"A vendre\" "
+"through a different channel entirely (eBay, an auction, direct sale) is "
+"never expected on Shopify in the first place, so it's excluded from all "
+"three checks."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:77 e204f08f577f4690b39280ad2dd4470a
+#, python-format
+msgid ""
+"This was two real, confirmed production bugs (ID-based matching finding "
+"100% of variations \"missing\"; then a scoping bug over-flagging units "
+"sold through other channels) before this design -- and a third since: "
+"`Variant_value` is manually-entered free text and can carry incidental "
+"whitespace (a real `\"150x75 \"` in Airtable) that Shopify itself trims "
+"on save (`\"150x75\"`); comparing the raw, un-normalized values meant a "
+"genuinely-existing variant was reported as missing. Both "
+"`Variation.variant_values` (`api/domain/catalog.py`) and "
+"`ShopifyVariant.option_values` (`api/integrations/shopify.py`) now strip "
+"before comparing -- the exact same class of bug independently found and "
+"fixed in `update_product.py`'s own (separate) variant matching, see "
+"`docs/update_product.md`."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:88 482409e813d94a01af1e15e2d041903d
+msgid "Data it fetches"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:123 e7382b8f44bc409d8ca1a3bdbe9975dc
+msgid "How it works"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:125 1695e15233804bbfabb2dd2a868f663a
+msgid ""
+"Fetch Models, Variations, Units, and Annonces Shopify listings from "
+"Airtable (`api.domain.catalog`, built on this project's own "
+"`api.services.airtable` functions)."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:128 cb271a1ac52742f3a0926a6705092483
+msgid ""
+"Fetch every Shopify Product and its Variants in one paginated GraphQL "
+"sweep (`api.integrations.shopify.ShopifyCatalog`)."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:130 df3cfdddbeec47cc9b0c5c0226f77f21
+msgid ""
+"Resolve each Model's Shopify product: prefer the linked Annonces Shopify "
+"listing's `ID_shopify`, fall back to the Model's own `ShopifyID`, then to"
+" a product tagged `airtable-model-<Model record id>` (only the dev-store "
+"seeding script sets that tag, since dev-store product ids never match "
+"Airtable's production ids -- a no-op in production)."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:135 500c43a84ef741a5b17a13cca218961b
+msgid ""
+"**Check 1:** for every Model that's `to_sell_on_shopify` and has current "
+"stock, is its resolved product id actually one of the fetched Shopify "
+"products?"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:137 de35916465a8496da29ad3e9dab9466a
+msgid ""
+"**Check 2:** for every Variation of a *found* Model that's "
+"`to_sell_on_shopify` and has current stock, does that product have any "
+"variant whose option values are a superset of the Variation's "
+"`Variant_value`?"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:140 6c2e0ded586d4511853d30aa3660d0fd
+#, python-brace-format
+msgid ""
+"**Check 3:** group \"A vendre\" units (in a listable condition) of "
+"Shopify-bound Variations by `(Variation, Etat esthétique)` -- a unit with"
+" no condition is counted in `a_vendre_units_total` but can't be matched "
+"to a variant. For each group, does a variant exist whose option values "
+"are a superset of `{Variant_value, condition}`? If not, that's a missing "
+"variant; if it exists but its `inventoryQuantity` doesn't match the unit "
+"count, that's a quantity mismatch."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:146 11f4bc27df644c41aae522a199d32b7a
+msgid ""
+"Diff the current full set of Model/Variation ids against the previous "
+"run's snapshot (stored in Redis, via `api.run_store.RunStore`) to report "
+"how many were added since last time (0 on the very first run)."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:149 c657e89898aa461baf342b10fa2d471c
+msgid ""
+"Enrich `details` (best-effort, never fails the run): Airtable record "
+"urls, then the latest `create_product_shopify`/`update_product` attempts "
+"(see below)."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:152 720c638d226b4a8bb449c9c916706704
+msgid ""
+"Live stages (`GET "
+"/internal/scripts/shopify_catalog_reconciliation/current`): "
+"`fetching_airtable_models`, `fetching_airtable_variations`, "
+"`fetching_airtable_units`, `fetching_airtable_shopify_listings`, "
+"`fetching_shopify_products`, `comparing_catalogs`, "
+"`attaching_airtable_urls`, `attaching_creation_attempts`."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:157 6d84ebfb6b8c427d9e514d3e582ee9e1
+msgid "Metrics and details"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:159 9a5f001b103946a69d863f1ecbd1c076
+msgid ""
+"`GET /internal/scripts/shopify_catalog_reconciliation/runs` returns, per "
+"run:"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 e442c9a2d2fb4a8a8560edc41c567450
+msgid "Metric"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 95d390fc4db846b891345c46e6371de6
+msgid "Meaning"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 1723299a7b76479eb32dacfbf670099a
+msgid "`relevant_models_total`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 a17c33a3f4054e349351337502688829
+msgid "Models that are `to_sell_on_shopify` and currently in stock"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 5ab5e4f54ffc4080b604c8c8882779a9
+msgid "`models_missing_in_shopify`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 2c79579059dc4de9a0498d73604aa6fc
+msgid "...of those, how many have no matching Shopify product"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 3e46e21524424363835f121fb02d9d57
+msgid "`relevant_variations_total`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 2b77c2bb663443b8af23b28054b291b1
+msgid "Variations of a *found* Model that are `to_sell_on_shopify` and in stock"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 80539333ca7644fab5a020c558d4387b
+msgid "`variations_missing_in_shopify`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 e075ea1fad2a480984fd7841f9d74731
+msgid "...of those, how many have no matching Shopify variant (any condition)"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 0cd580f0cd1a4451ae3d8a0c8b29a7d8
+msgid "`a_vendre_units_total`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 a11edd9d93924758a794dfee42b748d0
+msgid "Shopify-bound \"A vendre\" units (excludes other sales channels)"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 af7a43d52218442b9ea2eac5a6817c7a
+msgid "`a_vendre_units_missing_variant`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 3e70849085b64059aa5192628a1cce63
+msgid ""
+"(Variation, condition) pairs with stock but no matching Shopify variant "
+"at all"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 954973c7d6524117a70325bb4c5d75bf
+msgid "`a_vendre_quantity_mismatches`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 857ee5d3301d48cb9cf523d52ed58db7
+msgid ""
+"(Variation, condition) pairs where the variant exists but its quantity is"
+" wrong"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 43bd3ea6990146febbfc2ef0adbfbe5d
+msgid "`documentation_missing_in_airtable`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 5f7cea32881e41ceb571098bf7cbfd61
+msgid ""
+"Relevant Models (on Shopify yet or not) with no PDF at all in their "
+"Airtable `Documentation` field -- the list of documentation still to "
+"collect"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 e9246f8f679f4b9bae6065b75fe11470
+msgid "`documentation_missing_in_shopify`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 78f732f2a0fd482383d8459e7ef1e665
+msgid ""
+"Found Models with a `Documentation` PDF in Airtable but no \"PDF "
+"Descriptif\" on Shopify"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 7219d0c367244cfa90b7fab130511050
+msgid "`documentation_outdated_in_shopify`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 512ab2731b8c4dffa07525aa6a2da0f8
+msgid ""
+"Found Models whose Shopify PDF wasn't uploaded from Airtable's current "
+"attachment (replaced in Airtable, or set by hand -- see "
+"`docs/update_product.md`)"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 e9d48350623e432faccf3255bc35d029
+msgid "`a_vendre_units_without_price`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 5560b34d1d04448ebd939ca252b7a8ed
+msgid ""
+"Units expected on Shopify (A vendre, listable condition, Shopify-bound "
+"Variation) with a `Prix de vente HT` of 0, empty or invalid"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 7a39076d92144a4bbefcf9951bab8202
+msgid "`shopify_variants_without_price`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 3185a5723dce4d29b4a0aa9a6934bb52
+msgid ""
+"Variants priced at 0 that Airtable has A vendre stock for, on a Shopify "
+"product that isn't archived"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 1260baef8664444cb3acf0a43b300c65
+msgid "`duplicate_shopify_products`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 145af19dd8744d8189357a5debfab52b
+msgid ""
+"Groups of Shopify products with the same title (case and spacing ignored)"
+" where a copy has no Airtable Model or two copies share one; each copy "
+"with its Model or `null`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 74319c2c9a6d46feb26d202912c3f069
+msgid "`shopify_products_not_in_airtable`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 6a0ad16ab4c64362bc89dfcbd3a4c893
+msgid ""
+"Non-draft Shopify products no Annonces Shopify record, Model `ShopifyID` "
+"or dev-store tag refers to"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 e2f67ab7e55a4f0eb8bfad7b54bf7991
+msgid "`models_with_multiple_shopify_listings`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 52a6ef42e96f49a39dae3046d67f4cbe
+msgid "Models linked to more than one Annonces Shopify record"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 01987ed9163a48d982080b94f0a82d50
+msgid "`shopify_ids_with_multiple_listings`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 a5063ad3d9244c9389a7a82cb050eb6b
+msgid "Shopify product ids used by more than one Annonces Shopify record"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 b064be488b524ea9adb4f1b414a4b570
+msgid "`units_with_multiple_shopify_listings`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 c33588fd5c2143a3a19a47676a3f840c
+msgid ""
+"Units not sold yet that reach more than one Annonces Shopify record "
+"through their Variation(s)"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 92d9732f7c4a4e8492e979f158875b59
+msgid "`models_added_since_last_run` / `variations_added_since_last_run`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 311ee892feea4a3fb8feab042c836ad7
+msgid "Catalog growth since the previous run"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 442f36a851ca489cb81ea6bcf7330158
+msgid "`succeeded`"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:90 b2826e9b192a4493a385fbc234791623
+msgid "Always `1` on a completed run"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:183 69397f52cfa04290980cf581d0280b41
+msgid ""
+"`details` in the same response carries the actual named records behind "
+"each count above (model/variation id + name + an Airtable web-UI link via"
+" `record_url`), uncapped -- the frontend acts on these lists directly (a "
+"per-model \"create on Shopify\" button, and one that bulk-creates every "
+"missing model), so silently dropping entries past some cap would mean "
+"those specific models could never be created via the dashboard at all, "
+"not just a display inconvenience."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:190 87d053db7f2f49688e3c00f7b6a5ecac
+msgid ""
+"`attach_creation_attempts` (called from `run()`, right after "
+"`attach_airtable_urls`) then cross-references each "
+"`models_missing_in_shopify` entry against `create_product_shopify`'s own "
+"run history (via `RunStore`, ~1000 runs kept -- see "
+"`docs/architecture.rst`), and adds `entry[\"last_creation_attempt\"]` "
+"(`status`, `error`, `skipped_reason`, `finished_at`) when that Model has "
+"already been attempted. A Model showing up as \"missing\" isn't "
+"necessarily untried -- it might already be failing for a knowable reason "
+"(bad Airtable data, a stale Shopify desync, an image upload conflict), "
+"and that's a very different situation from \"nobody has tried creating it"
+" yet\". This is a read-only lookup against Redis (a second script's "
+"stored history, not a mutation of anything) and, like "
+"`attach_airtable_urls`, is wrapped so it can never fail the "
+"reconciliation run itself -- a broken/unreachable RunStore just means no "
+"entry gets `last_creation_attempt`, not a failed run."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:203 f83d5e46815d4535a41cf2c9b83c8c94
+msgid ""
+"`attach_update_attempts` does the same for "
+"`variations_missing_in_shopify`: each entry gets `last_update_attempt` "
+"(`status`, `error`, `finished_at`) from the latest `update_product` run "
+"whose `details.record_id` is that Variation. Runs triggered with "
+"`model_id` have no `record_id`, so they aren't attributed to individual "
+"Variations."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:208 0ab85d2fecf84c28baf0b0f220ba4a70
+msgid ""
+"The documentation lists only cover *relevant* Models that were found on "
+"Shopify (a Model missing from Shopify entirely is already "
+"`models_missing_in_shopify`). The Shopify side comes from the same bulk "
+"GraphQL read (two aliased `metafield(...)` fields per product). "
+"`attach_documentation_attempts` adds `last_update_attempt` to the "
+"missing/outdated entries from `update_product`'s history, matched by "
+"`details.model_id`. It only counts runs that actually tried a "
+"documentation sync (a failure, a skip, or a success with "
+"`documentation_status: \"uploaded\"`). The dashboard's \"Envoyer toutes "
+"les documentations manquantes\" / \"Remplacer toutes les documentations "
+"obsolètes\" buttons fan out `update_product?model_id=...` over those "
+"lists, 3 at a time. A run counts as updated only when it actually "
+"uploaded a PDF."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:219 502854b281d54822bbda6f9e3c65375c
+msgid ""
+"The Shopify-side entries (`shopify_variants_without_price`, "
+"`duplicate_shopify_products`, `shopify_products_not_in_airtable`, and the"
+" `product` of `shopify_ids_with_multiple_listings`) carry the product's "
+"Shopify admin `url`. The Airtable-side ones get the record's `url` from "
+"`attach_airtable_urls`, and every listing in a `listings` list gets the "
+"Annonces Shopify record's `url`. The title comparison runs against the "
+"whole Shopify catalog; same-title products that each belong to a "
+"different Model are not reported."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:227 938a36113ba14cd1a2a3e93d90d2b052
+msgid "Where to look"
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:229 dd977def717d42a78287ee032acc5ee8
+#, python-brace-format
+msgid ""
+"**Trigger/history:** `GET /internal/scripts/` (confirm it's registered), "
+"`POST /internal/scripts/shopify_catalog_reconciliation/run` (run it now),"
+" `GET /internal/scripts/status/{task_id}` (poll one run), `GET "
+"/internal/scripts/shopify_catalog_reconciliation/runs` (history), `GET "
+"/internal/scripts/shopify_catalog_reconciliation/current` (live stage)."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:234 25b49324be824b2c96cac139563a94c2
+msgid ""
+"**Schedule:** `api/celery_app.py`'s `beat_schedule`, driven by the `beat`"
+" service in `docker-compose.yml`."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:236 3e16421f392e4fd5a6f53ee2edf676b2
+msgid ""
+"**Logs:** `structlog`, logger `api.tasks` (stdout, or the rotating file "
+"at `api/constants.py`'s `LOG_FILE`)."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:238 62cad363d00242cbaa21ea31633326a3
+#, python-brace-format
+msgid ""
+"**Dashboards/alerting:** `GET /metrics` (`api/routes/metrics.py`) exposes"
+" this run's metrics as "
+"`rewake_api_script_metric{script=\"shopify_catalog_reconciliation\", "
+"...}` for Prometheus; RewakeObserve's Grafana dashboards query that "
+"series directly."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:241 ec1f9b9bfa76497f9a5e45ef169d57cb
+msgid ""
+"**Source:** `api/scripts/shopify_catalog_reconciliation.py`, "
+"`api/domain/catalog.py`, `api/integrations/shopify.py`."
+msgstr ""
+
+#: ../../shopify_catalog_reconciliation.md:243 dcaef127d4c94c7e96c0979b4f7aa520
+msgid "**Tests:** `tests/test_shopify_catalog_reconciliation.py`."
+msgstr ""
+

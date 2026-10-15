@@ -1,0 +1,166 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Rewake
+# This file is distributed under the same license as the Rewake API package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Rewake API \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-15 11:41+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../development.rst:2 785641e4dbe94bb598c274b704eacfbe
+msgid "Development"
+msgstr ""
+
+#: ../../development.rst:5 821c131f8eb24687a52ad0f396179a62
+msgid "Environment setup"
+msgstr ""
+
+#: ../../development.rst:7 0c968784e3424079830daaf505ca08b3
+msgid "Requires Python 3.14 and `uv <https://docs.astral.sh/uv/>`_."
+msgstr ""
+
+#: ../../development.rst:18 54b175ef03dd45cb838440ff7cb662a0
+msgid ""
+"Or the equivalent ``uv run ...`` commands directly -- ``make`` is a thin "
+"wrapper (see the ``Makefile``), not a requirement. Day to day:"
+msgstr ""
+
+#: ../../development.rst:29 4769154ebad44d2cab12205c0b60cf8f
+msgid ""
+"To run the full stack (API, Celery worker and beat, Redis, OCR sidecar) "
+"in Docker instead: ``docker compose up -d --build`` (see "
+":doc:`operations`)."
+msgstr ""
+
+#: ../../development.rst:33 a35303579a8d43429df90ac817df1191
+msgid "Airtable"
+msgstr ""
+
+#: ../../development.rst:35 8f468bf4eb81471fa0b4eddf4f9c235b
+msgid ""
+"``AIRTABLE_BASE_ID`` in ``.env`` selects the base: production, or the dev"
+" base copied from it (the one ``scripts/reset_dev_store`` is allowed to "
+"touch, paired with the ``RewakeDev`` Shopify store below). Get a personal"
+" access token with read/write access to that base (plus "
+"``schema.bases:read``), then verify it:"
+msgstr ""
+
+#: ../../development.rst:46 87020007ae06430cb3e85f94171d8e5d
+msgid ""
+"``uv run pytest`` genuinely calls Airtable for a few older tests "
+"(``tests/test_auth.py``, ``tests/test_airtable.py``, "
+"``tests/test_contact_*.py``) -- they have no mock/fixture layer yet (the "
+"newer catalog, script and AI tests use in-memory fakes). That's exactly "
+"why tests don't run in CI (see :doc:`operations`): they need six working "
+"token/credential secrets (``ADMIN_TOKEN``, ``HELLOPRO_TOKEN``, "
+"``MACHINIO_TOKEN``, ``APP_TOKEN``, ``AIRTABLE_TOKEN``, "
+"``AIRTABLE_BASE_ID``) just to pass, and a scope/typo issue in any one of "
+"them produces a wall of unrelated-looking 500s rather than a clear "
+"failure -- more fragile than valuable as a required gate today. Run them "
+"locally with a real ``.env`` instead."
+msgstr ""
+
+#: ../../development.rst:58 f85add64b5114627b73f8d44a49a5ac5
+msgid "Shopify (dev store)"
+msgstr ""
+
+#: ../../development.rst:60 d9a05a08b6834e5196c22cee2300b656
+msgid ""
+"The Shopify scripts (``shopify_catalog_reconciliation``, "
+"``create_product_shopify``, ``update_product`` -- see :doc:`scripts`) and"
+" the ``scripts/shopify`` tools call Shopify via ``SHOPIFY_SHOP_DOMAIN``/ "
+"``SHOPIFY_CLIENT_ID``/``SHOPIFY_CLIENT_SECRET``/``SHOPIFY_API_VERSION`` "
+"in ``.env.example`` (required scopes: ``read_products``, "
+"``write_products``, ``write_inventory``, ``read_files``, "
+"``write_files``). Test it against the **RewakeDev** Shopify development "
+"store, never production (``rewake-2``)."
+msgstr ""
+
+#: ../../development.rst:68 9de2cd78ea26486ca44003467160c0ab
+msgid ""
+"There is no access token to configure: Shopify's client-credentials "
+"tokens live ~24h (a lifetime Shopify fixes), so "
+"``api/integrations/shopify_auth.py`` exchanges the client ID/secret at "
+"runtime, caches the token in Redis for the API and every worker, renews "
+"it 10 minutes before expiry, and on a 401 renews it and retries once. The"
+" client ID/secret themselves don't expire. To verify the credentials and "
+"the granted scopes:"
+msgstr ""
+
+#: ../../development.rst:79 b5574d017f3746d4912f2c53f1b549d8
+msgid ""
+"Client credentials only work for a store in the Dev Dashboard app's own "
+"organization. A new scope only reaches the token after the app version "
+"declaring it is released and the update approved on the store. To start "
+"the dev store over, ``make reset-dev-store`` empties it (and the dev "
+"base's ``Annonces Shopify``) behind a hardcoded guard that refuses any "
+"other store/base; ``create_product_shopify`` then recreates the listings."
+" Point this project's ``.env`` at that store when testing anything "
+"Shopify-related here."
+msgstr ""
+
+#: ../../development.rst:89 3a4a423d8b614e9d892080896bb0fdfa
+msgid "Development scripts"
+msgstr ""
+
+#: ../../development.rst:91 ebb119d3902849e8bd90072729a78190
+msgid ""
+"``scripts/`` (repository root, not part of the ``api`` package) holds "
+"operator tooling, run as a module (or through the ``Makefile``):"
+msgstr ""
+
+#: ../../development.rst:101 4f3ea5d445f74403af6cb0e55e6c359a
+msgid ""
+"plus ``scripts/release/release_notes.py`` (run by CI) and "
+"``scripts/deploy/deploy.sh`` (run on the server, see :doc:`operations`). "
+"See ``scripts/README.md`` for what each one does."
+msgstr ""
+
+#: ../../development.rst:106 23a5f89ed4744ad4a722ed703e9e5daf
+msgid "Known gaps this tooling surfaces"
+msgstr ""
+
+#: ../../development.rst:108 4133e4625536413d9627bddab0b80934
+msgid ""
+"Adding ``ruff``/``mypy``/coverage/CI to a codebase that had none of it "
+"before makes existing debt visible; none of the following was introduced "
+"by adding the tooling itself, and none of it was fixed as part of adding "
+"it (fixing business logic wasn't in scope for that pass):"
+msgstr ""
+
+#: ../../development.rst:113 cb6829878c62428183f08272f754ca26
+msgid ""
+"**2 tests marked ``xfail``** "
+"(``tests/test_fees.py::test_distritec_fees_simple_package``, "
+"``test_distritec_fees_multiple_packages``, both ``strict=True``): the "
+"expected totals don't match ``api/services/fees.py``'s current output. "
+"Needs someone who knows the intended Distritec tariff to say which side "
+"is wrong. ``strict=True`` means if the underlying bug ever gets fixed, "
+"these flip to a hard test failure (``XPASS``) instead of silently staying"
+" green -- remove the marker at that point, don't leave it in place."
+msgstr ""
+
+#: ../../development.rst:120 08213cdde2a443bd91d048b51a10f3f7
+msgid ""
+"**mypy**: clean at its current (non-strict) level -- the ~32 findings "
+"this surfaced when first turned on (mostly a ``dict[str, str]`` parameter"
+" annotation that was actually ``dict[str, Any]`` in practice, since "
+"Airtable fields aren't all strings, plus a few missing local annotations "
+"and two untyped tariff-table dicts in ``api/services/fees.py``) have all "
+"been fixed. ``--strict`` finds ~106 more, almost all missing-annotation "
+"noise across the wider codebase rather than bugs -- a deliberate future "
+"ratchet, not turned on yet."
+msgstr ""
+

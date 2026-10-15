@@ -1,0 +1,1468 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Rewake
+# This file is distributed under the same license as the Rewake API package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Rewake API \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-15 11:41+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../routes.md:1 2179dab955284f23b8773871b78d7d71
+msgid "Routes"
+msgstr ""
+
+#: ../../routes.md:3 1af2e3c079a14b8c9fbc2f75bf390ddf
+msgid ""
+"Liste complète des endpoints de l'API Rewake avec leurs règles d'accès et"
+" exemples de réponses. La documentation interactive (OpenAPI) est servie "
+"par FastAPI sur `/docs` et `/redoc`."
+msgstr ""
+
+#: ../../routes.md:8 3057c19c7e7b4facbd22789ebcf38f1f
+msgid "🔍 Public"
+msgstr ""
+
+#: ../../routes.md:10 d1e1f1b3617b48f38639cee16becf933
+msgid "`/health/`"
+msgstr ""
+
+#: ../../routes.md:11 ../../routes.md:23 ../../routes.md:31 ../../routes.md:39
+#: ../../routes.md:46 ../../routes.md:56 ../../routes.md:70 ../../routes.md:88
+#: ../../routes.md:191 ../../routes.md:204 ../../routes.md:220
+#: ../../routes.md:292 ../../routes.md:368 ../../routes.md:383
+#: ../../routes.md:408 ../../routes.md:422 ../../routes.md:433
+#: ../../routes.md:463 02cd863a3ece4e6a970efa70a146386f
+#: 038e015c1da346a8996ffaa40c90c483 0b142be88d774968ae4762df489da6d0
+#: 115c00e28c1448d282cf5bb254c4448a 1ae545a943fc4c4ca6f73cf3bed8f7cd
+#: 250d7a0df7754bd4af413551fd6e67af 2916d98f9a2d4c40b4b931223d015bad
+#: 4857be9d079344a8a85c886ab4faaf39 4b151c9f31e74bebb3530c1ef8c6c8c5
+#: 6df3fa56ce594dae81ada49f9eb49f3c 832c99fd8d73497390d5c3d2e66e95f5
+#: 83467afdca8249cb98c97f503026b29c 8782a70745d84562a6cb4a6da557f54a
+#: b571298bb1084f32abe6ef3d1e0258cc df79bb17f8bc48f6ac75c4c4705d24f3
+#: ef997875ba76499fb6100f70b7d49a34 f299321aab3c49a59f1a09537e9c0823
+#: f7db4653e6e947a8bb684690f2dc002e
+msgid "**Méthode** : `GET`"
+msgstr ""
+
+#: ../../routes.md:12 e8ef848c407443d3965d74d018f4be72
+msgid "**Accès** : Public (pas de token requis)"
+msgstr ""
+
+#: ../../routes.md:13 26a24daac7c54d219d48c6846934eff7
+msgid "**Description** : Vérifie que l'API est opérationnelle"
+msgstr ""
+
+#: ../../routes.md:14 ../../routes.md:59 ../../routes.md:73 ../../routes.md:100
+#: ../../routes.md:157 ../../routes.md:181 ../../routes.md:211
+#: ../../routes.md:226 ../../routes.md:270 ../../routes.md:297
+#: ../../routes.md:333 ../../routes.md:388 ../../routes.md:399
+#: ../../routes.md:412 ../../routes.md:426 ../../routes.md:447
+#: ../../routes.md:467 ../../routes.md:489 133b0d018ab04a458d6f8401ffcfcce1
+#: 3d6425e258454c3586f16fb949eeb1c8 438dc043adbf4af797ddd4c96b3a1afb
+#: 4d63ea3d94d346e5934c6b7fd9b58c0e 5b2a776870914c8fb12df0d0e682c844
+#: 5bed3e2f62594227be05093a40645f74 67e75f1615a5497d8362cdd078b5ad64
+#: 6b0a15cc20f44842a2dea7f4baed7115 764e6f888a354a71af427a523630e49d
+#: 7739754aca6f4d90b028e6d3eb9fcf15 8cd7d33d2493451ca5949b0450c31f9e
+#: 9432f16592e24459bd2f8455e69d808d a5d64ad11dc44052b045e8f4fa648c9e
+#: cd3e5afa1739483689124779da71426e e126d23cf38948c29eff3d4e3d55064f
+#: e50d19640c424119a732af2646f33efa e98b2f4ff40343fabb08a96c01de8980
+#: f8d7f76b0fcb4dd08a5457931994b405
+msgid "**Réponse** :"
+msgstr ""
+
+#: ../../routes.md:22 ad9882d5ea574e9dbddfe191e67d5462
+msgid "`/metrics`"
+msgstr ""
+
+#: ../../routes.md:24 191441c59b4c48e9a679ace531b2bc58
+msgid "**Accès** : Public (scrapé par Prometheus)"
+msgstr ""
+
+#: ../../routes.md:25 c8b62ded7222482299e2739f5c2bd8f3
+#, python-brace-format
+msgid ""
+"**Description** : Exposition Prometheus calculée à chaque appel depuis la"
+" dernière exécution enregistrée de chaque script (voir "
+"[architecture](./architecture.rst)) : `rewake_api_script_metric{script, "
+"metric}`, `rewake_api_script_duration_seconds`, "
+"`rewake_api_script_last_run_success`, "
+"`rewake_api_script_last_run_timestamp_seconds`."
+msgstr ""
+
+#: ../../routes.md:30 ab54976d4e2f4451955803f6d36bd7ca
+msgid "`/invoice/get`"
+msgstr ""
+
+#: ../../routes.md:32 ../../routes.md:40 ../../routes.md:47
+#: 0d41f488a19c4c50914b9f6946ad3732 378d2640b3be4f74921ed2b0db0d92da
+#: 96b24e6d296b4d1992822e7dc0a5cba7
+msgid "**Accès** : Public (pas de token)"
+msgstr ""
+
+#: ../../routes.md:33 a2507e59cc4b4125a2c82ac2672cb663
+msgid ""
+"**Description** : Récupère une facture PDF sauvegardée par `POST "
+"/internal/invoice/analysis`"
+msgstr ""
+
+#: ../../routes.md:34 ecb6e3a023124d63a3c37c215f26f0f2
+msgid ""
+"**Query Params** : `hash` (string, **requis**) - Le hash renvoyé dans "
+"`file_location`"
+msgstr ""
+
+#: ../../routes.md:35 aa6517271b51476cbf2a52811854be49
+msgid "**Réponse** : Fichier PDF (download), `Content-Type: application/pdf`"
+msgstr ""
+
+#: ../../routes.md:36 2fe10d3004b8417ea4cf304ed5412eda
+msgid "**Erreurs** : `422` si aucun dossier ou aucun PDF pour ce hash"
+msgstr ""
+
+#: ../../routes.md:38 439fc8567198465d99c969c8bf1410a3
+#, python-brace-format
+msgid "`/pdf/{filename}`"
+msgstr ""
+
+#: ../../routes.md:41 5d01abb4cdd14f6a8d49b3e2e1983dde
+msgid ""
+"**Description** : Sert un PDF généré par les routes `/internal/pdf/*` "
+"(dossier `/home/rewake/DB/PDF`) ; c'est l'URL attachée aux records "
+"Airtable."
+msgstr ""
+
+#: ../../routes.md:43 07fd5f43b7b44101b45dceac353da21d
+msgid "**Erreurs** : `404` si le fichier n'existe pas"
+msgstr ""
+
+#: ../../routes.md:45 b1b4f2f33a8e4bbdb975542d61b15561
+#, python-brace-format
+msgid "`/formulaire/photos/{airtable_id}/{filename}`"
+msgstr ""
+
+#: ../../routes.md:48 7426f4c8a0b1427f8c808e71c75572e7
+#, python-brace-format
+msgid ""
+"**Description** : Sert une photo envoyée par `POST "
+"/internal/formulaire/photos/upload/{airtable_id}`"
+msgstr ""
+
+#: ../../routes.md:49 0a1b19adc64d43c7b36f5de1d35defc5
+msgid "**Erreurs** : `404` si la photo n'existe pas"
+msgstr ""
+
+#: ../../routes.md:53 f2dabe11633346aa9d9d769b2fadfbcd
+msgid "📊 HelloPro"
+msgstr ""
+
+#: ../../routes.md:55 b2a0836184764c26b519d5bb4ee65f0b
+msgid "`/hellopro/csv/`"
+msgstr ""
+
+#: ../../routes.md:57 c508f62f0716454292fddb71659f16a9
+msgid "**Accès** : `HELLOPRO_TOKEN` (sans vérification d'origine)"
+msgstr ""
+
+#: ../../routes.md:58 f80d967fac5343ad8850d4fca0e20a7b
+msgid ""
+"**Description** : Export des données CSV pour HelloPro (format pipe-"
+"delimited)"
+msgstr ""
+
+#: ../../routes.md:60 ../../routes.md:74 a39037b944be4b4a92f9aad5f2ddb070
+#: bc600064466d457592b1f4f433a79b56
+msgid "Fichier CSV (download)"
+msgstr ""
+
+#: ../../routes.md:61 ../../routes.md:75 b7cca8e3ee2544448c7668d3b6ca84d5
+#: ff9ceba3421b4e8aabe9d15c296c0866
+msgid "Content-Type: text/csv"
+msgstr ""
+
+#: ../../routes.md:62 c172923ca8ab486b80236cbc73852485
+msgid "Delimiter: `|`"
+msgstr ""
+
+#: ../../routes.md:63 833ada94f3874286851c83494cefd06d
+msgid "Nom du fichier: `hellopro_export.csv`"
+msgstr ""
+
+#: ../../routes.md:67 4168d2f5a4c34987bc7ee8e32e616204
+msgid "⚙️ Machinio"
+msgstr ""
+
+#: ../../routes.md:69 5b94281500bf440eb1a068eae30eb369
+msgid "`/machinio/csv/`"
+msgstr ""
+
+#: ../../routes.md:71 e9539f90d1b548c1a24450d905fae13b
+msgid "**Accès** : `MACHINIO_TOKEN` (sans vérification d'origine)"
+msgstr ""
+
+#: ../../routes.md:72 96b27d81e43746ba87d21a7406eae176
+msgid ""
+"**Description** : Export des données CSV pour Machinio (format semicolon-"
+"delimited)"
+msgstr ""
+
+#: ../../routes.md:76 b37f6fc227ef477ab62e32a3bf0b56a3
+msgid "Delimiter: `;`"
+msgstr ""
+
+#: ../../routes.md:77 214e076eadd844d18ddc41ab8ec88415
+msgid "Nom du fichier: `machinio_export.csv`"
+msgstr ""
+
+#: ../../routes.md:81 4cab0c7ee71f4b82b6d0db341b881bfb
+msgid "🔒 Interne"
+msgstr ""
+
+#: ../../routes.md:83 b15831fb607a414aba0d3c531cffc02d
+msgid ""
+"Toutes les routes `/internal/*` exigent `APP_TOKEN` **ET** une "
+"origine/referer autorisée (ou `ADMIN_TOKEN`), sauf `/internal/scripts/*` "
+"qui accepte aussi `AIRTABLE_AUTOMATION_TOKEN` sans origine (voir "
+"[authentication](./authentication.md))."
+msgstr ""
+
+#: ../../routes.md:87 1068e7d50cb34c07aac03ee21849e6d1
+msgid "`/internal/contact/check`"
+msgstr ""
+
+#: ../../routes.md:89 ../../routes.md:143 ../../routes.md:168
+#: ../../routes.md:192 ../../routes.md:197 ../../routes.md:205
+#: ../../routes.md:221 ../../routes.md:233 ../../routes.md:293
+#: ../../routes.md:314 ../../routes.md:348 ../../routes.md:358
+#: ../../routes.md:369 ../../routes.md:441 ../../routes.md:464
+#: ../../routes.md:480 2129749e86af463a80d77452a4af56f0
+#: 3f8fb58a8396439c9779b0d49ca447cd 56dc5000cde348f69c8d9fc837d62ec2
+#: 59016e97c1704b40bb5b611f69b4ebc9 671f9f5bf3f6420ca176affc14e581e3
+#: 6dbf90f41fe6415b871fbc1020212f3f 6f0c94b8a9ee40e2ab81103aba0e91ec
+#: 8128d2a244e34c7ea934c76dc88d6c0a 936da33b83314a4e9535b877bf6e3702
+#: c0d6a24705d64bec9209b2b13eba703d c0fcbe5fb6734a6b8087a380f8814dbf
+#: cdfe1af2a48842b98cd38b4ac2e9e828 d988ba0b25a04b4e8512487d1aeb0670
+#: e50ac74aade74e8891f78a19ba91cf66 ec1f090837fa4ab385b20a4be5235f7c
+#: f957bb779fcb4304a581f1e9572e3349
+msgid "**Accès** : `APP_TOKEN` **ET** origine/referer valide"
+msgstr ""
+
+#: ../../routes.md:90 c068dae05a584502b8c9c2a651abb2ad
+msgid ""
+"**Description** : Recherche les contacts potentiels dans la table "
+"\"Personne\" d'Airtable."
+msgstr ""
+
+#: ../../routes.md:91 f925330486904686bcf43cf00f154cc3
+msgid "**Stratégie** :"
+msgstr ""
+
+#: ../../routes.md:92 3175a261ae31491f8e53156caeb69849
+msgid "Email fourni → recherche par `Email OR Nom`, puis bonus prénom +3"
+msgstr ""
+
+#: ../../routes.md:93 c528c4609af946c7a6f00a6472c29826
+msgid "Pas d'email → recherche par `Nom OR Prénom`"
+msgstr ""
+
+#: ../../routes.md:94 4f51c9b1e0504e8eadbadc8af20cd4fe
+msgid "**Scoring** : Email +15, Nom +10, Prénom +3"
+msgstr ""
+
+#: ../../routes.md:95 8479eaa76cae4114877471826595563f
+msgid "**Note** : `best_match` n'est pas inclus dans `potential_contacts`"
+msgstr ""
+
+#: ../../routes.md:96 c98186b8c4ce475ca5fd24f10fb44e5f
+msgid "**Query Params** (au moins un requis) :"
+msgstr ""
+
+#: ../../routes.md:97 b86329dd0aa547da877f247cef0b1029
+msgid "`email` (string) : Email du contact"
+msgstr ""
+
+#: ../../routes.md:98 6f6434349569481b8628d40b124fbd22
+msgid "`nom` (string) : Nom du contact"
+msgstr ""
+
+#: ../../routes.md:99 7e9a3bdf16994ba28da528ba9d4479e9
+msgid "`prenom` (string) : Prénom du contact"
+msgstr ""
+
+#: ../../routes.md:139 d93cd8b66c1e40a982b28fd29d81b9e6
+msgid "**Erreurs** : `422` si aucun paramètre fourni, `500` si erreur Airtable"
+msgstr ""
+
+#: ../../routes.md:141 bb2de8bafea940c3aa5257161863d6c3
+#, python-brace-format
+msgid "`/internal/contact/update/{id}`"
+msgstr ""
+
+#: ../../routes.md:142 00ec3fa334b54b6193819c54f5447c00
+msgid "**Méthode** : `PATCH`"
+msgstr ""
+
+#: ../../routes.md:144 6a78a46379814bb7b10873a0c43fc034
+msgid ""
+"**Description** : Met à jour les champs fournis d'un record dans la table"
+" \"Personne\" d'Airtable."
+msgstr ""
+
+#: ../../routes.md:145 93d4550cbdbe45e583fc6a42be36a4f0
+msgid "**Path Params** : `id` (string, requis) - L'ID du record Airtable"
+msgstr ""
+
+#: ../../routes.md:146 ../../routes.md:170 6c55cefb09564af6a86a306fe2c35f1a
+#: 981ccf7af5f347b0aa521c288fc2bd77
+msgid "**Request Body** (au moins un champ requis) :"
+msgstr ""
+
+#: ../../routes.md:164 147da57f8bac47adb1e0b86811a6de46
+msgid ""
+"**Erreurs** : `404` si contact introuvable, `422` si aucun champ fourni, "
+"`500` si erreur Airtable"
+msgstr ""
+
+#: ../../routes.md:166 7b5bd9df06854cd0b140951b2411bc84
+msgid "`/internal/contact/create`"
+msgstr ""
+
+#: ../../routes.md:167 ../../routes.md:196 ../../routes.md:232
+#: ../../routes.md:313 ../../routes.md:347 ../../routes.md:357
+#: ../../routes.md:394 ../../routes.md:440 ../../routes.md:479
+#: 415210775ba648f5bbfd3d2f62e95fb1 4fbb43dd39e04fdd91ec1d9660fa0d3d
+#: 5b8671a208e548fa81d07e2db0f8c9f6 5b98da5b57ba4be3a058446ac648a5a0
+#: 6f12feac12444ed195d1b12c583591cc 9214f958e33a4f6bae06130b5efcf210
+#: a8bac809893046bdbf753ea7cec50abc c97a7305c3ed458b9f3bfd77953564ed
+#: d46e0d5ba7a34b569e493ce02a46f4f5
+msgid "**Méthode** : `POST`"
+msgstr ""
+
+#: ../../routes.md:169 593cf1d9b5ea4235b5413a0da997eb68
+msgid ""
+"**Description** : Crée un nouveau contact dans la table \"Personne\" "
+"d'Airtable."
+msgstr ""
+
+#: ../../routes.md:188 ../../routes.md:201 d296c343d9f444daafeee136b4e764fb
+#: fa6d452b2672404aa360246bf7603771
+msgid "**Erreurs** : `422` si aucun champ fourni, `500` si erreur Airtable"
+msgstr ""
+
+#: ../../routes.md:190 45d87a8f37994a3184791d72cdd8be04
+msgid "`/internal/contact/entreprise/all`"
+msgstr ""
+
+#: ../../routes.md:193 a71b4ead87fa46eaa8b6c85af141848c
+#, python-brace-format
+msgid ""
+"**Description** : Liste les records de la table \"Entreprise\", sous "
+"forme de dict `{nom: record_id}`."
+msgstr ""
+
+#: ../../routes.md:195 f6473fc1dea54aab91a19325b35c5a85
+msgid "`/internal/contact/entreprise/create`"
+msgstr ""
+
+#: ../../routes.md:198 5ebd028f8968459f8447150693e5d22a
+msgid "**Description** : Crée un record dans la table \"Entreprise\"."
+msgstr ""
+
+#: ../../routes.md:199 40cbf459acba4ed49b6bcca422a1f57c
+#, python-brace-format
+msgid ""
+"**Request Body** (au moins un champ requis) : `{\"nom\": \"Acme Corp\", "
+"\"siret\": \"12345678900011\"}`"
+msgstr ""
+
+#: ../../routes.md:200 7746d7f082c841879e16b01f94c6992d
+#, python-brace-format
+msgid "**Réponse** : `{\"id\": \"recXXX\", \"fields\": {...}}`"
+msgstr ""
+
+#: ../../routes.md:203 d6fa7561303a434e9ea404cad79e3af6
+msgid "`/internal/affaire/user/all`"
+msgstr ""
+
+#: ../../routes.md:206 7e927abbed8f42b2a4397aaab04a57da
+#, python-brace-format
+msgid ""
+"**Description** : Liste les employés Rewake pour alimenter le sélecteur "
+"\"Utilisateur\" de l'extension Chrome. La réponse est un dict `{nom: "
+"record_id}` — `toOptionList()` en fait `{label: nom, value: record_id}`, "
+"et c'est le `record_id` qui est renvoyé comme `utilisateur_id` à "
+"`/internal/affaire/create`. L'extension n'affiche que le label."
+msgstr ""
+
+#: ../../routes.md:219 54fcd81f13bf4792bacd7504fe1b2708
+msgid "`/internal/affaire/origine/all`"
+msgstr ""
+
+#: ../../routes.md:222 4f5c9363f9604bfdb4468779d838410c
+msgid ""
+"**Description** : Liste les valeurs possibles du champ \"Origine de "
+"l'affaire\" de la table Airtable \"Affaires\". C'est un `singleSelect` : "
+"il n'a pas de record associé, donc la réponse est une liste de strings et"
+" la valeur soumise à `/internal/affaire/create` est le libellé de "
+"l'option."
+msgstr ""
+
+#: ../../routes.md:231 0935d5fdd4384132aed236543e7a2b86
+msgid "`/internal/affaire/create`"
+msgstr ""
+
+#: ../../routes.md:234 02604abe09904df5bbd2a7f79fcf9fd6
+msgid ""
+"**Description** : Crée un record dans la table Airtable \"Affaires\" "
+"puis, si une date de relance a été fournie, une activité `relance` dans "
+"la table \"Activité\" liée à cette affaire. `Client` pointe sur la table "
+"\"Personne\", `Entreprise` sur \"Entreprise\" et `Propriétaire` sur "
+"\"Employé Rewake\", tous trois en lien — d'où l'écriture sous forme de "
+"liste de record ids."
+msgstr ""
+
+#: ../../routes.md:239 ../../routes.md:316 ../../routes.md:483
+#: 628b801bd3cf4b49acb1c707e9c8396e 7250044a1b3a43a48f42332ae44666cb
+#: ac0999e295084d6cb5c0750cd9fa9d88
+msgid "**Request Body** :"
+msgstr ""
+
+#: ../../routes.md:250 75c49df9ab744dd3ad5997e32babee45
+msgid ""
+"`entreprise` est le **nom** de la société (`best_match.entreprise` "
+"renvoyé par `/internal/contact/check`), pas son record id : la route le "
+"résout via la table \"Entreprise\"."
+msgstr ""
+
+#: ../../routes.md:253 da4726c481a446b28f7b99a775329a89
+msgid ""
+"`origine` est le libellé d'une valeur du `singleSelect` \"Origine de "
+"l'affaire\"."
+msgstr ""
+
+#: ../../routes.md:255 5cc8f138123243aea38e18b9f63f2ad6
+msgid ""
+"`date_relance` sort d'un `<input type=\"date\">` (format `YYYY-MM-DD`). "
+"La table \"Affaires\" n'a pas de champ de relance : la date sert à créer "
+"l'activité. **Si elle est vide, l'activité n'est pas créée** — une "
+"relance sans date n'a rien à faire dans le planning."
+msgstr ""
+
+#: ../../routes.md:259 064259b388b242418b6636474025e9b7
+msgid "**Activité créée** (table \"Activité\") :"
+msgstr ""
+
+#: ../../routes.md:269 8fbc472281ea4bb8808364f59e134110
+msgid "Le champ `Type` est laissé vide."
+msgstr ""
+
+#: ../../routes.md:283 94131dbdcea84e16b178d77043c019a3
+msgid "**Erreurs** :"
+msgstr ""
+
+#: ../../routes.md:284 38f7cbba6465482a92b3860147b02f35
+msgid ""
+"`422` si `nom` est vide, si `origine` n'est pas une valeur du "
+"`singleSelect`, si `entreprise` ne correspond à aucune Entreprise, si "
+"`utilisateur_id` n'est pas un employé connu, ou si `date_relance` n'est "
+"pas en `YYYY-MM-DD`"
+msgstr ""
+
+#: ../../routes.md:287 8b39e8bcc3df4dad90f4657f80626306
+msgid ""
+"`500` si erreur Airtable. Si l'activité de relance échoue alors que "
+"l'affaire a bien été créée, **l'affaire est supprimée** avant de renvoyer"
+" le `500`, pour ne pas laisser de doublon si l'utilisateur réessaie."
+msgstr ""
+
+#: ../../routes.md:291 fbf59e9ffc3b4af19f5f5b6231003915
+msgid "`/internal/backups/`"
+msgstr ""
+
+#: ../../routes.md:294 01d3f0a5185a4d79a2068d0d22f45135
+#, python-brace-format
+msgid ""
+"**Description** : Liste des backups (dossier "
+"`$VERIFICATION_SHOPIFY_DIR/backups`, hérité de l'ancien script "
+"`verification_shopify`) avec leurs fichiers et contenu (comparison.txt), "
+"plus récent d'abord ; `{\"backups\": []}` si le dossier n'existe pas"
+msgstr ""
+
+#: ../../routes.md:312 f6df8d2f0dcc4037badb4377bfca39be
+msgid "`/internal/fees/distritec`"
+msgstr ""
+
+#: ../../routes.md:315 205538018c904cfbb6c376afae829553
+msgid "**Description** : Calcule les frais de transport Distritec"
+msgstr ""
+
+#: ../../routes.md:331 3f91e478dfff4b3dbe14e213d9f592fb
+msgid ""
+"`departureCity`/`arrivalCity` sont des numéros de département ; `portage`"
+" est un nombre d'étages, `roulage` une distance en mètres."
+msgstr ""
+
+#: ../../routes.md:344 8cc279c33a0a46ffb197a4a72dd8250d
+msgid ""
+"**Erreurs** : `400` si `departureCity` ou `packages` manquant ou "
+"paramètre invalide"
+msgstr ""
+
+#: ../../routes.md:346 cece8877c3d04822bc35079975c036ab
+msgid "`/internal/fees/compute/handling`"
+msgstr ""
+
+#: ../../routes.md:349 abf39dfab88e4da6a4db13060f88d890
+msgid ""
+"**Description** : Résumé logistique d'une proposition de reprise (table "
+"\"Propositions de reprises\") : équipements, poids/volume totaux, nombre "
+"de colis / palettes / non conditionnés, code postal."
+msgstr ""
+
+#: ../../routes.md:352 17edfa649b3f482483709053adeea9b2
+msgid "**Query Params** : `id` (string, **requis**) - L'ID du record Airtable"
+msgstr ""
+
+#: ../../routes.md:353 499d7230d0244e0baca82ec6acf9fd2a
+msgid ""
+"**Erreurs** : `422` si un équipement non conditionné en colis n'a pas de "
+"poids ou de hauteur, ou si le code postal manque"
+msgstr ""
+
+#: ../../routes.md:356 97cd3569bc1743898425c8bdf3e492cc
+msgid "`/internal/fees/compute/dock`"
+msgstr ""
+
+#: ../../routes.md:359 705ad937ca3e43b9b60419f647ffc00b
+msgid ""
+"**Description** : Calcule les frais logistiques « à quai » de la même "
+"proposition (forfait pour 75/92/93/94/95 et 77/78/91, sinon tarif du "
+"département, table \"Grille tarifaire Granger\") et les écrit dans `Frais"
+" logistique - À quai`."
+msgstr ""
+
+#: ../../routes.md:362 bfbb51fffb1a4379bc10725253c5fc31
+msgid "**Query Params** : `id` (string, **requis**)"
+msgstr ""
+
+#: ../../routes.md:363 3f5a74ae915343d58253431d944fe0dd
+#, python-brace-format
+msgid "**Réponse** : `{\"success\": true}`"
+msgstr ""
+
+#: ../../routes.md:364 bb0db5c76feb4a01aab0a86a3664fa69
+msgid ""
+"**Erreurs** : `422` (données manquantes, département de montagne ou sans "
+"grille, équipement hors norme)"
+msgstr ""
+
+#: ../../routes.md:367 cf7c2f73a96943b5ada68a783adc535c
+msgid "`/internal/logs/`"
+msgstr ""
+
+#: ../../routes.md:370 12a1a3627e8843d0b8d55da5cebaaefc
+msgid "**Description** : Récupère le contenu d'un fichier de log"
+msgstr ""
+
+#: ../../routes.md:371 ab456fe1d6ef4a8ea4b7917ff3209ff7
+msgid ""
+"**Query Params** : `log` (nom du fichier, défaut: api.log) : un fichier "
+"du dossier des logs seulement ; un chemin qui en sort (`../.env`, chemin "
+"absolu) est refusé (400)"
+msgstr ""
+
+#: ../../routes.md:374 857b5d8409464469b01487e709caa645
+msgid "**Réponse** (fichier absent : `content` vide) :"
+msgstr ""
+
+#: ../../routes.md:382 23d1bff6590849a6bdc78bb41f7420c0
+msgid "`/internal/scripts/`"
+msgstr ""
+
+#: ../../routes.md:384 2a60fe6512564a5a9aabfc8da0b51524
+msgid ""
+"**Accès** : `APP_TOKEN` **ET** origine/referer valide, ou "
+"`AIRTABLE_AUTOMATION_TOKEN` (vrai pour toutes les routes "
+"`/internal/scripts/*`)"
+msgstr ""
+
+#: ../../routes.md:386 251da8c8ec5245518f36caceac13c3fd
+msgid ""
+"**Description** : Liste les scripts enregistrés (voir "
+"`api/scripts/registry.py` et [docs/architecture.rst](./architecture.rst))"
+msgstr ""
+
+#: ../../routes.md:393 fb6333710f3546a198670f761485f0a8
+#, python-brace-format
+msgid "`/internal/scripts/{name}/run`"
+msgstr ""
+
+#: ../../routes.md:395 dd07d816c1ca4545bcb107056d85acb1
+msgid ""
+"**Description** : Met en file d'attente (Celery) une exécution du script "
+"`name`. Query params : `record_id` (ID d'un **Model**) requis pour "
+"`create_product_shopify` ; pour `update_product`, exactement un de "
+"`record_id` (ID d'une Variation) ou `model_id` (ID d'un Model). Ignorés "
+"par les autres scripts."
+msgstr ""
+
+#: ../../routes.md:403 335a8dc49d1643179283ee55a171dcdf
+msgid ""
+"**Erreurs** : `404` si `name` inconnu, `400` si `record_id` manque pour "
+"`create_product_shopify` ou si `update_product` ne reçoit pas exactement "
+"un de `record_id`/`model_id`"
+msgstr ""
+
+#: ../../routes.md:407 65b08bfe69c2456aa923f154b910e8a1
+#, python-brace-format
+msgid "`/internal/scripts/status/{task_id}`"
+msgstr ""
+
+#: ../../routes.md:409 5528edb7a5d44c8cb203e711c5b0429a
+#, python-brace-format
+msgid ""
+"**Description** : État d'une tâche mise en file par `POST "
+"/internal/scripts/{name}/run` "
+"(`PENDING`/`STARTED`/`RETRY`/`SUCCESS`/`FAILURE`) ; une fois terminée, "
+"`result` (succès) ou `error` (échec)"
+msgstr ""
+
+#: ../../routes.md:421 34476fe77df94981b781e6ec7910ba58
+#, python-brace-format
+msgid "`/internal/scripts/{name}/runs`"
+msgstr ""
+
+#: ../../routes.md:423 fe84cf77d438499984646c3d78ce85e2
+msgid ""
+"**Description** : Historique des exécutions de `name`, plus récentes "
+"d'abord (Redis, 1000 dernières conservées par script)"
+msgstr ""
+
+#: ../../routes.md:425 7a16d5da487543c7b00fd8fb4a23c467
+msgid ""
+"**Query Params** : `limit` (int, défaut 20, max 100), `offset` (int, "
+"défaut 0)"
+msgstr ""
+
+#: ../../routes.md:430 ../../routes.md:437 8987d939a5d24978b032f4ca177df683
+#: fe8ccf88f2a347f3b276329ebe733f07
+msgid "**Erreurs** : `404` si `name` inconnu"
+msgstr ""
+
+#: ../../routes.md:432 507066fcb0aa4f22b3ce25cccab1a434
+#, python-brace-format
+msgid "`/internal/scripts/{name}/current`"
+msgstr ""
+
+#: ../../routes.md:434 28042561d8b349a898b2c20829c7036f
+msgid ""
+"**Description** : Étapes en cours des exécutions de `name` (une par "
+"`record_id` en parallèle), pour suivre une exécution en direct ; vide si "
+"rien ne tourne"
+msgstr ""
+
+#: ../../routes.md:436 63a18698d5254a35ab7332e34a1f7ead
+#, python-brace-format
+msgid ""
+"**Réponse** : `{ \"script\": \"create_product_shopify\", \"stages\": [ "
+"... ] }`"
+msgstr ""
+
+#: ../../routes.md:439 6420d36cbd1f4e1a9c061468ecea7a5d
+msgid "`/internal/invoice/analysis`"
+msgstr ""
+
+#: ../../routes.md:442 69daa8eaaa294f71acf93f7da0ecffe5
+msgid ""
+"**Description** : Analyse une facture PDF et extrait les informations "
+"selon la source ; le PDF est sauvegardé et récupérable via `GET "
+"/invoice/get?hash=...`"
+msgstr ""
+
+#: ../../routes.md:444 e9363f3ea6174e2ab8e9b9081bb919ff
+msgid "**Request** :"
+msgstr ""
+
+#: ../../routes.md:445 bc1709e6b9dd46798e610b07bcd66a69
+msgid "`file` : fichier PDF (multipart) - **requis**"
+msgstr ""
+
+#: ../../routes.md:446 fdf8f429e68345ba9c19a19b2d59b759
+msgid "`source` (query param) - **requis** - `surplus` ou `equipnet`"
+msgstr ""
+
+#: ../../routes.md:460 389c3966214849c99f59415e2dc3b651
+msgid "**Erreurs** : `400` si le fichier n'est pas un PDF ou si `source` manque"
+msgstr ""
+
+#: ../../routes.md:462 265bc2c4fc2b4cefb392dc8a743048a9
+#, python-brace-format
+msgid "`/internal/airtable/location/get/{record_id}`"
+msgstr ""
+
+#: ../../routes.md:465 67faab46904f413aa68f0e9cde0e3fcb
+msgid ""
+"**Description** : Récupère les informations de localisation d'une unité "
+"spécifique dans l'entrepôt"
+msgstr ""
+
+#: ../../routes.md:466 ../../routes.md:482 22428eaa2cd84ae8a0ed278e0332f0a2
+#: de8e822c1f8240db810aafe770912d01
+msgid ""
+"**Path Params** : `record_id` (string, requis) - L'ID du record Airtable "
+"de l'unité"
+msgstr ""
+
+#: ../../routes.md:478 98e5926c80384b4389b6c4a6f94d066f
+#, python-brace-format
+msgid "`/internal/airtable/location/update/{record_id}`"
+msgstr ""
+
+#: ../../routes.md:481 3846df17391f4065a6bf8fb550915ad2
+msgid ""
+"**Description** : Mets à jour l'emplacement d'une unité spécifique dans "
+"l'entrepôt sur Airtable"
+msgstr ""
+
+#: ../../routes.md:497 54765cbb6f8d4537b844f6ab9428cda7
+msgid ""
+"Référentiels Airtable (`/internal/airtable/*`, `/internal/model/*`, "
+"`/internal/cache/*`)"
+msgstr ""
+
+#: ../../routes.md:499 ae1149fd6c5b4c089a94d578d8ec1474
+#, python-brace-format
+msgid ""
+"Les routes `.../all` renvoient un dict `{nom: record_id}` (mis en cache) "
+"; les routes `create` renvoient `{\"id\": \"recXXX\", \"fields\": "
+"{...}}`, `422` si le nom est vide, `500` si erreur Airtable."
+msgstr ""
+
+#: ../../routes.md 01f325f801d14998a21d02590be24dc0
+#: 5f4e186c4f344390a010b51812523b57 91cc0d545b634ee3b2aaf167670b36dd
+#: a433dbd554c54dcb9f1c079d29480771 ac4ff93a20104c61ae08b74fe1e4b7d7
+#: fdadaa108b8b46e1ae873668989198b5
+msgid "Route"
+msgstr ""
+
+#: ../../routes.md 1b7d3c0a81364fdc8d862aab99a04a6d
+#: 31c966db740740dea55297728c26b788 7175bb72f9d144368d50a48bc7f9299b
+#: b66ea9fcad7b4d23ad118069887569f2 fa073aeeb4df46a9a704b6279e48f8ad
+msgid "Description"
+msgstr ""
+
+#: ../../routes.md 481781581d8e46c992633c52dc01708e
+msgid "`GET /internal/airtable/brand/all`"
+msgstr ""
+
+#: ../../routes.md 53decfe723b04d7991d5ecbb369afc2b
+msgid "Marques (table \"Marque\")"
+msgstr ""
+
+#: ../../routes.md 7244850dd67147fdb7c69637de7bedd7
+msgid "`POST /internal/airtable/brand/create?name=`"
+msgstr ""
+
+#: ../../routes.md 09b6d627cc3641d58b188b486d239c9a
+msgid "Crée une marque (vide le cache des marques)"
+msgstr ""
+
+#: ../../routes.md b18d99dc64284e8d9dd94a83b7ba9e3a
+msgid "`GET /internal/model/airtable/type/all`"
+msgstr ""
+
+#: ../../routes.md 1e4f38513f6c4d45a817b8dd89d74464
+msgid "Types d'équipement"
+msgstr ""
+
+#: ../../routes.md 6f4e637784c245bb9ca2fdf88054acaa
+msgid "`POST /internal/model/airtable/type/create?name=&categorieId=&familleId=`"
+msgstr ""
+
+#: ../../routes.md a5d340106e624cb8a2df240e99ff0e87
+msgid "Crée un type d'équipement"
+msgstr ""
+
+#: ../../routes.md 2c5b4f9405b64727a144ba43382beab2
+msgid "`GET /internal/model/airtable/famille/all`"
+msgstr ""
+
+#: ../../routes.md b11e963e6df14e71a494c8e694dbd71e
+msgid "Familles"
+msgstr ""
+
+#: ../../routes.md 2741b15f2f6f448f9eab80d56e65d15d
+msgid "`GET /internal/model/airtable/categorie/all`"
+msgstr ""
+
+#: ../../routes.md 2447adb61bea4574ae53063e9fdf00cc
+msgid "Catégories"
+msgstr ""
+
+#: ../../routes.md ef48e663b86843dfbef7c826e998a359
+msgid "`POST /internal/model/create`"
+msgstr ""
+
+#: ../../routes.md 5146a07dfa1b419a984e4931ef9d455c
+msgid ""
+"Crée un Model (`brandId`, `typeId`, `name`, `longueur`, `hauteur`, "
+"`profondeur` en mm) et sa Variation par défaut (`is_variant = Non`)"
+msgstr ""
+
+#: ../../routes.md 3e1cd09b581944fc8eedc0041cda1f6b
+msgid "`POST /internal/cache/refresh`"
+msgstr ""
+
+#: ../../routes.md 0d450fcdbeaa4287a5b3a9d01ad56211
+#, python-brace-format
+msgid ""
+"Vide les caches Airtable (schéma, models, marques) → `{\"success\": true,"
+" \"message\": ...}`"
+msgstr ""
+
+#: ../../routes.md:514 82b08b82342345e2ab88e90a8bcaa53b
+msgid "Formulaires client (`/internal/formulaire/*`)"
+msgstr ""
+
+#: ../../routes.md:516 649a7b1d1ebf4194862b6bda3eed4e2a
+msgid ""
+"Formulaires remplis par le client (proposition de reprise, formulaire "
+"logistique entreprise). `id` (query param, **requis**) est l'ID du record"
+" Airtable."
+msgstr ""
+
+#: ../../routes.md 149e3dce45ff42b3b0f0cc85edde68cb
+msgid "`GET /internal/formulaire/reprise/get/proposition`"
+msgstr ""
+
+#: ../../routes.md ecb85fcda9834d6089d5ab18503b21de
+msgid ""
+"Proposition de reprise (table \"Propositions de reprises\") avec ses "
+"équipements dépliés"
+msgstr ""
+
+#: ../../routes.md 505d63efebe948049bbb61c4c169abb8
+msgid "`PATCH /internal/formulaire/reprise/update/proposition`"
+msgstr ""
+
+#: ../../routes.md e3f834eefd9e438f9e9e876ad9c9b850
+msgid ""
+"Met à jour la proposition et ses équipements depuis le formulaire (corps "
+"JSON) ; `403` si `Modifiable par le client` est décoché"
+msgstr ""
+
+#: ../../routes.md 77618800ce2a4995b72ca9f1d1a39301
+msgid "`PATCH /internal/formulaire/reprise/finish/proposition`"
+msgstr ""
+
+#: ../../routes.md e93df04d88164bdab19a9909ba1388e1
+msgid ""
+"`Statut = Formulaire rempli`, plus modifiable par le client, puis notifie"
+" le responsable (webhook n8n)"
+msgstr ""
+
+#: ../../routes.md bc7e5a7dc7a544bebb49468ecea8d871
+#, python-brace-format
+msgid "`POST /internal/formulaire/photos/upload/{airtable_id}`"
+msgstr ""
+
+#: ../../routes.md 2026059a867b40b3887f411343f21fcb
+#, python-brace-format
+msgid ""
+"Upload multipart (`files`) des photos → `{\"photos\": [{filename, "
+"url}]}`, servies par `GET /formulaire/photos/...`"
+msgstr ""
+
+#: ../../routes.md 749b3bb418484179bad1f661b2ae6d6d
+msgid "`GET /internal/formulaire/entreprise/get`"
+msgstr ""
+
+#: ../../routes.md 205074fe00274c99bea025b22d846b69
+msgid ""
+"Champs du formulaire logistique (table \"Formulaire logistique "
+"entreprise\")"
+msgstr ""
+
+#: ../../routes.md 05aeaa34b3b149a3a51ecb5e1db6a401
+msgid "`PATCH /internal/formulaire/entreprise/update`"
+msgstr ""
+
+#: ../../routes.md 6df27f1e030e4e30a1ca01e6d4880e38
+msgid ""
+"Met à jour ce formulaire ; `403` si `Modifiable par l'entreprise` est "
+"décoché"
+msgstr ""
+
+#: ../../routes.md 3d8a5e1d51364ea1a5c5174d76b779e0
+msgid "`PATCH /internal/formulaire/entreprise/finish`"
+msgstr ""
+
+#: ../../routes.md 5bcda47a1b6b49ed9781c45065530425
+msgid "`Statut = Terminé`, plus modifiable par l'entreprise"
+msgstr ""
+
+#: ../../routes.md:529 b6c2bcc1424c4235a4fadcded1592309
+msgid "Erreurs : `404` si le record n'existe pas, `500` si erreur Airtable."
+msgstr ""
+
+#: ../../routes.md:531 f9d8fecc22d341dd8ced87e48eedfeb0
+msgid "Génération de PDF (`/internal/pdf/*`)"
+msgstr ""
+
+#: ../../routes.md:533 0154c55f27b54926b00b01bd77347b2b
+#, python-brace-format
+msgid ""
+"Chaque route génère un PDF (WeasyPrint) dans `/home/rewake/DB/PDF`, servi"
+" par `GET /pdf/{filename}`, et l'attache au record Airtable."
+msgstr ""
+
+#: ../../routes.md d5de4a23c4ad4b699b187304df10101c
+msgid "`POST /internal/pdf/proposition_de_rachat/create?id=`"
+msgstr ""
+
+#: ../../routes.md fb9d020428ae4597a929eee9f6e43fbf
+msgid ""
+"Proposition de rachat d'une proposition de reprise : crée un record dans "
+"la table \"Propositions de rachat\" → `record_id`, `file_number`"
+msgstr ""
+
+#: ../../routes.md 73da394ee99d4f7083682eba787f4137
+msgid "`POST /internal/pdf/bon_de_commande/create?proposition_id=&operation_id=`"
+msgstr ""
+
+#: ../../routes.md 5c3dde1764ec4e75b47dfaba27505372
+msgid ""
+"Bon de commande attaché à l'\"Opération reprise\", brouillon Gmail dans "
+"la boîte du responsable, et une Unit par équipement à racheter → "
+"`file_number`, `units_created`"
+msgstr ""
+
+#: ../../routes.md 0cece0b2c45a4d17868047ac43ad9276
+msgid "`POST /internal/pdf/logistique/fiche/create?id=`"
+msgstr ""
+
+#: ../../routes.md dc31e733222e45d986860ca3f70d0b3b
+msgid "Fiche logistique attachée à la proposition de reprise → `file_number`"
+msgstr ""
+
+#: ../../routes.md 798e0553877d4d869025ad85772075e0
+msgid "`POST /internal/pdf/rapport_intervention?id=`"
+msgstr ""
+
+#: ../../routes.md 5546e17cea264a7eb6035f92de2c205d
+msgid "Rapport d'intervention ajouté au record \"SAV\""
+msgstr ""
+
+#: ../../routes.md:543 bac55924ae654e38aaa4b81de05d5bf4
+msgid "Catalogue (`/internal/catalog/*`)"
+msgstr ""
+
+#: ../../routes.md:545 00540984b4a54323ae9921e89cef4005
+msgid ""
+"Routes du flux de réception et de la revue commerciale de "
+"`app.rewake.fr`. Le détail (corps, réponses, codes `409`) est dans "
+"[catalog_intake](./catalog_intake.md#endpoints)."
+msgstr ""
+
+#: ../../routes.md 396c91d879624b55ab0ac791bf35f2f7
+msgid "`GET /internal/catalog/options`"
+msgstr ""
+
+#: ../../routes.md 39f489e0463c411cabeef71480b6f408
+msgid ""
+"Marques, types, clés de spécification, états d'Unit (cache 10 min, "
+"`?refresh=true`)"
+msgstr ""
+
+#: ../../routes.md 26b628023e70426695489dd6f819e648
+msgid "`GET /internal/catalog/airtable-links`"
+msgstr ""
+
+#: ../../routes.md 994315c20aa742d6b9f12b54503164e4
+msgid "`base_id` et IDs des tables Model / Variation / Units"
+msgstr ""
+
+#: ../../routes.md 6a482291c3344846bf34d6149e498e31
+msgid "`POST /internal/catalog/match`"
+msgstr ""
+
+#: ../../routes.md 6898ed4fe55a4dacb1c330efd3d9c6be
+msgid "Models existants correspondant à marque + modèle"
+msgstr ""
+
+#: ../../routes.md f54ad81b57404273bcb36a5d9abf90d1
+msgid "`POST /internal/catalog/search`"
+msgstr ""
+
+#: ../../routes.md 06ed4a7b07404ad293bc50138bdce897
+msgid "Recherche catalogue (`q`) et suggestions depuis l'identité d'un article"
+msgstr ""
+
+#: ../../routes.md 9d7be00c3cb44a4cb769f373cc8f5184
+msgid "`POST /internal/catalog/units/sync`"
+msgstr ""
+
+#: ../../routes.md ffba839857a54c9dbe87eda9d9865612
+msgid "Crée ou complète l'Unit d'un article reçu"
+msgstr ""
+
+#: ../../routes.md 2b52f32e1f254ba082ee9bc9b901c7f6
+msgid "`POST /internal/catalog/units/photos`"
+msgstr ""
+
+#: ../../routes.md b8df3e5ed5664ecb9edaccceb2b8fa3c
+msgid "`Photos client` de plusieurs Units"
+msgstr ""
+
+#: ../../routes.md 8d25d97f94eb4e048c97214080a53bab
+#, python-brace-format
+msgid "`GET /internal/catalog/units/{unit_id}`"
+msgstr ""
+
+#: ../../routes.md a1c7f4d8f2974c91aec66811a568554a
+msgid "Champs catalogue d'une Unit (+ `snapshot`)"
+msgstr ""
+
+#: ../../routes.md 72a29b46bde148a485bb728218aa9c93
+#, python-brace-format
+msgid "`POST /internal/catalog/units/{unit_id}/photos`"
+msgstr ""
+
+#: ../../routes.md d037f4603dc64664b829ec8ad667a92e
+msgid "Ajoute une photo à `Photos interne`"
+msgstr ""
+
+#: ../../routes.md fd29e6cb1d5f46b681052e2782f608bf
+#, python-brace-format
+msgid "`POST /internal/catalog/units/{unit_id}/photos/remove`"
+msgstr ""
+
+#: ../../routes.md 157a2c6019424919a34f39efe282d022
+msgid "Retire des pièces jointes"
+msgstr ""
+
+#: ../../routes.md 7f1f40192d5c485eaa5b749804acf67d
+#, python-brace-format
+msgid "`POST /internal/catalog/units/{unit_id}/remove`"
+msgstr ""
+
+#: ../../routes.md 2f90d5dc96a74397be82952107ca0b38
+msgid "Supprime une Unit créée par l'app"
+msgstr ""
+
+#: ../../routes.md a37875c7181d4f49ae23b84fa1550440
+#, python-brace-format
+msgid "`POST /internal/catalog/units/{unit_id}/restore`"
+msgstr ""
+
+#: ../../routes.md e4d7475721e8426a865f3f1a40796cc8
+msgid "Restaure une Unit de reprise"
+msgstr ""
+
+#: ../../routes.md 8e57c4e7480945be894766423f8c2e03
+msgid "`POST /internal/catalog/groups/push`"
+msgstr ""
+
+#: ../../routes.md 0945a121beff4cd99e9bab294d9d6093
+msgid "Crée / met à jour un groupe (Model → Variations → Specs → Units)"
+msgstr ""
+
+#: ../../routes.md 2b154d14fd82466d83a51c9e4515b5ee
+msgid "`POST /internal/catalog/groups/validate`"
+msgstr ""
+
+#: ../../routes.md 1f943416b6c9481f8f703f8a3a44d8ca
+msgid "Valide les Variations du groupe"
+msgstr ""
+
+#: ../../routes.md cc80a44571d242448bacd2d3938cb1d3
+msgid "`POST /internal/catalog/groups/unvalidate`"
+msgstr ""
+
+#: ../../routes.md b918a1cae3cb46fdbbbd71f8db9b04a1
+msgid "Les repasse `À valider`"
+msgstr ""
+
+#: ../../routes.md 0d3fccec14e84950921a5851600efa5e
+msgid "`POST /internal/catalog/groups/cancel`"
+msgstr ""
+
+#: ../../routes.md b2bfe9d5e73f4401a11d68425d2c22a4
+msgid "Supprime ce que le groupe a créé"
+msgstr ""
+
+#: ../../routes.md 3b284ca932614f27a31b8810e953780e
+msgid "`POST /internal/catalog/relationships/accessory`"
+msgstr ""
+
+#: ../../routes.md 308220be149a449d95a06527462091c7
+msgid "Lie un accessoire à un Model hôte"
+msgstr ""
+
+#: ../../routes.md 7757e6bc5cb24b5f8bce3eba77921d6a
+msgid "`POST /internal/catalog/relationships/accessory/remove`"
+msgstr ""
+
+#: ../../routes.md a809c9ac20c543a4963457b3ab49673f
+msgid "Retire ce lien"
+msgstr ""
+
+#: ../../routes.md c6d140e5cf3f46d8bff8b16ed2e07011
+msgid "`GET /internal/catalog/reprises`"
+msgstr ""
+
+#: ../../routes.md 57bb9d519ae04c29a95e6bdedabf4dc4
+msgid "Opérations de reprise à réceptionner (`?q=`)"
+msgstr ""
+
+#: ../../routes.md f5fe3cf6c0f54539acd8f5cdb3792560
+#, python-brace-format
+msgid "`GET /internal/catalog/reprises/{operation_id}`"
+msgstr ""
+
+#: ../../routes.md 3ae129aeb56b46aeacbee8f10b240bad
+msgid "Une opération, ses Units pré-créées et équipements"
+msgstr ""
+
+#: ../../routes.md b04cd4563b3547c4a93077a4d82055c9
+#, python-brace-format
+msgid "`POST /internal/catalog/reprises/{operation_id}/received`"
+msgstr ""
+
+#: ../../routes.md 985d12f0f0ce4c02a7eb4ee1dbe22f45
+msgid "Marque l'opération `Appareils reçus`"
+msgstr ""
+
+#: ../../routes.md 5203fa5027bb4ae8a50b9066372600d6
+#, python-brace-format
+msgid "`POST /internal/catalog/reprises/{operation_id}/received/undo`"
+msgstr ""
+
+#: ../../routes.md 8d4363420c804aeea636e5d1205ab05d
+msgid "Annule ce marquage"
+msgstr ""
+
+#: ../../routes.md d43927d97d014e91a47195e3ce1e9a48
+#, python-brace-format
+msgid "`GET /internal/catalog/variations/{variation_id}`"
+msgstr ""
+
+#: ../../routes.md cdfb402be6dd4ee4a9caec065b51a145
+msgid "Nom, Model, statut et identité d'une Variation"
+msgstr ""
+
+#: ../../routes.md 0539025be06e4eab85a4a52541c1ed1a
+msgid "`POST /internal/catalog/ocr`"
+msgstr ""
+
+#: ../../routes.md 456c5ec13cbe4ecca6177d109a715309
+msgid "Met en file l'OCR d'une photo d'étiquette → `job_id`"
+msgstr ""
+
+#: ../../routes.md b3f1c276e584431eb486a5d147eed187
+#, python-brace-format
+msgid "`GET /internal/catalog/ocr/{job_id}`"
+msgstr ""
+
+#: ../../routes.md a2c3984480e34b75bf7b8dd7070b85ec
+msgid "État / résultat de l'OCR"
+msgstr ""
+
+#: ../../routes.md 400aef0bdd3d4a33ba487e0f66bfef52
+msgid "`POST /internal/catalog/suggest-reference`"
+msgstr ""
+
+#: ../../routes.md 2ca3ee382dcb47f68af43f0e829c40b4
+msgid "Suggestion de Référence variant (Variations existantes d'abord, IA)"
+msgstr ""
+
+#: ../../routes.md 6f9a3af2b041457ab7fa9068e2f6fa0a
+msgid ""
+"`POST /internal/catalog/brands`, `POST /internal/catalog/types`, `POST "
+"/internal/catalog/spec-types`"
+msgstr ""
+
+#: ../../routes.md affa8ace067643edb331cd2bcead10a8
+msgid ""
+"Crée une marque / un type / une clé de spécification confirmée comme "
+"nouvelle"
+msgstr ""
+
+#: ../../routes.md 502b4ded76d5484f9f24aee3379ab3f9
+msgid "`POST /internal/catalog/research`"
+msgstr ""
+
+#: ../../routes.md d4849a6cc44a495a9835f1691ba53d4f
+msgid "Met en file la recherche IA d'un produit → `job_id`"
+msgstr ""
+
+#: ../../routes.md b469463b476b4f6d9d29cdaf04c8d702
+#, python-brace-format
+msgid "`GET /internal/catalog/research/{job_id}`"
+msgstr ""
+
+#: ../../routes.md 2e0d85fc5c504b659590e40c8a629e00
+msgid "État / résultat de la recherche"
+msgstr ""
+
+#: ../../routes.md da290de65e3c4d7ba1040a1821c56a9c
+msgid "`GET /internal/catalog/review-queue`"
+msgstr ""
+
+#: ../../routes.md 078621466df142b3b1a234b1099f6d48
+msgid "Models à vérifier pour le site, plus urgents d'abord"
+msgstr ""
+
+#: ../../routes.md 2eb0441173cb444c916db419cb8cf3d5
+#, python-brace-format
+msgid "`GET /internal/catalog/models/{model_id}/sheet`"
+msgstr ""
+
+#: ../../routes.md 48dbdf7c3bcb4d19b04bd738b2b7c75d
+msgid "Fiche complète d'un Model pour la revue commerciale"
+msgstr ""
+
+#: ../../routes.md 89c204ae916b44f288447dace40d8bbc
+#, python-brace-format
+msgid "`PATCH /internal/catalog/models/{model_id}`"
+msgstr ""
+
+#: ../../routes.md d6e0261747864ec897ef23556d0738c0
+msgid "Corrige le Model (`changes` / `expected`)"
+msgstr ""
+
+#: ../../routes.md 0fc6a135168646f29b209ba9f77c5eb5
+#, python-brace-format
+msgid "`POST /internal/catalog/models/{model_id}/verify`"
+msgstr ""
+
+#: ../../routes.md c3e0b449deec450ba7edfadf48b4f99c
+msgid "Coche `Vérification pour site`, Variations `Vérifié`"
+msgstr ""
+
+#: ../../routes.md a4ffa5e6864b46f88eb783bc94195271
+#, python-brace-format
+msgid "`POST /internal/catalog/models/{model_id}/unverify`"
+msgstr ""
+
+#: ../../routes.md aeb7409beb7b43c5b6a65d1f5cd23653
+msgid "Remet le Model en revue"
+msgstr ""
+
+#: ../../routes.md 99a03b33d3ee47ebbe6f8b7d6b248750
+#, python-brace-format
+msgid "`POST /internal/catalog/models/{model_id}/pdf`"
+msgstr ""
+
+#: ../../routes.md 88a8fa37c4ac40c09e1073d9062c8ebb
+msgid "PDF commercial du Model, lu par l'IA → fiche proposée"
+msgstr ""
+
+#: ../../routes.md 20d38e5c25294ff4b820b90b10de5fa7
+#, python-brace-format
+msgid "`POST /internal/catalog/models/{model_id}/documents`"
+msgstr ""
+
+#: ../../routes.md 106ce7c887a5498383b917e8146a1754
+msgid "Ajoute un PDF par URL (documentation, manuels)"
+msgstr ""
+
+#: ../../routes.md 491cfe433faf4bbea569e0974b56aa90
+#, python-brace-format
+msgid "`POST /internal/catalog/models/{model_id}/variants`"
+msgstr ""
+
+#: ../../routes.md 635ebc939f554853a456d94681a197ec
+msgid "Crée une variante proposée"
+msgstr ""
+
+#: ../../routes.md 81146e3334a340d385d087de049b0047
+#, python-brace-format
+msgid "`POST /internal/catalog/variations/{variation_id}/specs`"
+msgstr ""
+
+#: ../../routes.md 83b94c1bed4440c78ecec502de579408
+msgid "Ajoute une spécification à une Variation"
+msgstr ""
+
+#: ../../routes.md e23cf0a380644f67b01000177ae9b81b
+#, python-brace-format
+msgid ""
+"`PATCH /internal/catalog/specs/{spec_id}`, `DELETE "
+"/internal/catalog/specs/{spec_id}`"
+msgstr ""
+
+#: ../../routes.md 309218a3c1254442904095b1f2c102ea
+msgid "Modifie / supprime une spécification"
+msgstr ""
+
+#: ../../routes.md d3c4280428474ea1a4dc2ee477405b9c
+msgid "`POST /internal/catalog/describe`"
+msgstr ""
+
+#: ../../routes.md df09142652184f9b8df39fa8ebb394f7
+msgid "Réécriture IA des descriptions (proposition, rien n'est écrit)"
+msgstr ""
+
+#: ../../routes.md b5d0992ad9ad49ca830165ac8dfae236
+msgid "`POST /internal/catalog/documents/search`"
+msgstr ""
+
+#: ../../routes.md bc57e232786248548030e3e5c5be3850
+msgid "Met en file la recherche web IA des PDF d'un modèle → `job_id`"
+msgstr ""
+
+#: ../../routes.md d0af8b5f0e8f4e3cafee9ce935cbe117
+#, python-brace-format
+msgid "`GET /internal/catalog/documents/search/{job_id}`"
+msgstr ""
+
+#: ../../routes.md f9d13c1655d948b1b537a6519044a78d
+msgid "État / documents trouvés"
+msgstr ""
+
+#: ../../routes.md:593 2d46c8f8c73647f2971bc93bd6d7024e
+msgid "IA (`/internal/ai/*`)"
+msgstr ""
+
+#: ../../routes.md:595 688ce1c76ead495b8ad994824ac90e0f
+msgid ""
+"Réglages et suivi du service IA central (`api/services/ai/`, voir "
+"[catalog_intake](./catalog_intake.md))."
+msgstr ""
+
+#: ../../routes.md e5047a756a9a4dd09960c1f138fb876d
+msgid "`GET /internal/ai/settings`"
+msgstr ""
+
+#: ../../routes.md 3b2c903380394724865c0c4eb09af2e9
+msgid "Réglages, fournisseurs configurés, fonctions et catalogue de prix"
+msgstr ""
+
+#: ../../routes.md ce593a71e07e4db88ba89f33841eaa63
+msgid "`PUT /internal/ai/settings`"
+msgstr ""
+
+#: ../../routes.md b37451755f0745249fb7b1df1e4d6fed
+msgid "Modifie les réglages (`422` si champ inconnu ou ID invalide)"
+msgstr ""
+
+#: ../../routes.md d588099d0355445dbd773b84d7a19f69
+msgid "`POST /internal/ai/models/test`"
+msgstr ""
+
+#: ../../routes.md 336380ade19245f48005e012a1e2ba76
+msgid "Petite requête réelle avec un modèle IA"
+msgstr ""
+
+#: ../../routes.md b7020aaa5f0241c7966266651f2078a6
+msgid "`GET /internal/ai/usage?days=`"
+msgstr ""
+
+#: ../../routes.md 2f2c9324b4f549f1bd9c52c2380686c2
+msgid "Consommation par fonction, fournisseur et jour (défaut 30, max 365)"
+msgstr ""
+
+#: ../../routes.md 992e110705e54296b91a308eef9813cd
+msgid "`GET /internal/ai/calls?limit=&feature=`"
+msgstr ""
+
+#: ../../routes.md ee1b717124164036855cb37a5a6b6c71
+msgid "Derniers appels IA (défaut 50, max 500)"
+msgstr ""
+
+#: ../../routes.md 8c1e1a3a67c946cf919ddec6c686da27
+msgid "`POST /internal/ai/feedback`"
+msgstr ""
+
+#: ../../routes.md d269ca66efb54a71bca8f20ab2b8a8bf
+msgid ""
+"Retour sur un résultat (`call_id`, `outcome`, `detail`) ; `404` si appel "
+"inconnu"
+msgstr ""
+
+#: ../../routes.md:609 ab70dea2aac0400eaae39c87a043bed8
+msgid "Résumé des règles"
+msgstr ""
+
+#: ../../routes.md 964112a86b254f689bb508399db8a31f
+msgid "Token requis"
+msgstr ""
+
+#: ../../routes.md 31ce1b3d33634e6a99d97c8bcf77d3ae
+msgid "Origin/Referer requis"
+msgstr ""
+
+#: ../../routes.md 6cbf6635e1164f50aae62ef16ab1ed63
+msgid "`/health/`, `/metrics`"
+msgstr ""
+
+#: ../../routes.md 0072eaf5609d4e9dbc0cdcbda72609ef
+#: 0c9ca37e7e1749348fa0c28b3ed17ad5 48704615732c4b559ca06d7297cd1c11
+#: 799cd8ecf3ee48a7af2c11649eab2219 d1318d619c3245c4b7c2d12d1120c4f1
+#: f6132a7ba7764a369eee3ed40421f07f
+msgid "❌ Non"
+msgstr ""
+
+#: ../../routes.md 72ba18657773425891c30319fe1290f3
+#, python-brace-format
+msgid "`/invoice/get`, `/pdf/{filename}`, `/formulaire/photos/*`"
+msgstr ""
+
+#: ../../routes.md 7820671c68424fa99953f74095a2c2b4
+msgid "`/hellopro/*`"
+msgstr ""
+
+#: ../../routes.md 5b0d1ef8426a487d95469eb214694252
+msgid "✅ Oui (`HELLOPRO_TOKEN`)"
+msgstr ""
+
+#: ../../routes.md b5bdb580eef74efa8ef4c483ca832b44
+msgid "`/machinio/*`"
+msgstr ""
+
+#: ../../routes.md 6d937f197ae14985adb6f6869ae5af0b
+msgid "✅ Oui (`MACHINIO_TOKEN`)"
+msgstr ""
+
+#: ../../routes.md c41096e0275946a596f7721bb5f104d5
+msgid "`/internal/*`"
+msgstr ""
+
+#: ../../routes.md cc1eb01d63df4103be35857e3cf75a67
+msgid "✅ Oui (`APP_TOKEN`)"
+msgstr ""
+
+#: ../../routes.md 50d4345204fc48e5b7644096f7c89c21
+msgid "✅ Oui"
+msgstr ""
+
+#: ../../routes.md a912ab99cfa640009bde699466a873f5
+msgid "`/internal/scripts/*`"
+msgstr ""
+
+#: ../../routes.md 4007aa447dde4da89099f0a52152c29b
+msgid "✅ Oui (`APP_TOKEN` ou `AIRTABLE_AUTOMATION_TOKEN`)"
+msgstr ""
+
+#: ../../routes.md 9f3fc6f649fa4885b4b54da57d59eb17
+msgid "✅ Oui avec `APP_TOKEN`, ❌ Non avec `AIRTABLE_AUTOMATION_TOKEN`"
+msgstr ""
+
+#: ../../routes.md:620 d6aeabf87b1c4aa08779432c9e32d714
+msgid ""
+"`ADMIN_TOKEN` donne accès à toutes les routes protégées, sans "
+"vérification d'origine."
+msgstr ""
+

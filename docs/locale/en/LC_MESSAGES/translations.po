@@ -1,0 +1,66 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Rewake
+# This file is distributed under the same license as the Rewake API package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Rewake API \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-15 11:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../translations.rst:2 a061000d20ed42beb0af433ceff8a1f3
+msgid "Translations and publishing"
+msgstr ""
+
+#: ../../translations.rst:4 5c00a930958548dfb226efde3b1237e8
+msgid ""
+"The documentation is published as two static Sphinx builds under ``/en/``"
+" and ``/fr/`` in the public `RewakeDevelopmentDocumentation repository "
+"<https://github.com/techRewake/RewakeDevelopmentDocumentation>`_. The "
+"root page links to both languages. The generated site includes HTML and "
+"the assets Sphinx needs to render it."
+msgstr ""
+
+#: ../../translations.rst:10 2271c8aa3ce849758bda76b9e30bf505
+msgid ""
+"Translations use Sphinx gettext catalogs in ``docs/locale/<language>/``. "
+"The source pages currently mix English and French. Each language catalog "
+"translates pages written in the other language; untranslated text falls "
+"back to its source language until its catalog is completed."
+msgstr ""
+
+#: ../../translations.rst:15 9843c43ff59e4e81a8c0040d20e8ba61
+msgid ""
+"To refresh the translation templates and create or update the French "
+"catalogs:"
+msgstr ""
+
+#: ../../translations.rst:22 55b833c0af574362b31712acfebf33e3
+msgid ""
+"Translate the ``msgstr`` values in the relevant "
+"``docs/locale/<language>/`` catalogs while preserving Sphinx roles, "
+"references, code, and markup. Build either language locally with:"
+msgstr ""
+
+#: ../../translations.rst:31 41f120ca63e943448f3d4d10ca1d745d
+msgid ""
+"The ``Publish documentation`` GitHub Actions workflow builds both "
+"languages on pushes to ``main`` that affect the docs, then publishes the "
+"generated site to the public repository. It needs a ``DOCS_DEPLOY_TOKEN``"
+" Actions secret in the source repository. Create a fine-grained personal "
+"access token with Contents: Read and write access to "
+"``techRewake/RewakeDevelopmentDocumentation``, then add it as that "
+"secret. The workflow can also be started manually from the Actions tab."
+msgstr ""
+

@@ -1,0 +1,261 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Rewake
+# This file is distributed under the same license as the Rewake API package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Rewake API \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-15 11:41+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../authentication.md:1 43a2ea619f96488d929b73c7a3927598
+msgid "Authentification"
+msgstr ""
+
+#: ../../authentication.md:3 3bbc73744d034f649e5c9335b588afa6
+msgid ""
+"Le système d'authentification de l'API Rewake repose sur des **tokens "
+"Bearer** et une vérification optionnelle de l'origine/referer."
+msgstr ""
+
+#: ../../authentication.md:7 0fdc609d0a4f43f6b51ef245d84ad48b
+msgid "Tokens"
+msgstr ""
+
+#: ../../authentication.md ee5353cd7bb549209fe76242ef4b7927
+msgid "Token"
+msgstr ""
+
+#: ../../authentication.md a5add9f29a5942868b77834ba6481860
+msgid "Description"
+msgstr ""
+
+#: ../../authentication.md 2f368dbfb7644207aa8c6b0ab7bf8b34
+msgid "Accès"
+msgstr ""
+
+#: ../../authentication.md 1bf250270a62438ab722df064640a2e9
+msgid "`ADMIN_TOKEN`"
+msgstr ""
+
+#: ../../authentication.md 6dff9493c922485fa3c1b0a136ecd729
+msgid "Token administrateur"
+msgstr ""
+
+#: ../../authentication.md d7155ca97fd84c419e19281a3cb88a7f
+msgid "**Toutes les routes**, contourne la vérification d'origine"
+msgstr ""
+
+#: ../../authentication.md c52d752938f749f1989fb73f50a75bed
+msgid "`HELLOPRO_TOKEN`"
+msgstr ""
+
+#: ../../authentication.md 3242108a545d497d8b6e40ac9cd03ebc
+msgid "Token dédié HelloPro"
+msgstr ""
+
+#: ../../authentication.md b7f27d2beffe45a6be5f6c7a02a18cdc
+msgid "Routes `/hellopro/*` uniquement"
+msgstr ""
+
+#: ../../authentication.md dfd77c891f5b4869bfcab3ad185344fd
+msgid "`MACHINIO_TOKEN`"
+msgstr ""
+
+#: ../../authentication.md d043e50762e4468b80f888d47cc0ec70
+msgid "Token dédié Machinio"
+msgstr ""
+
+#: ../../authentication.md d2935b7bfd164e14acec48abbe88cb7e
+msgid "Routes `/machinio/*` uniquement"
+msgstr ""
+
+#: ../../authentication.md e8cd8b58661642df956621306c0aa5fb
+msgid "`APP_TOKEN`"
+msgstr ""
+
+#: ../../authentication.md 73e8380686a543188586c87879f9792a
+msgid "Token dédié à l'app interne"
+msgstr ""
+
+#: ../../authentication.md 3dd95a4d834c487fab078720725a4967
+msgid "Routes `/internal/*` uniquement"
+msgstr ""
+
+#: ../../authentication.md 90207ad1bd9a4f688d3658acd81c1205
+msgid "`AIRTABLE_AUTOMATION_TOKEN`"
+msgstr ""
+
+#: ../../authentication.md 9525de42327c444e8038c5c15677e461
+msgid ""
+"Token envoyé par les automatisations Airtable (≠ `AIRTABLE_TOKEN`, que "
+"l'API envoie à Airtable)"
+msgstr ""
+
+#: ../../authentication.md d523cc66a6114af5b78645d3a489acb2
+msgid "Routes `/internal/scripts/*` uniquement"
+msgstr ""
+
+#: ../../authentication.md:17 e3ad25a5f36742d1bfe5dda566475739
+msgid ""
+"[!WARNING]  Les tokens doivent être définis dans `.env` et **ne jamais "
+"être commités**."
+msgstr ""
+
+#: ../../authentication.md:22 a1dc99c217b94cf08aaa8059fb1f302d
+msgid "Origines autorisées"
+msgstr ""
+
+#: ../../authentication.md:24 cd07dcf0b98d424d910bf406fbae6de1
+msgid ""
+"L'API accepte les requêtes provenant des domaines suivants (quand la "
+"vérification de domaine est activée, via l'en-tête `Origin` **ou** "
+"`Referer` ; `ALLOWED_ORIGINS` dans `api/utils/auth.py`) :"
+msgstr ""
+
+#: ../../authentication.md:26 4e75e239315e45a9ab509ef1de60406a
+msgid "`https://app.rewake.fr`"
+msgstr ""
+
+#: ../../authentication.md:27 12c3a2f4a4f24754a2c4d01489662c5e
+msgid "`https://sav.rewake.fr`"
+msgstr ""
+
+#: ../../authentication.md:28 3b7f3011ae4c4c6897376f9d49949ce5
+msgid "`https://info.rewake.fr`"
+msgstr ""
+
+#: ../../authentication.md:30 4fea7d4893c146b68f750462d50a9203
+msgid ""
+"Le CORS (`api/main.py`) n'autorise en revanche que `app.rewake.fr` et "
+"`sav.rewake.fr`."
+msgstr ""
+
+#: ../../authentication.md:32 659cc8a44fb040e29ba8a4a8f38ad67a
+#, python-brace-format
+msgid ""
+"Les routes publiques (`/health/`, `/metrics`, `/invoice/get`, "
+"`/pdf/{filename}`, `/formulaire/photos/*`) ne demandent ni token ni "
+"origine (voir [routes](./routes.md))."
+msgstr ""
+
+#: ../../authentication.md:37 3b4dbd93c65b433d9608884ce1868d17
+msgid "Logique de vérification"
+msgstr ""
+
+#: ../../authentication.md:39 3b03baf6d43c4b909e52cb9c761a094d
+msgid "Avec `ADMIN_TOKEN`"
+msgstr ""
+
+#: ../../authentication.md:40 1d88946e021d463f9a550252c93f0559
+msgid ""
+"Accès **automatique** à toutes les routes, **sans vérification "
+"d'origine/referer**."
+msgstr ""
+
+#: ../../authentication.md:42 6d561f7a98fc4c4ebdc273d950906082
+msgid "Règles par route"
+msgstr ""
+
+#: ../../authentication.md f61a420b300e40c9a2abf526ac178fdd
+msgid "Route"
+msgstr ""
+
+#: ../../authentication.md 2b97977c12be4d78b44a573bb50e7bdb
+msgid "Vérification d'origine"
+msgstr ""
+
+#: ../../authentication.md 0071e740d6c642e798732873df179c77
+msgid "`/hellopro/*`"
+msgstr ""
+
+#: ../../authentication.md 96a0982528ec4dc9b6509f2772d8b5a3
+msgid "❌ Non (seulement `HELLOPRO_TOKEN` requis)"
+msgstr ""
+
+#: ../../authentication.md c482ea87186d4edfb4fea1d31da5c61a
+msgid "`/machinio/*`"
+msgstr ""
+
+#: ../../authentication.md 91bf3e1eb56548e1a2c6d79bff5eaa98
+msgid "❌ Non (seulement `MACHINIO_TOKEN` requis)"
+msgstr ""
+
+#: ../../authentication.md e0f6ecbe9ba444e7b7d1e7f9f2b8cea4
+msgid "`/internal/*`"
+msgstr ""
+
+#: ../../authentication.md cbef8c7a228c48d990d16f213431c249
+msgid "✅ Oui (`APP_TOKEN` **ET** origine/referer valide)"
+msgstr ""
+
+#: ../../authentication.md 800063bf2c5e4291a5446d86808dea04
+msgid "`/internal/scripts/*`"
+msgstr ""
+
+#: ../../authentication.md 9aad44034db64c19bd96b41bfeb2ecaf
+msgid "✅ Oui avec `APP_TOKEN`, ❌ Non avec `AIRTABLE_AUTOMATION_TOKEN`"
+msgstr ""
+
+#: ../../authentication.md:51 c9fc451b4cb24ad38dfc9fa735847d65
+msgid ""
+"[!IMPORTANT]  `ADMIN_TOKEN` contourne toujours la vérification d'origine "
+"sur toutes les routes."
+msgstr ""
+
+#: ../../authentication.md:54 1c71abce49d94566807ad22112e8321a
+msgid ""
+"Quand l'origine est vérifiée, elle l'est **avant** le token : une requête"
+" sans origine valide reçoit `403 Accès interdit: domaine invalide`, quel "
+"que soit le token ; avec une origine valide mais un mauvais token, `403 "
+"Accès interdit: token invalide`. Si la variable d'environnement d'un "
+"token n'est pas définie, seul `ADMIN_TOKEN` ouvre les routes "
+"correspondantes."
+msgstr ""
+
+#: ../../authentication.md:62 db96c4d0ec2b4e8391da8ad8091f0ae8
+msgid "Exemples de requêtes"
+msgstr ""
+
+#: ../../authentication.md:64 948a5dfd633c4a538c57d1a80870cb7e
+msgid "Token seul (ADMIN_TOKEN)"
+msgstr ""
+
+#: ../../authentication.md:71 8814014912d144f1ada93f90a4b2afba
+msgid "APP_TOKEN + Origin"
+msgstr ""
+
+#: ../../authentication.md:79 c43b30b652644e319e25acf9f278f9c3
+msgid "APP_TOKEN sans Origin"
+msgstr ""
+
+#: ../../authentication.md:86 0bebbf69c0244637a9e5ab2d9698c9ca
+msgid "HELLOPRO_TOKEN (pas de vérification d'origine)"
+msgstr ""
+
+#: ../../authentication.md:93 e74c31b274c8452c9cfac55b13e6a628
+msgid "Automatisation Airtable (AIRTABLE_AUTOMATION_TOKEN)"
+msgstr ""
+
+#: ../../authentication.md:94 51d4d183904c43488cc184b00a1777ef
+msgid ""
+"Les automatisations Airtable tournent sur les serveurs d'Airtable, sans "
+"`Origin`/`Referer` rewake.fr : ce token n'a donc pas de vérification "
+"d'origine, mais n'ouvre que `/internal/scripts/*`."
+msgstr ""
+
+#: ../../authentication.md:107 6eb1a0efcfbe40eda3cbab5981e918a5
+msgid "Origin sans Token"
+msgstr ""
+

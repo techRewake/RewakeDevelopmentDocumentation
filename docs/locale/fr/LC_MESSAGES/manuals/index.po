@@ -1,0 +1,68 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Rewake
+# This file is distributed under the same license as the Rewake API package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Rewake API \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-15 11:41+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../manuals/index.md:1 be7a29a4847548d8aea577f7bdc71420
+msgid "Manuels"
+msgstr ""
+
+#: ../../manuals/index.md:3 276150edf5024726a3d3a31478ed84f2
+msgid ""
+"Guides d'utilisation des outils Rewake, écrits pour les équipes qui s'en "
+"servent au quotidien (pas pour les développeurs : le reste de cette "
+"documentation est technique)."
+msgstr ""
+
+#: ../../manuals/index.md 6ae6e19cae894f44a1756467b5d334a3
+msgid "Manuel"
+msgstr ""
+
+#: ../../manuals/index.md be43c893fa074e50b25b07827918a0f8
+msgid "Pour qui"
+msgstr ""
+
+#: ../../manuals/index.md cf8087c546b74008b44a0bd417f6dc57
+msgid "Contenu"
+msgstr ""
+
+#: ../../manuals/index.md 03666b8e319c468b8fee9acd45e8b9a1
+msgid "[Réception produits](./reception-produits.md)"
+msgstr ""
+
+#: ../../manuals/index.md f0a7adac0aae4eb8b428e5b1ccbc63a7
+msgid "Équipe opérations"
+msgstr ""
+
+#: ../../manuals/index.md 0af7f4429bd44973b856207685c69f3d
+msgid ""
+"Réceptionner une reprise produit par produit dans l'intranet "
+"(`app.rewake.fr`) : photos, n° de série, marque et modèle, mesures, état,"
+" accessoires ; chaque produit complet part dans Airtable, puis fin de "
+"réception."
+msgstr ""
+
+#: ../../manuals/index.md:11 139475fa90824a28a115796135579f49
+msgid ""
+"Les images de chaque manuel sont dans `docs/manuals/images/<manuel>/` ; "
+"tant qu'une capture n'est pas fournie, une image provisoire grise indique"
+" son numéro et ce qu'elle doit montrer. Une capture marquée « ancienne "
+"interface » montre une version précédente de l'écran : le texte fait foi."
+msgstr ""
+

@@ -1,0 +1,865 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Rewake
+# This file is distributed under the same license as the Rewake API package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Rewake API \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-15 11:41+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../update_product.md:1 57070c4d3e1048fab327e0e843627e5f
+msgid "Update Product"
+msgstr ""
+
+#: ../../update_product.md:3 ab39f778779c4d7e863a2300417a3e7e
+msgid ""
+"<img src=\"https://cdn.simpleicons.org/airtable\" alt=\"Airtable\" "
+"width=\"28\" height=\"28\"> <img "
+"src=\"https://cdn.simpleicons.org/shopify\" alt=\"Shopify\" width=\"28\" "
+"height=\"28\">"
+msgstr ""
+
+#: ../../update_product.md 7bcf9632a79249728b553685ba706159
+msgid "**Module**"
+msgstr ""
+
+#: ../../update_product.md 54ed9e2545e84f65b4b3f6c8f9f622bb
+msgid "`api.scripts.update_product`"
+msgstr ""
+
+#: ../../update_product.md 2bcc0266b4c14e8d9dc2ffd4c77fd4e5
+msgid "**Schedule**"
+msgstr ""
+
+#: ../../update_product.md c1970a435678498cb20373c1866f3364
+msgid ""
+"on-demand only (`schedule = None`) -- requires exactly one of `record_id`"
+" (a Variation) or `model_id` (a Model)"
+msgstr ""
+
+#: ../../update_product.md 1126cbdbf8c745859de821f739e5849d
+msgid "**Reads**"
+msgstr ""
+
+#: ../../update_product.md f130e053905247ca954aa2e13cb9565e
+msgid ""
+"Airtable (Model, Variation, Toutes les unités, Annonces Shopify, Type "
+"d'équipement, Marque, Familles, Specification) + the live Shopify product"
+msgstr ""
+
+#: ../../update_product.md 9d04d582d26b4b35b4cdd10bef26df01
+msgid "**Requires**"
+msgstr ""
+
+#: ../../update_product.md 877b8d926e7643949a93c7bcca6caa0f
+msgid ""
+"Airtable + Shopify settings and `SHOPIFY_LOCATION_ID`, otherwise the run "
+"is recorded as `skipped`"
+msgstr ""
+
+#: ../../update_product.md aa1da1850073456a8c1c1cd43975e58c
+msgid "**Writes**"
+msgstr ""
+
+#: ../../update_product.md 1f7207d2e3e644faad7d69193e645b28
+msgid ""
+"**Shopify** -- the other script here that writes anything, alongside "
+"`create_product_shopify` (which creates a brand-new listing; this one "
+"only ever updates one that already exists, or deletes it when "
+"`to_sell_on_shopify` is \"Non\") -- and deletes the \"Annonces Shopify\" "
+"record in that case"
+msgstr ""
+
+#: ../../update_product.md ced1bf8ab38a459595f35f09ac6356d3
+msgid "**Origin**"
+msgstr ""
+
+#: ../../update_product.md a770a644f8b943ad89221090d62e10ba
+msgid ""
+"ported in-process from a sibling project (`Update-Product`, a separate "
+"git repository) that this script previously shelled out to as a "
+"subprocess -- see \"Deliberate deviations\" below"
+msgstr ""
+
+#: ../../update_product.md:14 eb8fc1d6a9f549dd816f0570290b1d9a
+msgid "What it does"
+msgstr ""
+
+#: ../../update_product.md:16 8ff71c594fe94ebf814a6e8e28877615
+msgid ""
+"Syncs an existing Shopify product from Airtable. **Airtable is the source"
+" of truth** for everything it writes:"
+msgstr ""
+
+#: ../../update_product.md:19 d38d52a500464ea8ab4d5f5eadcd46b4
+msgid ""
+"**Product:** title (`Name`), description (`Short description`), vendor "
+"(`Marque`, or `Sans marque`), product type (the Type's `Name`), and "
+"status (the linked \"Annonces Shopify\" record's `Status`: "
+"`active`/`draft`/`archived`/`unlisted`, case ignored; left as is when "
+"empty, a failure when it's anything else). An empty Airtable value never "
+"clears a Shopify field."
+msgstr ""
+
+#: ../../update_product.md:24 69fa9d7dbd7e4458afe395a18b778387
+msgid ""
+"**Metafields:** the same set `create_product_shopify` writes -- "
+"`long_description`, `reconditionnement`, `livraison`, `garantie`, "
+"`main_table` -- plus the family \"filter\" metafields "
+"(`FAMILY_FILTER_METAFIELDS`, currently only `Balances`). A filter spec "
+"Airtable doesn't have is listed in `details.filter_specs_missing` (no "
+"alert email -- this script runs on every stock change)."
+msgstr ""
+
+#: ../../update_product.md:29 f1188b8362c6498b9d820f29e0955acd
+msgid ""
+"**Images:** the Model's `Photo neuve`, then the `Photos marketplace` of "
+"its first sellable unit that has any -- the same images "
+"`create_product_shopify` uploads (see \"Images\" below)."
+msgstr ""
+
+#: ../../update_product.md:32 5928c89de375420e9b11340b91e6087a
+msgid "**Documentation PDF:** see below."
+msgstr ""
+
+#: ../../update_product.md:33 4b6c229bf98840be94059402af401ee8
+msgid ""
+"**Options and variants:** the product is reconciled to Airtable, never "
+"just patched. Options: \"État esthétique\", plus the size option (the "
+"Variation's `Variant_value`; label from the Type, see "
+"`_variant_option_name`) whenever *any* of the Model's Variations has a "
+"`Variant_value` -- with or without stock right now, since that's what "
+"reconciliation matches a variant against. Variants: exactly one per "
+"sellable (condition[, variant value]) combination, with Airtable's price,"
+" weight and stock -- a missing one is **created**, one with nothing left "
+"to sell is **deleted**. When the options change (e.g. a product created "
+"without the size option), every variant is recreated under the new "
+"options. Shopify requires at least one variant, so when the whole Model "
+"has nothing left to sell, the existing variants are kept and **set to a "
+"zero stock**."
+msgstr ""
+
+#: ../../update_product.md:45 0d277b3f03664134855b3d07f2cd5b56
+msgid ""
+"When the Model's `to_sell_on_shopify` is **\"Non\"**, the run instead "
+"**deletes the Shopify product and its \"Annonces Shopify\" record** "
+"(every linked one). A product already gone from Shopify (404) still has "
+"its listing deleted; any other Shopify error stops before the listing is "
+"deleted, so a retry still knows what to delete. An empty (or "
+"unrecognized) `to_sell_on_shopify` is a failure -- deleting a live "
+"product over an unfilled field would be too destructive a guess. Accepted"
+" values: \"Oui\"/\"Non\" (or booleans)."
+msgstr ""
+
+#: ../../update_product.md:53 a38279bff330415987fe79b793ad0b1c
+msgid "Two entry modes, both real (nothing here previews or dry-runs):"
+msgstr ""
+
+#: ../../update_product.md:55 8d9b41c8a1db4bf98ab56b161b945a07
+msgid ""
+"**`record_id`** (a Variation id, the default/existing convention): "
+"resolves that Variation's parent Model, then updates the whole product. "
+"Shopify variants all belong to one product per Model anyway, so \"update "
+"one variation\" and \"update its model\" converge on the same write."
+msgstr ""
+
+#: ../../update_product.md:59 bd639f3fa72d4f36b06ea5459694b3c6
+msgid ""
+"**`model_id`**: the identical pipeline, entered directly from a Model id "
+"-- what the Airtable automations use (see \"Triggering from Airtable\")."
+msgstr ""
+
+#: ../../update_product.md:62 a51990c79daa44638c752557bfaecaef
+msgid ""
+"Nothing here creates a brand-new Shopify listing -- see "
+"`create_product_shopify` for that. A Model with no Shopify product yet "
+"(`Aucun produit Shopify associé à ce modèle`) is a validation failure "
+"here, not something this script will fix."
+msgstr ""
+
+#: ../../update_product.md:66 516dc4b1715f4fcab87ced948407bd99
+msgid ""
+"Like `create_product_shopify` (same `_collect_sellable_units`), it fails "
+"before any Shopify write when a sellable unit (A vendre, not Abimé/Très "
+"abimé) has a `Prix de vente HT` of 0, empty or invalid. The run history "
+"links to that unit."
+msgstr ""
+
+#: ../../update_product.md:70 4344dfcf379f4c95bbfe9dbbec93b564
+msgid "Triggering from Airtable"
+msgstr ""
+
+#: ../../update_product.md:72 e9d125c312c7435a8e2f1b23da98f8ec
+msgid ""
+"The four automations that used to call the queue manager (\"Update fiche "
+"shopify (vendus)\", \"(Pas a vendre)\", \"(modifs)\", \"Update quantité "
+"shopify (entry)\") all run the same script (\"Run script\" action, input "
+"`model_id` = the Model's record id), with `AIRTABLE_AUTOMATION_TOKEN`:"
+msgstr ""
+
+#: ../../update_product.md:97 83c05398f9aa440aaa193b0f2c22001f
+msgid ""
+"The response only confirms the run was queued; its outcome is in `GET "
+"/internal/scripts/update_product/runs` (and the alert email on failure)."
+msgstr ""
+
+#: ../../update_product.md:100 13c4c81358f349608738042c68116494
+msgid "Images"
+msgstr ""
+
+#: ../../update_product.md:102 d34db622ed454e6594f75e5567857335
+msgid ""
+"**Source:** the Model's `Photo neuve` (all of them; missing, or any under"
+" 300x300px, is a failure), then the `Photos marketplace` of the first "
+"sellable unit that has any (under 300x300px or duplicating a `Photo "
+"neuve` url: skipped) -- shared with `create_product_shopify` via "
+"`_marketplace_photo_attachments`."
+msgstr ""
+
+#: ../../update_product.md:106 36fa965214c3484c89b2f530e7f0a711
+msgid ""
+"**Change detection:** the Airtable attachment ids the Shopify images came"
+" from are recorded, in order, in the `custom.images_airtable_ids` "
+"metafield. Images are replaced only when that differs from Airtable's "
+"current list, or when Shopify's image count no longer matches. A product "
+"whose images predate this (no recorded ids) has them replaced once."
+msgstr ""
+
+#: ../../update_product.md:111 fcd58da379d74f87b3eb8d9d19e24aa4
+msgid ""
+"**Replacement:** new images are uploaded first (in order, with their "
+"position); the old ones are deleted only once every upload worked. A "
+"failed upload deletes what it added and leaves the old images in place."
+msgstr ""
+
+#: ../../update_product.md:114 e68b583bc8ee4c0ab2beb8dd7cbf2183
+msgid ""
+"**Worth knowing:** the marketplace photos follow the *first sellable* "
+"unit -- when that unit is sold, the next one's photos replace them on the"
+" next update."
+msgstr ""
+
+#: ../../update_product.md:117 5fe019cea07a45afab9eabe8d4b081d4
+msgid "Documentation PDF"
+msgstr ""
+
+#: ../../update_product.md:119 659ce7ceffb74b28be5a668c5bfb67a6
+msgid ""
+"Shared with `create_product_shopify` via "
+"`api/scripts/_product_documentation.py` (upload through "
+"`api/integrations/shopify_files.py`, GraphQL)."
+msgstr ""
+
+#: ../../update_product.md:122 62b1259380484fdb973cb904f42ef3aa
+msgid ""
+"**Source:** the Model's Airtable `Documentation` attachment field -- the "
+"first attachment that is a PDF (MIME type, or a `.pdf` filename). Other "
+"attachments are ignored."
+msgstr ""
+
+#: ../../update_product.md:124 0b8be7a18fb24444ab72d710f9f90b91
+msgid ""
+"**Target:** the product metafield "
+"`SHOPIFY_PDF_METAFIELD_NAMESPACE`.`SHOPIFY_PDF_METAFIELD_KEY` (default "
+"`custom.pdf_descriptif`, the \"PDF Descriptif\" definition), type "
+"`file_reference`, plus a companion `single_line_text_field` "
+"(`custom.pdf_descriptif_airtable_id` by default) recording the Airtable "
+"attachment id the Shopify file came from."
+msgstr ""
+
+#: ../../update_product.md:128 75b8608ca777445290fa03b53cd2d9eb
+msgid ""
+"**Upload:** the PDF is downloaded from Airtable (signed url, fetched "
+"fresh with the record) and sent through Shopify's staged upload -> "
+"`fileCreate` -> poll until `READY` -> `metafieldsSet` (both metafields in"
+" one atomic call)."
+msgstr ""
+
+#: ../../update_product.md:131 82f603363add41e499f0d95448aa28e8
+msgid ""
+"**Change detection:** same \"diff against live Shopify\" approach as the "
+"rest of `update_product` -- no extra state store (the two metafields are "
+"read through GraphQL first). Upload when Shopify has no PDF, or when the "
+"recorded source id differs from Airtable's current attachment id "
+"(Airtable gives a replaced file a new id). A Shopify PDF set by hand "
+"before this sync existed has no source id, so it is replaced once by "
+"Airtable's, then stays stable."
+msgstr ""
+
+#: ../../update_product.md:137 dcc02db867464f72ad08a3faa0664561
+msgid ""
+"**Never clears:** an empty Airtable field writes nothing "
+"(`documentation_status: \"absent\"`) -- there's no deletion-sync "
+"convention in this project."
+msgstr ""
+
+#: ../../update_product.md:139 cd2317356207415caabc28aca700c772
+msgid ""
+"**Size limit:** a PDF over Shopify's 20 MB limit is first compressed with"
+" Ghostscript (`api/utils/pdf_compression.py`); if it's still too big, the"
+" sync fails with both sizes in the message (the Airtable original is "
+"never modified)."
+msgstr ""
+
+#: ../../update_product.md:142 943e63875aab47eab4862100d95d21f3
+msgid ""
+"The replaced Shopify file is not deleted from the Files library (it may "
+"be referenced elsewhere)."
+msgstr ""
+
+#: ../../update_product.md:144 b06d75f886564bb1ba6845aa778cce6d
+msgid ""
+"**Scopes:** the Shopify app needs `write_files` and `read_files` "
+"(confirmed missing on the RewakeDev token on 2026-09-28 -- `fileCreate` "
+"answers ACCESS_DENIED without them)."
+msgstr ""
+
+#: ../../update_product.md:146 151423eb6e9a466f8087a43b708e1c44
+msgid ""
+"**Failure handling:** runs inside the per-Model lock, after variants. A "
+"failed upload doesn't stop the rest of the sync, but turns the run into a"
+" `failure` afterwards (same rule as a failed variant creation: it's what "
+"reconciliation's documentation bulk action runs this script for)."
+msgstr ""
+
+#: ../../update_product.md:151 87bf1817cd7346f7beaee0e00840d5b8
+msgid "Locking: runs for one Model never overlap, and never get dropped"
+msgstr ""
+
+#: ../../update_product.md:153 80ad1a5642184565921bc69d28e971ba
+msgid ""
+"The per-`record_id` Redis lock in `api/tasks.py` (shared by every script)"
+" guards the outer request layer -- keyed by whatever the caller passed in"
+" as `record_id`. `update_product` sets `requeue_when_locked`, so a run "
+"that finds it held is put back on the queue instead of being skipped."
+msgstr ""
+
+#: ../../update_product.md:157 d11b47b5a94c4325bd9525630e48f988
+msgid ""
+"A second lock, acquired inside `run()` once the Model is resolved, keyed "
+"by the Model id (`RunStore.acquire_lock(\"update_product_model\", "
+"model_id)`, the `SHOPIFY_MODEL_LOCK_NAME` of "
+"`api/scripts/_shopify_links.py`) -- the one that actually matters, since "
+"a Variation id and a Model id (or two Variations of one Model) resolve to"
+" the same Shopify product. `create_product_shopify` takes the same lock, "
+"so an update never runs while the product is still being created. A run "
+"that finds it held raises `RequeueLater`, and `api/tasks.py` puts it back"
+" on the queue (5s countdown, up to `REQUEUE_MAX_RETRIES` = 120 times, "
+"then a `failure` run is recorded)."
+msgstr ""
+
+#: ../../update_product.md:166 8f832500d53e4053904b103d7b6194a8
+msgid ""
+"Every Airtable read happens after the Model lock is acquired, with a "
+"fresh cache -- a run that waited its turn syncs Airtable's *latest* "
+"state, not what it saw when it was triggered. A waiting run isn't "
+"recorded in the run history; only the run that actually happens is."
+msgstr ""
+
+#: ../../update_product.md:171 184b5b76bcee4d5da1d85b5b61ac54e8
+msgid "Data it touches"
+msgstr ""
+
+#: ../../update_product.md:191 b099ee03b729441cbbc7c2584cb625d7
+msgid "How it works"
+msgstr ""
+
+#: ../../update_product.md:193 af89a5156c474363949e0c4b84feee80
+msgid ""
+"Resolve the Model: `record_id` mode verifies the id really belongs to the"
+" `Variation` table (Airtable's single-record GET doesn't validate that --"
+" see `_assert_belongs_to_table`), then reads its `Model` link field; "
+"`model_id` mode verifies the id belongs to `Model` directly."
+msgstr ""
+
+#: ../../update_product.md:197 9699c1cc9a5a4f2584ea47638a970591
+msgid "Acquire the per-Model lock (or requeue -- see above), then read the Model."
+msgstr ""
+
+#: ../../update_product.md:198 87f626d7b78441678d5bb299b2f4b981
+msgid ""
+"`to_sell_on_shopify` = \"Non\": delete the Shopify product(s) and "
+"listing(s), done."
+msgstr ""
+
+#: ../../update_product.md:199 8f1830b5ac044fddb61d47f5e617ad9d
+msgid ""
+"Validate: a Shopify product is linked (via `Annonces Shopify` -> "
+"`ID_shopify`, the same `_resolve_listing_ids` helper "
+"`create_product_shopify.py` uses), the listing's `Status` is valid, the "
+"Type is set and exists, the weight (when set) is a number -- an empty "
+"weight just leaves the variants' weight alone. Collect the sellable units"
+" with the same `_collect_sellable_units`/`_build_variant_rows` helpers "
+"`create_product_shopify.py` uses (`api/scripts/_shopify_links.py`, so "
+"both scripts agree on what the variants *should* be) -- an empty result "
+"is fine here: it means zero stock everywhere."
+msgstr ""
+
+#: ../../update_product.md:207 58bea9fad7034aba8b4404208da34174
+msgid ""
+"Fetch the live product, then sync, in this order: variants (stock first "
+"-- it's what matters most if anything later fails), product fields, "
+"metafields, documentation PDF, images. Each step diffs against the live "
+"product first -- a no-op write is never sent. Variants go through one "
+"product PUT with the full variant list (Shopify REST: a listed variant "
+"with an `id` is kept and updated, one without is created, an unlisted one"
+" is deleted) -- which is also what lets the options themselves change -- "
+"then each variant's stock is pushed. A variant's identity is its option "
+"values, stripped, in position order."
+msgstr ""
+
+#: ../../update_product.md:215 d3460fe6b9a74f9682a422c28e0aa485
+msgid ""
+"A failure in any step is collected, not fatal: every other step still "
+"runs, then the run reports `status=\"failure\"` with every reason (first "
+"5 in `details.error`) and the partial progress (the details and metrics "
+"below, merged into `details`). A missing/invalid `Photo neuve` works the "
+"same way: images are skipped, everything else syncs, the run fails."
+msgstr ""
+
+#: ../../update_product.md:220 0099640b126f4258a1c1ba2ced87e63b
+msgid ""
+"Live stages (`GET /internal/scripts/update_product/current`): "
+"`resolving_variation` or `resolving_model`, `validating_model`, then "
+"either `removing_from_shopify` or `validating_stock`, "
+"`fetching_shopify_product`, `syncing_variants`, `syncing_product`, "
+"`syncing_metafields`, `syncing_documentation`, `syncing_images`."
+msgstr ""
+
+#: ../../update_product.md:225 cf4ecb26292241b1bc280bdb66d1fa81
+msgid "Deliberate deviations from the source (`Update-Product`)"
+msgstr ""
+
+#: ../../update_product.md:227 20817625d4ba4a758a3d21134126affe
+msgid ""
+"**Queued, not skipped, when busy.** An earlier version of this port "
+"skipped a run that found the product's lock held (`status=\"skipped\"`) "
+"-- but that run could be the one carrying the newer Airtable data (a sale"
+" triggering two automations at once), so it now waits its turn instead."
+msgstr ""
+
+#: ../../update_product.md:231 cd7e52cbfce64f57811116402f7d6c61
+msgid ""
+"**In-process, no subprocess.** The source shelled out to `uv run Update-"
+"Product/main.py <record_id>`, parsing captured stdout/stderr to guess "
+"success (`stderr == \"\"`) -- unreliable, since `Update-Product` logs "
+"structured JSON events to stderr *by design*, even on a clean run. This "
+"port sidesteps that signal entirely."
+msgstr ""
+
+#: ../../update_product.md:236 1913a89b9d2547f98bb47240052af8fc
+msgid ""
+"**No sandbox/dry-run mode.** The source defaulted to a sandbox mode "
+"(reads real data, logs what it *would* do, never actually writes) unless "
+"an `ENVIRONMENT`/`ENV` var said \"prod\". This port always writes for "
+"real once triggered, matching `create_product_shopify`'s own behavior and"
+" this codebase's existing posture."
+msgstr ""
+
+#: ../../update_product.md:240 b0b033964b61454cae0c85c3638a2277
+msgid ""
+"**No `ALLOW_VARIANT_CREATE` permission gate.** The source required an "
+"explicit opt-in env var before it would create a missing variant, "
+"defaulting to blocking that. This port always creates a missing variant "
+"-- a routine, expected part of \"update\", not an edge case to guard "
+"against (this is also exactly what makes reconciliation's \"Variations "
+"absentes de Shopify\" -> \"Mettre à jour\" button meaningful)."
+msgstr ""
+
+#: ../../update_product.md:245 46bd508ff4d941149b958d0432a3382d
+msgid ""
+"**REST, not GraphQL, for every Shopify write.** The source used Shopify's"
+" GraphQL Admin API (`productUpdate`, `metafieldsSet`, "
+"`productVariantsBulkUpdate`, `productVariantsBulkCreate`) plus one REST "
+"inventory call. This port extends the existing REST-only `ShopifyAdmin` "
+"(`api/integrations/shopify_rest.py`) instead of introducing a second, "
+"GraphQL-based client alongside it -- one consistent Shopify integration "
+"style for both scripts, same asymmetric retry semantics (see that "
+"module's own docstring), same positional option/variant matching "
+"`create_product_shopify.py`'s own `_create_variants` already established."
+msgstr ""
+
+#: ../../update_product.md:253 40e5daec494042f395e02c4e38a3c093
+msgid ""
+"**Inventory location: the existing `SHOPIFY_LOCATION_ID` constant, not a "
+"live lookup.** The source queried Shopify for \"the first location\" on "
+"every run (`locations(first: 1)`) and used whatever came back. This port "
+"reuses the already-configured `SHOPIFY_LOCATION_ID` (set up for "
+"`create_product_shopify`) -- the dev store alone has 3 locations, so "
+"\"whichever one Shopify lists first\" is a real correctness risk the "
+"source carried, not something worth preserving."
+msgstr ""
+
+#: ../../update_product.md:259 1db2f24e106b4bce9551bc68846b1113
+msgid ""
+"**A single `_ValidationFailed` exception, not the source's 9-class "
+"hierarchy.** `Update-Product/errors.py`'s granular exceptions "
+"(`RecordNotInVariationTableError`, `NoUnitsLinkedError`, `NoPriceError`, "
+"etc.) map 1:1 to specific checks, but `create_product_shopify.py` already"
+" established a single internal exception (message + `extra_details` for "
+"Airtable links) as this codebase's own convention for exactly this kind "
+"of \"one of several checks failed\" flow. This port follows that "
+"precedent rather than introducing a second error-handling philosophy "
+"alongside it -- each check still raises a distinct, specific message, "
+"just not a distinct class."
+msgstr ""
+
+#: ../../update_product.md:267 a58ec631c69e415b8dfd46c764e0de5e
+msgid ""
+"**Alerts via the existing Gmail API service, not raw SMTP.** The source "
+"sent alert emails via `smtplib` and a Gmail app password "
+"(`SMTP_GMAIL_PASSWORD`) -- the same category of credential exposure "
+"flagged in `Update-Product/docs/incident-2026-08-shopify-duplicates.md`'s"
+" security remediation checklist. This port reuses "
+"`api/services/gmail.py`'s `send_alert_email` (Gmail API + a service "
+"account), exactly like `create_product_shopify.py` already does."
+msgstr ""
+
+#: ../../update_product.md:273 0ad29af0d2044408bbb2a0301c84cf11
+msgid ""
+"**This port is the incident doc's own target architecture.** That "
+"document's \"architecture cible\" diagram explicitly names bringing this "
+"logic in-process behind an authenticated internal endpoint, with a per-"
+"Shopify-id lock and no silent-success masking of a real failure -- this "
+"is that migration, not an unrelated refactor."
+msgstr ""
+
+#: ../../update_product.md:278 77ef9e6c621e48daba6159008a929002
+msgid "Known risks / things worth reviewing"
+msgstr ""
+
+#: ../../update_product.md:280 fafebadf5b524fb48246a575c66413d9
+msgid ""
+"**A model_id-mode (or a Model's *other* Variations') update isn't "
+"attributed back to an individual Variation in reconciliation's cross-"
+"reference.** `attach_update_attempts` in "
+"`shopify_catalog_reconciliation.py` only matches a stored "
+"`update_product` run against `variations_missing_in_shopify` via that "
+"run's own `record_id` -- a run triggered by `model_id` (or by a "
+"*different* sibling Variation of the same Model) has no `record_id` of "
+"its own to match on, so it won't show up as \"already tried\" against a "
+"Variation it may well have actually updated."
+msgstr ""
+
+#: ../../update_product.md:287 f040f2744813499687951a0bda13810b
+msgid ""
+"**Fixed: a product created without the size option could never get it.** "
+"Confirmed live (dev store, \"RT PCR Thermo Scientific QuantStudio 5\"): "
+"`create_product_shopify` only added the size option when more than one "
+"size had stock at creation, and `update_product` read the option count "
+"from the live product, so its \"0.1 mL / Très bon\" row matched the "
+"existing condition-only \"Très bon\" variant and every run reported "
+"success without changing anything -- while reconciliation kept listing "
+"\"0.1 mL\" as missing. Both scripts now decide the options from Airtable "
+"(`_model_has_variant_values`), and update restructures a product whose "
+"options differ. Worth knowing: a product whose option names differ from "
+"what Airtable implies (e.g. renamed by hand) has all its variants "
+"recreated once."
+msgstr ""
+
+#: ../../update_product.md:297 0b469524eccf490da78438cc1fbdab57
+msgid ""
+"**Option 1 is always \"État esthétique\".** Variants are matched by "
+"option values in position order under the options Airtable implies; a "
+"live product whose option names differ (an older or hand-edited one) "
+"isn't matched value by value -- all its variants are recreated once, with"
+" new variant ids."
+msgstr ""
+
+#: ../../update_product.md:301 201a4bea0c3a4b0dba7a45fde72c7bb5
+msgid ""
+"~~First real end-to-end verification against the dev store is still "
+"pending~~ -- done: both entry modes and the reconciliation buttons were "
+"run live against the dev store, which is exactly what caught the bug "
+"below."
+msgstr ""
+
+#: ../../update_product.md:304 4ff2a546b0464154bfd3af6c62638274
+msgid ""
+"**Fixed, but worth knowing about: variant option values must be compared "
+"stripped, not raw.** Confirmed live: Airtable's `Variant_value` can carry"
+" incidental trailing whitespace (`\"120x47 \"`) that Shopify itself trims"
+" on save (`\"120x47\"`). Comparing the raw, untrimmed Airtable value "
+"against Shopify's own (already-trimmed) option values meant an already-"
+"existing variant was never recognized as a match -- `update_product` "
+"would then attempt to create a *duplicate* variant with the same option "
+"combination, which Shopify correctly rejects, and (before this fix) that "
+"rejection was silently logged and swallowed, with the run still reporting"
+" `status=\"success\"`. Both bugs are now fixed: `_variant_key` (used for "
+"both the Airtable rows and the live Shopify variants) strips both sides "
+"before comparing, and a failed variant *creation* now makes the whole run"
+" report `status=\"failure\"` (with the real Shopify rejection reason in "
+"`details.error`) instead of silently succeeding. Since then, every "
+"variant sync failure (price, weight, stock, zero stock) does the same."
+msgstr ""
+
+#: ../../update_product.md:317 4401df0fef5944038325889acd1258d5
+msgid ""
+"**A `requests.Response` is falsy for any non-2xx status** "
+"(`Response.__bool__` returns `self.ok`) -- code that checks `if response "
+"else None` instead of `if response is not None else None` silently "
+"discards the real status code/body of a genuine error response. This "
+"exact mistake is what hid the bug above during initial testing (logs "
+"showed `\"status\": null` for a real 422). Fixed via "
+"`_response_error_detail`, which checks `is not None` and includes the "
+"actual response body. Worth grepping for this same `if response else ...`"
+" pattern if it's ever copied elsewhere."
+msgstr ""
+
+#: ../../update_product.md:325 25e9e003d1124d0f9b04be751ee7c684
+msgid "Metrics and details"
+msgstr ""
+
+#: ../../update_product.md:327 c0ed3ff2e0ff482c82803ef6d83b3314
+msgid "`GET /internal/scripts/update_product/runs` returns, per run:"
+msgstr ""
+
+#: ../../update_product.md:173 3b3688e874a141469a659fbc37fdf510
+msgid "Key"
+msgstr ""
+
+#: ../../update_product.md:173 1a82174269ac4d91bbb6dbdae75747b2
+msgid "Meaning"
+msgstr ""
+
+#: ../../update_product.md:173 ef2a8a690c75417da8ba21ad41208d6f
+msgid "`metrics.variants_created`"
+msgstr ""
+
+#: ../../update_product.md:173 76323e68c4f247e484ace81bd4893ce9
+msgid "How many Shopify variants were newly created this run"
+msgstr ""
+
+#: ../../update_product.md:173 f5c1912eac994bb3a2e33a34c30dcde5
+msgid ""
+"`metrics.prices_updated` / `metrics.weights_updated` / "
+"`metrics.quantities_updated`"
+msgstr ""
+
+#: ../../update_product.md:173 763780919b184538a6893fedc5965274
+msgid "How many existing variants had their price/weight/inventory changed"
+msgstr ""
+
+#: ../../update_product.md:173 f0f33ec3416945339685477f3e72b87d
+msgid "`metrics.variants_deleted`"
+msgstr ""
+
+#: ../../update_product.md:173 221c98f13b844ddb9c273d62420e7d60
+msgid "How many Shopify variants with nothing left to sell were deleted"
+msgstr ""
+
+#: ../../update_product.md:173 0ad5ddfc60b340359054e734082afbf0
+msgid "`metrics.options_updated`"
+msgstr ""
+
+#: ../../update_product.md:173 f357bcb78e034a4d8b7a2cb689a83a73
+msgid "1 when the product's options were changed (variants then all recreated)"
+msgstr ""
+
+#: ../../update_product.md:173 e629498c8e8542bca6c90e75214a654f
+msgid "`metrics.quantities_zeroed`"
+msgstr ""
+
+#: ../../update_product.md:173 a4994afe10cd40c29e6fbdf789d40e2d
+msgid ""
+"How many variants were set to a zero stock because the whole Model has "
+"nothing left to sell"
+msgstr ""
+
+#: ../../update_product.md:173 c8db8d6f7c8f4fdea4e73be675b9dc4f
+msgid "`metrics.metafields_updated`"
+msgstr ""
+
+#: ../../update_product.md:173 02fa4c8fe40d4daba60e3a50827a3fc0
+msgid "How many metafields were actually written (0 if all already matched)"
+msgstr ""
+
+#: ../../update_product.md:173 f37c853bbb15491c87980b3cd8799079
+msgid "`metrics.images_uploaded`"
+msgstr ""
+
+#: ../../update_product.md:173 a9d480630b8148debc865cb12be3d184
+msgid "How many images were uploaded this run (0 when unchanged)"
+msgstr ""
+
+#: ../../update_product.md:173 5f410b5f9e104d779f5124c4a0f80006
+msgid "`metrics.documentation_updated`"
+msgstr ""
+
+#: ../../update_product.md:173 65d1750987df44e2944a474a4ceb4542
+msgid "1 when a documentation PDF was uploaded this run, else 0"
+msgstr ""
+
+#: ../../update_product.md:173 b950af0d9bbd41b597b7f88fecc5ec29
+msgid "`details.action`"
+msgstr ""
+
+#: ../../update_product.md:173 e03c4be7cedb4d8f96ce454f9821a6bc
+msgid ""
+"`updated`, or `removed` (`to_sell_on_shopify` = \"Non\"; such a run has "
+"no metrics)"
+msgstr ""
+
+#: ../../update_product.md:173 a6fdcd576ecb47599b816e5059e55026
+msgid ""
+"`details.deleted_shopify_product_ids` / "
+"`details.deleted_listing_record_ids`"
+msgstr ""
+
+#: ../../update_product.md:173 1a1a289ea6c84d469cd0210ad5c49dd8
+msgid "What a `removed` run deleted"
+msgstr ""
+
+#: ../../update_product.md:173 d6b2c8691b2e41e796edae30002b4546
+msgid "`details.product_fields_updated`"
+msgstr ""
+
+#: ../../update_product.md:173 08926c6cd60a42b4b43c9031a372ed64
+msgid "Which of `title`/`body_html`/`vendor`/`product_type`/`status` were written"
+msgstr ""
+
+#: ../../update_product.md:173 e8759fe4b04e430286c054274b805d12
+msgid "`details.description_updated`"
+msgstr ""
+
+#: ../../update_product.md:173 47bdd0ca7e6a4ed39522f970597d494c
+msgid "Whether `body_html` was among them"
+msgstr ""
+
+#: ../../update_product.md:173 d213769dd1e348c2bc907ce7224c2336
+msgid "`details.images_status`"
+msgstr ""
+
+#: ../../update_product.md:173 479bae1f709443b8b0a72d29b8ca3fc0
+msgid "`uploaded` / `unchanged` / `failed` / `skipped` (no valid `Photo neuve`)"
+msgstr ""
+
+#: ../../update_product.md:173 57f7e04b67e841b6ae9805bab6b24738
+msgid "`details.filter_specs_missing`"
+msgstr ""
+
+#: ../../update_product.md:173 ba37b5dace524a7db7612e5ea338e4df
+msgid "Family filter specs Airtable doesn't have (only when some are missing)"
+msgstr ""
+
+#: ../../update_product.md:173 38fa2d0cf4934748b30dbba1758f69ef
+msgid "`details.documentation_status`"
+msgstr ""
+
+#: ../../update_product.md:173 bda5cd5f3c914f13a02a631b4212d816
+msgid ""
+"`uploaded` / `unchanged` / `absent` (no PDF in Airtable, Shopify "
+"untouched) / `failed`"
+msgstr ""
+
+#: ../../update_product.md:173 c1b80f1f8ebc499caeceb1965d849e9a
+msgid "`details.documentation_error` / `details.documentation_file_id`"
+msgstr ""
+
+#: ../../update_product.md:173 801dde63561f4d19ace753ffbab31dc2
+msgid ""
+"The failure reason, or the new Shopify file id when `uploaded` (plus "
+"`documentation_compressed`/`_original_size`/`_uploaded_size` when the PDF"
+" had to be compressed)"
+msgstr ""
+
+#: ../../update_product.md:173 90312f0995b64f05b0e3cc2b22bfcb8a
+msgid "`details.model_id`"
+msgstr ""
+
+#: ../../update_product.md:173 dff9787346a24ebba8dafb1b4089ae0e
+msgid "The Model this run resolved to, regardless of entry mode"
+msgstr ""
+
+#: ../../update_product.md:173 37f20f82741d4103b033ea941b0eb90f
+msgid "`details.record_id`"
+msgstr ""
+
+#: ../../update_product.md:173 667c8af435c841788cff90f56e84feab
+msgid ""
+"The Variation id when that was the entry mode used (`null` in `model_id` "
+"mode)"
+msgstr ""
+
+#: ../../update_product.md:173 c4cc157a03fe417099072728c490a4f3
+msgid "`details.title`"
+msgstr ""
+
+#: ../../update_product.md:173 8ad7ede4bb104cb4bd9e085426dafb6e
+msgid "The Model's name, present on every outcome"
+msgstr ""
+
+#: ../../update_product.md:173 bbd24e05f8624d648e1f637843afa866
+msgid ""
+"`details.shopify_product_id` / `details.shopify_product_url` / "
+"`details.airtable_listing_url`"
+msgstr ""
+
+#: ../../update_product.md:173 a5c6cac50d2548aba9dec96d70f9c72d
+msgid "Links to the product this run was about"
+msgstr ""
+
+#: ../../update_product.md:173 6df0dd176a9f435e95d8d35694378f0f
+msgid "`details.error`"
+msgstr ""
+
+#: ../../update_product.md:173 d76c2734dd0847e2b3e46db976c28eaa
+msgid "Present on failure"
+msgstr ""
+
+#: ../../update_product.md:173 28d059856b214945a0f215d59ba180d4
+msgid ""
+"`details.airtable_model_url` / `details.airtable_variation_url` / "
+"`details.airtable_unit_url`"
+msgstr ""
+
+#: ../../update_product.md:173 0089d50986ce4236ac922b894846cf52
+msgid ""
+"Best-effort links to the Airtable record a validation failure is actually"
+" about -- same convention as `create_product_shopify`"
+msgstr ""
+
+#: ../../update_product.md:354 4a3710d4b49e4c28896a6736d040af8f
+msgid "Where to look"
+msgstr ""
+
+#: ../../update_product.md:356 920e95d28a6c4efc9b75e7c351597fb7
+#, python-brace-format
+msgid ""
+"**Trigger/history:** `POST "
+"/internal/scripts/update_product/run?record_id=recXXX` (or "
+"`?model_id=recXXX`), `GET /internal/scripts/status/{task_id}`, `GET "
+"/internal/scripts/update_product/runs`, `GET "
+"/internal/scripts/update_product/current` (live stage while running)."
+msgstr ""
+
+#: ../../update_product.md:360 a80f152fc01e43e3acf64a4b9657d8b2
+msgid ""
+"**Logs:** `structlog`, logger `api.scripts.update_product` (business "
+"logic) and `api.tasks` (task lifecycle)."
+msgstr ""
+
+#: ../../update_product.md:362 14f2439e9d924695b49a5929a42a3781
+msgid ""
+"**Source:** `api/scripts/update_product.py`; shared helpers with "
+"`create_product_shopify.py` (the exception class, the Airtable cache, "
+"link builders, unit/spec aggregation) live in "
+"`api/scripts/_shopify_links.py`."
+msgstr ""
+
+#: ../../update_product.md:365 df2c2f632d6a4e5d97728bd1d05d263e
+msgid "**Tests:** `tests/test_update_product.py`."
+msgstr ""
+

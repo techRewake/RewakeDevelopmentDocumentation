@@ -1,0 +1,457 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Rewake
+# This file is distributed under the same license as the Rewake API package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Rewake API \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-15 11:41+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../catalog_model.md:1 eec6d536426e4ccc924ac72c8800e0e9
+msgid "Catalog model: Model, Variation, Unit"
+msgstr ""
+
+#: ../../catalog_model.md:3 f4d4e62574fd4057af9643c32f4f07cf
+msgid ""
+"How a product is represented in Airtable, how the tables are linked, how "
+"that becomes a Shopify listing, and what to create when a product we've "
+"never had arrives. The figures come from the production base on "
+"2026-10-02. How the receiving app creates and reviews these records "
+"through `/internal/catalog` is in [Catalog intake](catalog_intake.md)."
+msgstr ""
+
+#: ../../catalog_model.md:9 23447603bd5e47c8b6ed3c76f5fffee7
+msgid "The chain"
+msgstr ""
+
+#: ../../catalog_model.md:11 5a87bc4c00a442609891d670f4eb6ac5
+msgid "Table"
+msgstr ""
+
+#: ../../catalog_model.md:11 cfc9bfae63c44bd5a1e0a5f9e7251719
+msgid "One record is"
+msgstr ""
+
+#: ../../catalog_model.md:11 d66e40bb36c246389f61a84018582993
+msgid "Holds"
+msgstr ""
+
+#: ../../catalog_model.md:11 aa443854c17a443ea8eaa9bf2de13129
+msgid "Linked by"
+msgstr ""
+
+#: ../../catalog_model.md:11 2354c64d43c446579473395de64fb0f8
+msgid "**Model**"
+msgstr ""
+
+#: ../../catalog_model.md:11 c7e4c115dabf478ea3a3b741a2f9a53c
+msgid ""
+"A commercial reference: brand + model name (`Name` = Type + Marque + "
+"Modèle)"
+msgstr ""
+
+#: ../../catalog_model.md:11 a999c062c9fa4579a674a35a97541757
+msgid ""
+"Descriptions, `Photo neuve`, weight, dimensions, `Prix neuf HT`, "
+"`Documentation`/`Manuel Operateur`/`Manuel de service`, "
+"`to_sell_on_shopify`, `Vérification pour site`"
+msgstr ""
+
+#: ../../catalog_model.md:11 359b63d3f2654260ad6403bd8d5ddc6d
+msgid "`Type`, `Marque`, `Variation`, `Annonces Shopify`"
+msgstr ""
+
+#: ../../catalog_model.md:11 7472f000f80d4c3aa2942003afac84be
+msgid "**Variation**"
+msgstr ""
+
+#: ../../catalog_model.md:11 9363bf8259ad47209e1263743b750d41
+msgid "One sellable version of a Model, e.g. a volume range of a micropipette"
+msgstr ""
+
+#: ../../catalog_model.md:11 5dc87d5f4e0941febc68a1faf32ad03c
+msgid ""
+"`is_variant`, `Variant_name`/`Variant_value`, `Specifications`, `Statut "
+"validation Variation` (`À valider`/`Validé`), `Statut verification`"
+msgstr ""
+
+#: ../../catalog_model.md:11 1ca90a695c36410d9222b10648ec7fd8
+msgid "`Model` (exactly one), `Toutes les unités`"
+msgstr ""
+
+#: ../../catalog_model.md:11 a010e66bd59b47f6b3396bf1766d9349
+msgid "**Toutes les unités**"
+msgstr ""
+
+#: ../../catalog_model.md:11 a3dc4833e58f4a408eb465e5dc1810a5
+msgid "One physical item in stock, with its own serial number"
+msgstr ""
+
+#: ../../catalog_model.md:11 47082a79a35c4b5db8f6f9db2b8bac55
+msgid ""
+"`Numéro de série`, `Etat esthétique`, `État fonctionnel`, `Statut "
+"commercial`, `Prix de vente HT`, `Prix de rachat`, `Photos marketplace`, "
+"`Photos client`, `Photos interne`, `Lieu de stockage`"
+msgstr ""
+
+#: ../../catalog_model.md:11 a8775ef2f2d643e7b66bd7a3bc28585d
+msgid "`Référence variant` → one Variation; `Opération reprise`"
+msgstr ""
+
+#: ../../catalog_model.md:11 e0861bcffd204b7299d0943d0aece99a
+msgid "**Specification**"
+msgstr ""
+
+#: ../../catalog_model.md:11 c273786829ce40d1a62784a06caa26b2
+msgid "One `clé : valeur unité` line (e.g. `Portée max : 220 g`)"
+msgstr ""
+
+#: ../../catalog_model.md:11 927392b8c38c45c483ad31c57ed1491c
+msgid "`clé` (→ Specification type), `valeur`, `unité`"
+msgstr ""
+
+#: ../../catalog_model.md:11 0014806b55834a5d8489ac328f466420
+msgid "`Variation associée` (as a spec), `Spec_variant` (as the variant axis)"
+msgstr ""
+
+#: ../../catalog_model.md:11 739b8c7680f5449bb1dfd639c6a95425
+msgid "**Annonces Shopify**"
+msgstr ""
+
+#: ../../catalog_model.md:11 06840f145d3a42ecb68855fe48fcdf01
+msgid "The Shopify product for a Model"
+msgstr ""
+
+#: ../../catalog_model.md:11 c1e64616b60446aea64e722994d50902
+msgid "`ID_shopify`, `Status` (draft/active/archived/unlisted)"
+msgstr ""
+
+#: ../../catalog_model.md:11 4de3019a13af4f84bcda6650e60b1de9
+msgid "`Model`"
+msgstr ""
+
+#: ../../catalog_model.md:31 29679eeae19d47609fab9b047483f609
+msgid ""
+"A unit has no direct link to its Model: it reaches it through its "
+"Variation. The Model fields shown on a unit are lookups."
+msgstr ""
+
+#: ../../catalog_model.md:34 cad423882a354e3d9fad8f1450a69119
+msgid "What a Variation means"
+msgstr ""
+
+#: ../../catalog_model.md:36 321ae23de97d461da97289a9a5ab80dc
+msgid ""
+"A Variation answers the question \"which version of this Model is this "
+"unit?\". There are two cases:"
+msgstr ""
+
+#: ../../catalog_model.md:39 4aa44c534f39469e90df50f5ea949586
+msgid ""
+"**The Model comes in several versions** (`is_variant = Oui`). There is "
+"one Variation per version, and each points to one Specification through "
+"`Variant_name` (its `valeur` becomes `Variant_value`, e.g. `2 - 20`). "
+"Example: *Finnpipette F1 | 2 - 20*, *Finnpipette F1 | 10 - 100*. The "
+"Variation's `Name` gets ` | <value>` appended."
+msgstr ""
+
+#: ../../catalog_model.md:44 58fbbd5781874376ae61ad550fa171fc
+msgid ""
+"**The Model has only one version** (`is_variant = Non`). There is still "
+"exactly one Variation, a \"default\" one with no `Variant_name`, because "
+"units can only attach to a Variation. It is created automatically with "
+"the Model: `POST /internal/model/create` (the intranet's *Création de "
+"modèle*) creates the Model, then its `is_variant = Non` Variation. The "
+"receiving app's group push (`POST /internal/catalog/groups/push`) also "
+"creates the Model with its Variation(s), as drafts (`Statut validation "
+"Variation = À valider`)."
+msgstr ""
+
+#: ../../catalog_model.md:52 834bd190d9464ccd9d5c822547f58a15
+msgid ""
+"The **condition is not a Variation.** `Etat esthétique` (Neuf, Neuf "
+"déclassé, Très bon, Bon, Abimé, Très abimé) is stored on each unit, "
+"because two items of the same version can be in different states."
+msgstr ""
+
+#: ../../catalog_model.md:11 4734d164bd7a4eaeb6d4dce62496541b
+msgid "Today (production)"
+msgstr ""
+
+#: ../../catalog_model.md:11 9de4ae42555f4bd6be928450660d9f74
+msgid "Models"
+msgstr ""
+
+#: ../../catalog_model.md:11 5a016e67c91d43438a044db8a07ea0f2
+msgid "1,786 (1,445 `to_sell_on_shopify = Oui`, 296 with a Shopify listing)"
+msgstr ""
+
+#: ../../catalog_model.md:11 46e9f5752083453484b12d942fb2da0a
+msgid "Models with exactly 1 Variation"
+msgstr ""
+
+#: ../../catalog_model.md:11 83621a6716464bc6bfe29bb28baab169
+msgid "1,685 (94%)"
+msgstr ""
+
+#: ../../catalog_model.md:11 b49512378d384817bbfa2a590ca9b04c
+msgid "Models with 2 to 22 Variations"
+msgstr ""
+
+#: ../../catalog_model.md:11 a4061a129bd14fc4bac4a98b421b252a
+msgid "99"
+msgstr ""
+
+#: ../../catalog_model.md:11 e16e21d1501b44f3ba88842991387b27
+msgid "Variations `is_variant = Non` / `Oui` / empty"
+msgstr ""
+
+#: ../../catalog_model.md:11 10e824fdf8424df3aad84a762ba7b503
+msgid "1,633 / 547 / 3"
+msgstr ""
+
+#: ../../catalog_model.md:11 9f293404423944aba38ba5c02980089a
+msgid "Units"
+msgstr ""
+
+#: ../../catalog_model.md:11 64d06305dbef4a83a6d15315253039ab
+msgid "3,905 (1,411 *A vendre*, 2,131 *Vendu*)"
+msgstr ""
+
+#: ../../catalog_model.md:11 8b771e0181114c50815345f9a541c833
+msgid "Specifications"
+msgstr ""
+
+#: ../../catalog_model.md:11 0ffa06f883bb4e87bfa303630e0ca6d8
+msgid "8,106, all but 3 linked to a single Variation"
+msgstr ""
+
+#: ../../catalog_model.md:65 89c5480bdc6d4c58b7f6add6132d33a1
+msgid "How it becomes a Shopify product"
+msgstr ""
+
+#: ../../catalog_model.md:67 82e5f53c931448719f848f7b0a929087
+msgid "`create_product_shopify` and `update_product` build it the same way:"
+msgstr ""
+
+#: ../../catalog_model.md:69 f70227a2720d43cdb2be2fa1aa562ae8
+msgid ""
+"**Shopify product** = the Model (title, descriptions, photos, vendor = "
+"Marque, product type = Type). Its Shopify id is stored in Annonces "
+"Shopify."
+msgstr ""
+
+#: ../../catalog_model.md:71 a8bd5d97071a46218f1e9a0a53e32737
+msgid ""
+"**Shopify options**: `État esthétique` always. A second option is added "
+"only if a Variation has a `Variant_value`, and its label is hard-coded "
+"from the Type: \"Plage de volume [µL]\" for micropipettes, \"Dimensions "
+"[cm]\" for paillasses, \"Variante\" for anything else."
+msgstr ""
+
+#: ../../catalog_model.md:75 d3e81f7219654cfb93899cf5496aa426
+msgid ""
+"**Shopify variant** = one per *(Variant_value, Etat esthétique)* pair "
+"found among the sellable units. Sellable means `Statut commercial = A "
+"vendre` and a condition other than Abimé/Très abimé."
+msgstr ""
+
+#: ../../catalog_model.md:78 5d178ccbc47a46a4b285069b1c991c62
+msgid "**Quantity** = the number of those units."
+msgstr ""
+
+#: ../../catalog_model.md:79 f73542510a46461c89875e387977c6f0
+msgid "**Price** = the lowest `Prix de vente HT` among them."
+msgstr ""
+
+#: ../../catalog_model.md:80 4137bee838d44273b4230445171b8e54
+msgid ""
+"**Spec table** (`main_table` metafield) = weight, dimensions, and the "
+"Specifications of the **first** Variation only, minus its variant spec."
+msgstr ""
+
+#: ../../catalog_model.md:83 44c39a8518824971a36e594cc5d3e7ed
+msgid ""
+"So **stock and price come from units, structure comes from Variations, "
+"and content comes from the Model.**"
+msgstr ""
+
+#: ../../catalog_model.md:94 f5a16bff8d73491bb03c19f295bfff0b
+msgid "Creating a product we've never had"
+msgstr ""
+
+#: ../../catalog_model.md:111 fd858e4b1af54db9b90d1fe218b5a5ca
+msgid ""
+"The `create-rewake-model` skill automates the Model + Variation + "
+"Specifications part. In the receiving workflow, the app does it through "
+"`/internal/catalog`: operations push the group (a variant Variation gets "
+"its axis spec through `Spec_variant`), and the commercial team reviews "
+"the Model (`Vérification pour site`) before it is sold; see [Catalog "
+"intake](catalog_intake.md)."
+msgstr ""
+
+#: ../../catalog_model.md:118 91838b8c000545ab89ddd3e34009347a
+msgid "Rules that the scripts rely on:"
+msgstr ""
+
+#: ../../catalog_model.md:120 43cc7c19235d45fcb2187dae05950c19
+msgid ""
+"**Every unit needs exactly one Variation** (`Référence variant`). A unit "
+"without one is invisible to Shopify and to the reconciliation (52 such "
+"units today, plus 1 linked to two Variations)."
+msgstr ""
+
+#: ../../catalog_model.md:123 433e0062c1af46f695f1c360690441f5
+msgid "**Every Variation needs exactly one Model** (5 have none today)."
+msgstr ""
+
+#: ../../catalog_model.md:124 ae3ef3fdd4584442bf054cf5777ae679
+msgid ""
+"**A Model is either all `Non` (one Variation) or all `Oui`.** Never mix "
+"them: a `Non` Variation next to `Oui` ones would end up as a Shopify "
+"variant whose option value is `0`. No Model mixes them today."
+msgstr ""
+
+#: ../../catalog_model.md:127 b81627797467483892f3339c1e2c6418
+msgid ""
+"**`is_variant = Oui` needs a `Variant_name`.** 5 Variations break this "
+"today, and 3 have `is_variant` empty. The intake push refuses a variant "
+"without its axis (`missing_variant_axis`)."
+msgstr ""
+
+#: ../../catalog_model.md:130 454f687b173e45e6a08e1992ba2b3265
+msgid ""
+"**Only one dimension can vary.** `Variant_name` holds a single spec, so a"
+" pipette range can be a variant axis, but \"range × number of channels\" "
+"can't. Make those separate Models."
+msgstr ""
+
+#: ../../catalog_model.md:133 29e9c4fafbf54bb0b4be8317a583505f
+msgid ""
+"**Specs that differ between versions, other than the variant axis, are "
+"lost on Shopify.** Only the first Variation's specs go into the spec "
+"table."
+msgstr ""
+
+#: ../../catalog_model.md:136 1815407163d940be99019cc74d70d68f
+msgid "The weak spots"
+msgstr ""
+
+#: ../../catalog_model.md:138 0ef8850c58f64d2aad0084f6e5b8336f
+#, python-format
+msgid ""
+"**The default Variation duplicates the Model.** For 94% of Models it's a "
+"copy of the Model that exists only so units have something to link to. "
+"It's created automatically, so it costs no work, but it's still a second "
+"record per product, and it's where the Model's specs end up (see the next"
+" point)."
+msgstr ""
+
+#: ../../catalog_model.md:142 69bed8fde1b84516abb2f276061669b7
+msgid ""
+"**Specs are copied for every Variation.** A 10-version pipette has 10 "
+"copies of \"Nombre de canaux : 1\", which have to be kept consistent by "
+"hand. Only the first copy is used."
+msgstr ""
+
+#: ../../catalog_model.md:145 5b3abb75cff341779137c22293b88b54
+msgid ""
+"**`is_variant` is typed by hand** (the API only sets it on the records it"
+" creates or converts) but can be worked out from the data (`Variant_name`"
+" filled or not), so it drifts (8 inconsistent records)."
+msgstr ""
+
+#: ../../catalog_model.md:148 2a19d4a1443a4f13ad333d65d8a55c91
+msgid ""
+"**The second option's label is hard-coded** by Type name in the code "
+"(`_variant_option_name` in `api/scripts/_shopify_links.py`), so a new "
+"Type with versions just gets \"Variante\"."
+msgstr ""
+
+#: ../../catalog_model.md:151 99d6d5528cdc4de888b6e180e4648f86
+msgid ""
+"**Prices live in two places.** Each unit has its own `Prix de vente HT` "
+"(what Shopify uses), and the Variation also has `Prix bon état €HT`, "
+"`Prix abimé €HT` and `Prix de la variation`, which nothing in the API "
+"reads."
+msgstr ""
+
+#: ../../catalog_model.md:155 cecee06b8d904ef995a3b292dd64885b
+msgid "Suggested improvements"
+msgstr ""
+
+#: ../../catalog_model.md:157 4193ca73b592485ba884860e9eac3e34
+msgid ""
+"They are ordered from cheapest to most structural. Each one can be done "
+"on its own, without changing what Shopify shows."
+msgstr ""
+
+#: ../../catalog_model.md:160 f8d0aa246e7d4da59fc74d10273eaa6f
+#, python-brace-format
+msgid ""
+"**Make `is_variant` a formula:** `IF({Variant_name}, \"Oui\", \"Non\")`. "
+"The code only compares it to `\"Oui\"`, so nothing breaks, and the 8 "
+"inconsistent records disappear."
+msgstr ""
+
+#: ../../catalog_model.md:163 d0ea457259a547f7aa453b7dd9980c9c
+msgid ""
+"**Add data-quality views,** and have the reconciliation flag the same "
+"cases: units without a Variation, Variations without a Model, Models that"
+" mix `Oui` and `Non`."
+msgstr ""
+
+#: ../../catalog_model.md:166 55684c15422b43a7badc1913abd1e270
+msgid ""
+"**Move the variant label to the Type:** add an \"Axe de variante\" field "
+"on Type d'équipement (e.g. \"Plage de volume [µL]\") and read it instead "
+"of the hard-coded names."
+msgstr ""
+
+#: ../../catalog_model.md:169 880d560e4a32419d8e95eae2c07686af
+msgid ""
+"**Put common specs on the Model:** link Specification to Model for what "
+"all versions share, and keep on each Variation only the spec that defines"
+" it (`Variant_name`). This removes the copies (most of the 8,106 records)"
+" and the \"first Variation only\" rule, and the spec table reads Model "
+"specs + the variant value."
+msgstr ""
+
+#: ../../catalog_model.md:174 9d3539e938444dc8877e7dc95d809567
+msgid ""
+"**Keep the default Variation.** It's already created automatically, so "
+"the duplication costs no work; what it still costs is the specs stored on"
+" it, which suggestion 4 moves to the Model. Removing the level altogether"
+" (units linking straight to a Model) would mean two different ways for a "
+"unit to find its Model and two code paths in every script, so a Variation"
+" that always exists is the simpler rule: **Model → ≥1 Variation → "
+"units**, always."
+msgstr ""
+
+#: ../../catalog_model.md:180 f905415ab8704e35bee58a308a729589
+msgid ""
+"**Choose one source of truth for price:** either the unit's `Prix de "
+"vente HT` (today's behaviour), with the Variation prices removed or "
+"turned into suggestions, or a price per (Variation, condition) that is "
+"copied onto new units."
+msgstr ""
+
+#: ../../catalog_model.md:185 ae8b4b64f4ee4839b24253ffafc2a6c5
+msgid ""
+"The condition stays on the unit. It describes one physical item, and the "
+"current mapping to Shopify (condition = an option, units = quantity) is "
+"right."
+msgstr ""
+

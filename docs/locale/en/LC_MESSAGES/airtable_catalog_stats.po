@@ -1,0 +1,261 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Rewake
+# This file is distributed under the same license as the Rewake API package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Rewake API \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-15 11:41+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../airtable_catalog_stats.md:1 ac81bb58b95e4e689ca0436bdc6511b2
+msgid "Airtable Catalog Stats"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md 8fdc6f48d30540bebc1a32fdeee3c5ad
+msgid "**Module**"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md c60554a8f0d644e0ad40a36b19a38fc1
+msgid "`api.scripts.airtable_catalog_stats`"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md 387d4645dd804464a9a05635e430896a
+msgid "**Schedule**"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md 8aadf935a2ef41d9ace64b029e09e5e9
+msgid ""
+"daily at `AIRTABLE_CATALOG_STATS_HOUR`:`AIRTABLE_CATALOG_STATS_MINUTE` "
+"(default `20:42`, `Europe/Paris`) -- also runnable on demand"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md ba70b407fac44228b20e2bf805f8a500
+msgid "**Reads**"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md a2e25474663d44d0892a6f7d063d6170
+msgid "Airtable (Model, Variation, Toutes les unités) only -- no Shopify calls"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md 177185a7e2f6416fb9c36be703629307
+msgid "**Writes**"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md 9d55b3cb69224c1f8647ed461225dace
+msgid "nothing -- strictly read-only"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md 5df36c6583eb4cc3b9ac2d2d634b1824
+msgid "**Requires**"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md d3a9032b92cb4e6087d05f8c7ba03895
+msgid ""
+"`AIRTABLE_BASE_ID` + `AIRTABLE_TOKEN` (otherwise the run is recorded as "
+"`skipped`)"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:13 cda2e5e89d1f439a9ae1129014763c54
+msgid "What it does"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:15 3aff273680f4461daa27e3dbac53cb99
+msgid ""
+"A broad, Shopify-independent scrape of the whole catalog: how big it is, "
+"how it's shaped (variants per model, units per variant), a couple of "
+"catalog-hygiene signals, and how all of that is changing day over day. "
+"Where "
+"[`shopify_catalog_reconciliation`](shopify_catalog_reconciliation.md) "
+"asks \"does Shopify match Airtable for the things we sell online\", this "
+"script doesn't compare against Shopify at all -- it's purely about the "
+"catalog's own shape and growth, useful for spotting things like data-"
+"entry gaps (a Model nobody ever added a Variation to) or just tracking "
+"how fast the catalog is growing."
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:24 84ce49f5eeb6438c903e0c592433adf2
+msgid "Data it fetches"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:46 463b32314d56417b93e3096f063f1c1e
+msgid "How it works"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:48 bf5ef2fe0f04432a89cfb09568404eda
+msgid ""
+"Fetch every Model, Variation, and Unit from Airtable "
+"(`api.domain.catalog`, the same module `shopify_catalog_reconciliation` "
+"uses)."
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:50 57aecaf29d1e46a094b2e886f2fdcbb7
+msgid ""
+"Compute totals and derived ratios directly from those three lists -- no "
+"external calls beyond Airtable."
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:52 de6b56b3bf1e41d6937b71e988b2ce40
+msgid ""
+"Diff the current full sets of Model/Variation/Unit ids against the "
+"previous run's snapshot (stored in Redis via `api.run_store.RunStore`, "
+"same pattern as `shopify_catalog_reconciliation`) to report how many of "
+"each were added since last time. The first run ever (no snapshot yet) "
+"reports 0 additions, not the whole catalog."
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:57 2d0f9b84b7124305be05fd16d6aaf204
+msgid ""
+"Live stages (`GET /internal/scripts/airtable_catalog_stats/current`): "
+"`fetching_airtable_models`, `fetching_airtable_variations`, "
+"`fetching_airtable_units`, `computing_statistics`."
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:61 fa39e36fcec04c36b55f17202b44d845
+msgid "Metrics"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:63 504458dedb314a00a091c84e865517eb
+msgid "`GET /internal/scripts/airtable_catalog_stats/runs` returns, per run:"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 01fb0f582fe24dc2b7a2aa6ed3ece765
+msgid "Metric"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 8af60d8e3a3540b19357fe3d98274c0a
+msgid "Meaning"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 e91dd4fac7794315b912c815d1b2ee71
+msgid "`models_total` / `variations_total` / `units_total`"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 3859c83371ec4e68803f271fdc6621b1
+msgid "Raw catalog size"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 05bf41dee6e24a0995e4fd19183f9311
+msgid "`avg_variations_per_model`"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 aeb80340ea004dce9b0837703083399d
+msgid "`variations_total / models_total` (0 if there are no models)"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 6bc5fe8b5b5145c7a164ef4b4cbe9fa7
+msgid "`avg_units_per_variation`"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 e7bfa6d03391428a8903e472d3679501
+msgid "`units_total / variations_total` (0 if there are no variations)"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 39e1bdcc0e674ec5a1b67e4c9d7a4a97
+msgid "`models_without_variations`"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 a71749495d8d44068640108253e774d3
+msgid "Catalog-hygiene signal: a Model with zero linked Variations"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 7bc0a7084ffd409f9681ef4a04558383
+msgid "`variations_without_units`"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 f812ee5598ce4ec5ab1bcfdfe46dcf33
+msgid "Catalog-hygiene signal: a Variation with zero physical units"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 6785dca9e53d45de9e9c5082b3409102
+msgid "`models_to_sell_on_shopify` / `models_to_sell_on_shopify_pct`"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 9d0e36c9897841ecafc43bd0bd2951a4
+msgid "How many/much of the catalog is flagged for Shopify at all"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 d9121800dd7a45ebaee0a2fa9dac6912
+msgid "`units_a_vendre_total`"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 d92afd4c85ac49f2b21e58fb927473a8
+msgid ""
+"Units currently marked `Statut commercial = \"A vendre\"`, any sales "
+"channel"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 ee4fea8697374447acf72c75d7f1bfa2
+msgid ""
+"`models_added_since_last_run` / `variations_added_since_last_run` / "
+"`units_added_since_last_run`"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 89d9383f0d3d4a829017922d48c6e805
+msgid "Catalog growth since the previous run"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 a6414b1135ce434aab5e71beea6641df
+msgid "`succeeded`"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:26 b1de0a5a383f426b9c14dd05eb85490b
+msgid "Always `1` on a completed run"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:77 c98416c5181a4b8598f43cf81ae5556e
+#, python-brace-format
+msgid ""
+"This script has no `details` payload (`details` is `{}`) -- every result "
+"is a flat number, so each run in `GET "
+"/internal/scripts/airtable_catalog_stats/runs` is just `status`, the "
+"metrics above, `duration_seconds` and `finished_at`. `GET /metrics` "
+"exposes them to Prometheus as "
+"`rewake_api_script_metric{script=\"airtable_catalog_stats\", ...}`."
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:83 f1851421b10645768130c6103585c5c0
+msgid "Where to look"
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:85 10b39348696947a68c046b521abe65e0
+#, python-brace-format
+msgid ""
+"**Trigger/history:** `POST /internal/scripts/airtable_catalog_stats/run`,"
+" `GET /internal/scripts/status/{task_id}`, `GET "
+"/internal/scripts/airtable_catalog_stats/runs`, `GET "
+"/internal/scripts/airtable_catalog_stats/current` (live stage while "
+"running)."
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:89 a98e365dfa82473882fd97b0b16f51bb
+msgid ""
+"**Schedule:** `api/celery_app.py`'s `beat_schedule`, driven by the `beat`"
+" service in `docker-compose.yml` (20:42 Europe/Paris, DST included)."
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:91 a8543983ad614eb68770cc7f55101244
+msgid "**Logs:** `structlog`, logger `api.tasks`."
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:92 7975a4d27daa44bd8bd2745ebfaba8ac
+msgid ""
+"**Source:** `api/scripts/airtable_catalog_stats.py`, "
+"`api/domain/catalog.py`."
+msgstr ""
+
+#: ../../airtable_catalog_stats.md:93 a950255a13f74f24969843b7399eb92f
+msgid "**Tests:** `tests/test_airtable_catalog_stats.py`."
+msgstr ""
+

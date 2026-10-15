@@ -1,0 +1,31 @@
+Scripts
+=======
+
+Registered in ``api/scripts/registry.py``; each runs on demand via ``POST
+/internal/scripts/{name}/run`` (see :doc:`architecture`), and the two
+scheduled ones also run automatically (``beat``; the schedules below are
+the defaults, configurable in ``.env`` -- see :doc:`operations`). Run
+history: ``GET /internal/scripts/{name}/runs``; live progress: ``GET
+/internal/scripts/{name}/current``.
+
+- :doc:`update_product` -- syncs an existing Shopify listing from Airtable
+  (on demand; a Variation or a Model id, both converge on the same product;
+  native code, ported in-process from a sibling project's subprocess).
+- :doc:`create_product_shopify` -- creates a brand-new Shopify listing from
+  one Airtable **Model** (on demand; native code -- the other script here
+  that writes to Shopify, alongside ``update_product``).
+- :doc:`shopify_catalog_reconciliation` -- verifies Shopify reflects the
+  sellable Airtable catalog (hourly). Replaces the older, separate
+  ``verification_shopify`` script, which did the same *kind* of comparison
+  and has been removed.
+- :doc:`airtable_catalog_stats` -- catalog-shape statistics, independent of
+  Shopify (daily, 20:42 Europe/Paris).
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   update_product
+   create_product_shopify
+   shopify_catalog_reconciliation
+   airtable_catalog_stats

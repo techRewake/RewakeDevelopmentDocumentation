@@ -1,0 +1,779 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Rewake
+# This file is distributed under the same license as the Rewake API package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Rewake API \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-15 11:41+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../create_product_shopify.md:1 b111be3e9dfa485f97cd5587035d9b12
+msgid "Create Product Shopify"
+msgstr ""
+
+#: ../../create_product_shopify.md:3 aabd6af38b7b4d8ab889c3c7d4ccdcb8
+msgid ""
+"<img src=\"https://cdn.simpleicons.org/airtable\" alt=\"Airtable\" "
+"width=\"28\" height=\"28\"> <img "
+"src=\"https://cdn.simpleicons.org/shopify\" alt=\"Shopify\" width=\"28\" "
+"height=\"28\">"
+msgstr ""
+
+#: ../../create_product_shopify.md 54ef0f6982c34d4ca3aa15048abf1fad
+msgid "**Module**"
+msgstr ""
+
+#: ../../create_product_shopify.md 98b82ce2f1924c57814201c5e251d121
+msgid "`api.scripts.create_product_shopify`"
+msgstr ""
+
+#: ../../create_product_shopify.md 2795b8e8291e47228def20f928e82c36
+msgid "**Schedule**"
+msgstr ""
+
+#: ../../create_product_shopify.md 30d0160949b8419b97db66108bab8b6a
+msgid ""
+"on-demand only (`schedule = None`) -- requires a `record_id` (an Airtable"
+" **Model** id)"
+msgstr ""
+
+#: ../../create_product_shopify.md 7ddbf699897f4fca90d58a7f08a8d738
+msgid "**Reads**"
+msgstr ""
+
+#: ../../create_product_shopify.md 051ea9518e404b2ba8259666727e849c
+msgid ""
+"Airtable (Model, Variation, Toutes les unités, Type d'équipement, Marque,"
+" Familles, Specification)"
+msgstr ""
+
+#: ../../create_product_shopify.md 38da7a7ffda5404582c2f512a3bef324
+msgid "**Writes**"
+msgstr ""
+
+#: ../../create_product_shopify.md 505da51ccb27458da70564e957aa44bd
+msgid ""
+"**Shopify** (creates a new product, variants, metafields, images, "
+"documentation PDF, inventory) + Airtable (`Annonces Shopify`, and `Date "
+"de mise en ligne` on units)"
+msgstr ""
+
+#: ../../create_product_shopify.md 0e8eed65a496480da78875f92f024795
+msgid "**Requires**"
+msgstr ""
+
+#: ../../create_product_shopify.md f195eac72567436ea5e9d3a7d700bc0a
+msgid ""
+"Airtable + Shopify settings and `SHOPIFY_LOCATION_ID`, otherwise the run "
+"is recorded as `skipped`"
+msgstr ""
+
+#: ../../create_product_shopify.md acdfcd1732f6410ba6bfc271ccb0790f
+msgid "**Origin**"
+msgstr ""
+
+#: ../../create_product_shopify.md 3471d1d54b3b4aaabce8c3159114351f
+msgid ""
+"ported from a Google Cloud Function (`create_product_shopify(request)`, a"
+" Flask handler); this port is new code written in-process for this API"
+msgstr ""
+
+#: ../../create_product_shopify.md:14 0acc195c9ab3491fa9f1423e18ffea33
+msgid "What it does"
+msgstr ""
+
+#: ../../create_product_shopify.md:16 d86ebdc5f53142df8ace143afd6271e2
+msgid ""
+"Creates a brand-new Shopify product listing from an Airtable Model that "
+"doesn't have one yet: validates the Model's data is complete enough to "
+"list (descriptions, weight, a usable photo, sellable units with a valid "
+"price), builds one Shopify variant per (size/range, état esthétique) "
+"combination found among its sellable units, sets generic and family-"
+"specific metafields, uploads product images, and pushes inventory levels "
+"-- then records the new listing back into Airtable (`Annonces Shopify`) "
+"so it isn't created twice."
+msgstr ""
+
+#: ../../create_product_shopify.md:24 c5559d7c1c6644fa9dc4cab963ca4175
+msgid ""
+"This is the **only script here besides `update_product`** that writes to "
+"Shopify, and the only one of the two that *creates* a listing rather than"
+" updating an existing one. Both are native Python in this repo -- there's"
+" no external process involved."
+msgstr ""
+
+#: ../../create_product_shopify.md:28 5ad44ad95e8f4d4fb8c698967cd17b7f
+msgid "Documentation PDF"
+msgstr ""
+
+#: ../../create_product_shopify.md:30 0a299105dc8a453ea0dda065401794b1
+msgid ""
+"Shared with `update_product` via `api/scripts/_product_documentation.py` "
+"(upload through `api/integrations/shopify_files.py`, GraphQL)."
+msgstr ""
+
+#: ../../create_product_shopify.md:33 e4bc0e6dd03847b3ab211ed161f622fd
+msgid ""
+"**Source:** the Model's Airtable `Documentation` attachment field -- the "
+"first attachment that is a PDF (MIME type, or a `.pdf` filename). Other "
+"attachments are ignored."
+msgstr ""
+
+#: ../../create_product_shopify.md:35 536cb9202aac464fa1d25a15701097a7
+msgid ""
+"**Target:** the product metafield "
+"`SHOPIFY_PDF_METAFIELD_NAMESPACE`.`SHOPIFY_PDF_METAFIELD_KEY` (default "
+"`custom.pdf_descriptif`, the \"PDF Descriptif\" definition), type "
+"`file_reference`, plus a companion `single_line_text_field` "
+"(`custom.pdf_descriptif_airtable_id` by default) recording the Airtable "
+"attachment id the Shopify file came from."
+msgstr ""
+
+#: ../../create_product_shopify.md:39 8171042fdf1f4056800561abdfead41e
+msgid ""
+"**Upload:** the PDF is downloaded from Airtable (signed url, fetched "
+"fresh with the record) and sent through Shopify's staged upload -> "
+"`fileCreate` -> poll until `READY` -> `metafieldsSet` (both metafields in"
+" one atomic call)."
+msgstr ""
+
+#: ../../create_product_shopify.md:42 d5501171605947f688875badd07d9ed0
+msgid ""
+"**Change detection:** a product this script just created has no PDF yet, "
+"so the upload always happens when Airtable has one (no Shopify read "
+"first). Later changes are `update_product`'s job (see its own "
+"\"Documentation PDF\" section)."
+msgstr ""
+
+#: ../../create_product_shopify.md:45 b951beb9125145188f20e0d3f73fa7a0
+msgid ""
+"**Size limit:** a PDF over Shopify's 20 MB limit is first compressed with"
+" Ghostscript (`api/utils/pdf_compression.py`); if it's still too big, the"
+" sync fails with both sizes in the message (the Airtable original is "
+"never modified)."
+msgstr ""
+
+#: ../../create_product_shopify.md:48 b00b63a04cd44dc4a5fcd836aa98a330
+msgid ""
+"**Never clears:** an empty Airtable field writes nothing "
+"(`documentation_status: \"absent\"`) -- there's no deletion-sync "
+"convention in this project."
+msgstr ""
+
+#: ../../create_product_shopify.md:50 a445a15c5bcb4d97b5f823c3f9e6b900
+msgid ""
+"The replaced Shopify file is not deleted from the Files library (it may "
+"be referenced elsewhere)."
+msgstr ""
+
+#: ../../create_product_shopify.md:52 96c01f5f329149768fac4cab26fce549
+msgid ""
+"**Scopes:** the Shopify app needs `write_files` and `read_files` "
+"(confirmed missing on the RewakeDev token on 2026-09-28 -- `fileCreate` "
+"answers ACCESS_DENIED without them)."
+msgstr ""
+
+#: ../../create_product_shopify.md:54 24a1e9808411495daacc9410431b07af
+msgid ""
+"**Failure handling:** attached last, after variants, so a creation rolled"
+" back earlier never leaves an orphan file. It's optional content: no PDF "
+"-> nothing happens. A PDF that can't be uploaded sends an alert email and"
+" is reported in `details`, but the product is kept and the run is still a"
+" `success`. Reconciliation then lists it under \"Documentation PDF "
+"absente de Shopify\", and its bulk action retries it."
+msgstr ""
+
+#: ../../create_product_shopify.md:60 33de8be2914f45469e0ee33966aa945c
+msgid "Idempotence (two layers)"
+msgstr ""
+
+#: ../../create_product_shopify.md:62 319566559d34453681ca2d7ad262c14a
+msgid ""
+"**Before anything else**, verify directly against Shopify (not just "
+"Airtable) that no listing already exists for this Model. Airtable's own "
+"record of \"does this have a Shopify id\" can be stale (a previous "
+"attempt could have failed after linking but before actually creating the "
+"product, or vice versa), so this always makes a real Shopify API call "
+"rather than trusting Airtable alone."
+msgstr ""
+
+#: ../../create_product_shopify.md:67 f855a6ffd4c048a2a25523ea50c638ce
+msgid ""
+"**Immediately after** the Shopify product is created -- before "
+"metafields, images, or variants -- an `Annonces Shopify` Airtable record "
+"is created linking back to the Model. This is a retry-safe lock: Airtable"
+" auto-maintains the reverse link, so if this run (or Cloud Tasks-style "
+"retry, in the original) is re-triggered, layer 1's check finds this "
+"record and stops before creating a second product. **This ordering is "
+"deliberate -- don't move the lock-record creation later \"for "
+"cleanliness.\"**"
+msgstr ""
+
+#: ../../create_product_shopify.md:74 1466b545a7434ec8b729194b4b1d0c84
+msgid ""
+"Neither of those two layers, on their own, stops two truly *concurrent* "
+"triggers for the same Model from both passing layer 1's check before "
+"either has created anything -- that's a real race, present in the "
+"original Cloud Function too, not introduced by this port. It's closed by "
+"a third mechanism, one level up: `api/tasks.py`'s `run_script` takes a "
+"Redis lock (`RunStore.acquire_lock`) keyed by `record_id` before calling "
+"this script's `run()` at all, and records an immediate `skipped` result "
+"for a second concurrent trigger rather than letting it race. See "
+"`docs/architecture.rst`'s `api/tasks.py` section for the full explanation"
+" -- verified live: two simultaneous triggers for the same record, one "
+"rejected in 5ms, the other ran normally to completion."
+msgstr ""
+
+#: ../../create_product_shopify.md:84 50febabf09b24a498a8a3f7e52c85f33
+msgid "Safeguards added after the 2026-10-05 incident"
+msgstr ""
+
+#: ../../create_product_shopify.md:86 106cb3da1eaa473894c0313d04468d4b
+msgid ""
+"An Airtable automation re-triggered this script about every 40 s for one "
+"Model and left duplicate products on Shopify. Three causes, three fixes:"
+msgstr ""
+
+#: ../../create_product_shopify.md:89 8d1162cceefd464783aa68498e569253
+msgid ""
+"**Create and update collided.** The lock record this script writes "
+"changes the Model, which fired an `update_product` on the product still "
+"being created. Shopify then answered both with `409 \"This product is "
+"currently being modified\"`, and the image uploads failed. Both scripts "
+"now share one Redis lock per Model (`SHOPIFY_MODEL_LOCK_NAME` = "
+"`\"update_product_model\"` in `api/scripts/_shopify_links.py`). Whichever"
+" starts second raises `RequeueLater` and is put back on the queue until "
+"the first finishes."
+msgstr ""
+
+#: ../../create_product_shopify.md:96 d84bed7f2d724b1f96fc07e85dd0f0df
+msgid ""
+"**The rollback dropped the lock while the product was still on Shopify.**"
+" When the product's deletion failed (e.g. 409), "
+"`_cleanup_failed_creation` deleted the Annonces Shopify record anyway, so"
+" the next trigger created another copy. It now keeps the record when the "
+"product isn't really gone (the next trigger then sees the product and "
+"stops), and reports `cleanup_error`. A creation whose lock record can't "
+"be written is rolled back right away."
+msgstr ""
+
+#: ../../create_product_shopify.md:102 cb3ac71127384b4b9a4a14df5d5bd91f
+msgid ""
+"**Rollbacks re-fired the automation.** A rolled-back run is recorded with"
+" `rolled_back: true` (a run that crashed in a post-creation stage counts "
+"too, via `failed_at_stage`). For `ROLLBACK_COOLDOWN_SECONDS` (15 min) "
+"afterwards, triggers for that Model are recorded with `status: "
+"\"skipped\"`, the reason and the remaining wait in `skipped_reason`. Only"
+" the latest run for the Model counts. This applies to the dashboard "
+"button too. Runs that failed before creating anything (plain validation "
+"errors) never start a cooldown."
+msgstr ""
+
+#: ../../create_product_shopify.md:110 f2a252b70a3d48c2be59e84d5e9c1ae5
+msgid "Data it touches"
+msgstr ""
+
+#: ../../create_product_shopify.md:131 9aea9eb74bee48ada19aa0756d806150
+msgid "Triggering from Airtable"
+msgstr ""
+
+#: ../../create_product_shopify.md:133 17912729ed64469abeead8f3ec77806e
+msgid ""
+"An Airtable automation (\"Run script\" action, input `model_id` = the "
+"Model's record id) calls the API directly with "
+"`AIRTABLE_AUTOMATION_TOKEN` -- it replaces the former queue manager -> "
+"Cloud Tasks -> Cloud Function chain (Celery is the queue now, with its "
+"own retries and per-`record_id` lock):"
+msgstr ""
+
+#: ../../create_product_shopify.md:157 e56866a1226f44a8bd77b8b4f1099df5
+msgid ""
+"The response only confirms the run was queued; its outcome is in `GET "
+"/internal/scripts/create_product_shopify/runs` (and the alert email on "
+"failure). See [Authentification](./authentication.md) for the token's "
+"scope."
+msgstr ""
+
+#: ../../create_product_shopify.md:161 957499327e6646e6bde55b9053f6827b
+msgid "How it works"
+msgstr ""
+
+#: ../../create_product_shopify.md:163 48167ae80e004f0797ea5437184df86c
+msgid ""
+"`POST "
+"/internal/scripts/create_product_shopify/run?record_id=recXXXXXXXXXXXXXX`"
+" queues a Celery task; a missing `record_id` is rejected with `400` (same"
+" query param `update_product` uses -- both take a `record_id`, they're "
+"just for different tables: `update_product`'s is a Variation id, this "
+"one's is a Model id)."
+msgstr ""
+
+#: ../../create_product_shopify.md:167 0c4be3400b0741488a9c9b049b096789
+msgid ""
+"Reports a `report_stage` checkpoint at each major step "
+"(`checking_existing_listing`, `validating_model`, "
+"`resolving_type_and_marque`, `creating_shopify_product`, "
+"`creating_airtable_lock_record`, `building_metafields`, "
+"`uploading_images`, `creating_variants`, `uploading_documentation`, "
+"`updating_unit_listing_dates`) -- visible live via `GET "
+"/internal/scripts/create_product_shopify/current` while it runs, and in "
+"Grafana/Loki (`script=\"create_product_shopify\"`, `stage=\"...\"`)."
+msgstr ""
+
+#: ../../create_product_shopify.md:173 9cbf46e75d344e0f9952161a7064a9ad
+msgid ""
+"Existence check, then ~15 individual field validations (each raises an "
+"internal-only `_ValidationFailed`, caught once and turned into a "
+"`ScriptResult` failure -- see `api/scripts/create_product_shopify.py`'s "
+"module docstring for why this shape was chosen over either a bare early-"
+"return chain or a full custom exception hierarchy). Among them: `Short "
+"description`, `Long description`, a positive `Poids net (kg)`, `Name` and"
+" `Type`, at least one `Photo neuve` (every one at least 300x300px); every"
+" unit linked to the Model's Variations needs a non-empty `Prix de vente "
+"HT`; every \"A vendre\" unit needs a sale price not below its `Prix de "
+"rachat`, and, when it's sellable (not Abimé/Très abimé), a `Prix de vente"
+" HT` above 0. A unit at 0, empty or invalid fails the run before anything"
+" is created on Shopify, with a link to that unit. No sellable unit at all"
+" is a failure too."
+msgstr ""
+
+#: ../../create_product_shopify.md:184 d1b30d83a0a34c39aa0cebc4fbc522fa
+msgid ""
+"Creates the Shopify product (shell, no variants yet), then the Airtable "
+"lock record."
+msgstr ""
+
+#: ../../create_product_shopify.md:185 b7b95a34c9c24b1c89c00fcb4466c6dd
+msgid ""
+"Builds the metafields: a generic spec table (weight, dimensions, any non-"
+"variant Specification whose name is `\"key : value\"`-shaped) plus "
+"family-specific \"filter\" metafields (currently only defined for the "
+"`\"Balances\"` family -- see `FAMILY_FILTER_METAFIELDS` in the source)."
+msgstr ""
+
+#: ../../create_product_shopify.md:189 25afc9cee96c41569f05ffe75e94f8d9
+msgid ""
+"Uploads product images one at a time: \"Photo neuve\" always, plus "
+"marketplace photos from the *first* sellable unit that has any (see "
+"\"Known risks\" below for the exact semantics here)."
+msgstr ""
+
+#: ../../create_product_shopify.md:192 8aab49c69c3547ce88abf463cc7bab67
+msgid ""
+"Groups sellable units into variant rows by `(variant value, état "
+"esthétique)`, aggregating to `(min price, count)` per group; creates one "
+"Shopify variant per row (the first is bundled into the product-level "
+"update that also sets Shopify's `options`, matching Shopify's own "
+"requirement that a product have at least one variant before more can be "
+"added), and pushes each variant's inventory level. Options: \"État "
+"esthétique\", plus a second option holding the Variation's "
+"`Variant_value` whenever any of the Model's Variations has one "
+"(`_model_has_variant_values`)."
+msgstr ""
+
+#: ../../create_product_shopify.md:200 ea76035806614f2ab167c10107b22f55
+msgid "Attaches the documentation PDF (see \"Documentation PDF\")."
+msgstr ""
+
+#: ../../create_product_shopify.md:201 89563e69fbec438dbfe84986eeb8f3ad
+msgid ""
+"Updates `Date de mise en ligne` on every unit that was just listed, if "
+"not already set."
+msgstr ""
+
+#: ../../create_product_shopify.md:202 7ba6e6a723eb49b4a023dc08316b960e
+msgid ""
+"Sends an error-alert email (`api.services.gmail.send_alert_email`, "
+"reusing the existing Google service account -- no separate SMTP "
+"credential) on any failure, on a failed documentation upload, and when a "
+"family filter spec is missing."
+msgstr ""
+
+#: ../../create_product_shopify.md:206 b2e475ba399e4eb1b28f37bb0b41f255
+msgid "Deliberate deviations from the source Cloud Function"
+msgstr ""
+
+#: ../../create_product_shopify.md:208 be6f0314ef414704ba84ca755e7b3861
+msgid ""
+"**No pandas/numpy.** The source used pandas only for a small groupby-"
+"aggregate and numpy only for incrementally building small 2D arrays; this"
+" port uses a plain `collections.defaultdict` instead (see "
+"`_build_variant_rows`). Behaviorally equivalent, including `sorted()` on "
+"the groups to match pandas' `groupby(sort=True)` default -- this matters "
+"because the *first* variant row is special-cased (bundled into the "
+"options-setting product update), so group iteration order isn't cosmetic."
+msgstr ""
+
+#: ../../create_product_shopify.md:214 afece8c454ca400789249a1faa7e9e16
+msgid ""
+"**No SMTP / hardcoded credential.** The source had a Gmail app-password "
+"hardcoded in plaintext. This port instead reuses the Gmail API service "
+"account already configured for `api.services.gmail.create_draft` "
+"(`GOOGLE_APPLICATION_CREDENTIALS`), sending (not drafting) from "
+"`ALERT_EMAIL_SENDER` to `ALERT_EMAIL_RECIPIENTS`. No new credential type,"
+" and nothing plaintext."
+msgstr ""
+
+#: ../../create_product_shopify.md:219 7ad029989ec8438283a4b354b20e8629
+msgid ""
+"**Hardened: zero-variants-created is now a failure, not a silent "
+"success.** The source logs each variant/metafield creation failure and "
+"continues regardless -- if *every* variant call failed (e.g. a bad "
+"payload, a Shopify API change), it still returned success with a real "
+"product that has zero real variants. This port checks the count of "
+"variants actually created and fails the run (with cleanup: the Shopify "
+"product and Airtable lock record are both deleted) if it's zero. "
+"Metafield failures are still soft/non-fatal, same as source -- only \"the"
+" product is fundamentally unsellable\" is hardened."
+msgstr ""
+
+#: ../../create_product_shopify.md:227 c803cdf45ad94214937546e488aad80a
+msgid ""
+"**`SHOPIFY_LOCATION_ID` is now required config**, not a hardcoded "
+"production value. Confirmed empirically the dev store has three "
+"locations, none matching the production id the source hardcoded "
+"(`84104446276`) -- see `.env.example`."
+msgstr ""
+
+#: ../../create_product_shopify.md:231 b4d535f224594c6a976c69136f0d14da
+msgid "Known risks / things worth reviewing"
+msgstr ""
+
+#: ../../create_product_shopify.md:233 c437057d9feb45419f743bd42004f500
+msgid ""
+"This is a large, first-time port of real, previously-production business "
+"logic, tested so far with unit tests (hand-written fakes) and one real "
+"end-to-end run against the dev store (see below) -- not exhaustively "
+"exercised against every historical edge case the source handled. Worth a "
+"closer look before relying on this for real production listings:"
+msgstr ""
+
+#: ../../create_product_shopify.md:239 9abfa1c4ba9441928df8e96b8224f44a
+msgid ""
+"**Marketplace-photo semantics, preserved exactly (possibly surprising).**"
+" Only the *first* unit (in Airtable's own order) with any raw `Photos "
+"marketplace` entries at all contributes photos -- even if every one of "
+"its photos gets filtered out by the ≥300×300px/dedup-against-\"Photo "
+"neuve\" checks, the function does not keep looking at later units for one"
+" that actually has a usable photo. If a Model's first-listed unit happens"
+" to have only low-res marketplace photos, the listing gets **zero** "
+"marketplace photos even though a later unit might have great ones. This "
+"is the source's exact behavior, kept deliberately rather than \"fixed\" "
+"-- confirm this is actually wanted."
+msgstr ""
+
+#: ../../create_product_shopify.md:247 b52ce8d4b1794ffcaeb7884fc9053e71
+msgid ""
+"**Metafield creation failures are silent.** Unlike the hardened variant-"
+"count check above, a generic metafield that fails to create is at most "
+"logged (the response status isn't even checked), never surfaces in the "
+"run's result at all. A product could ship with a missing `main_table` and"
+" the run would still report success. For family filter metafields, a spec"
+" Airtable doesn't have (or a network error) sends an alert email listing "
+"the missing ones, but the run still succeeds."
+msgstr ""
+
+#: ../../create_product_shopify.md:253 27fe08985d144386ab3a1fd936e93a1c
+msgid ""
+"~~Fixed, but worth knowing about: the second Shopify option was decided "
+"by a hardcoded Type-name lookup, not by whether the Model actually needed"
+" one.~~ `_resolve_option` used to return `None` (no second option at all)"
+" for any Type outside two hardcoded special cases (`Micropipette`, "
+"`Paillasse`/`Meuble sous paillasse`) -- confirmed live: a genuinely "
+"multi-variant Model (two distinct sizes) whose Type was neither of those "
+"got created with **only one Shopify option**. Now detected from whether "
+"*any* of the Model's Variations has a non-empty `Variant_value`, with or "
+"without stock (`_model_has_variant_values`); the Type name still only "
+"picks a nicer option label for the two known families, falling back to a "
+"generic `\"Variante\"` otherwise. A product created before this fix with "
+"only one option is repaired by its next `update_product` run, which "
+"decides the options from Airtable and recreates the variants under them "
+"(see `docs/update_product.md`)."
+msgstr ""
+
+#: ../../create_product_shopify.md:265 34b2ba260e364dbc92253217f33f8050
+msgid ""
+"**`SHOPIFY_API_VERSION` is `2025-01`** (this project's existing shared "
+"default), **not** `2025-07` (what the source was actually written and "
+"validated against). No equivalence check has been done between these two "
+"versions for the specific mutating endpoints this script uses "
+"(product/variant/metafield/image/inventory writes) -- worth a deliberate "
+"check, not an assumption, before trusting this in production."
+msgstr ""
+
+#: ../../create_product_shopify.md:270 e2ebf213adeb4d809c5458428fb1d21b
+msgid ""
+"**Family-specific filter metafields only cover `\"Balances\"`** (ported "
+"as-is from the source's own `METAFIELDS` dict) -- every other family gets"
+" only the generic spec table, no dedicated filter metafields. If other "
+"families need filters, that mapping needs extending; nothing in this port"
+" adds new families beyond what the source had."
+msgstr ""
+
+#: ../../create_product_shopify.md:274 895fa43647b941359d4ae92ba5471264
+msgid ""
+"**The three-repo naming quirk in `Model.fields[\"Status (from Annonces "
+"Shopify (dev))\"]` is real, not a typo** -- copied byte-for-byte from the"
+" source. It's a rollup field whose own name happens to contain "
+"`\"(dev)\"` even when read against the production base. If this field is "
+"ever renamed in Airtable, this string must be updated to match exactly, "
+"or the \"already has an active listing\" short-circuit silently stops "
+"working (falls through to always re-checking Shopify directly, which is "
+"safe but slower -- not a silent-corruption risk, just worth knowing this "
+"specific string is load-bearing)."
+msgstr ""
+
+#: ../../create_product_shopify.md:281 b62df0514f3042dfac494047e2ee109b
+msgid ""
+"~~No dedicated unit test for the \"network error on the initial product-"
+"creation POST\" path~~ -- covered by `tests/test_shopify_rest.py`, added "
+"alongside the 409 fix below."
+msgstr ""
+
+#: ../../create_product_shopify.md:283 4bb84bdee7634a8da109e0112e7b3f8e
+#, python-brace-format
+msgid ""
+"**Concurrent image uploads to the same product can 409 -- now uploaded "
+"one at a time** (`IMAGE_UPLOAD_WORKERS = 1` since 2026-10-05: the retries"
+" below still let 1 image in 7 fail in production, which rolled the whole "
+"creation back). They used to upload in parallel to *one* product; "
+"Shopify's Admin API rejects a same-product write that collides with "
+"another one in flight with `409 {\"errors\": {\"product\": [\"This "
+"product is currently being modified. Please try again later.\"]}}` -- "
+"confirmed live against the dev store (7 concurrent image uploads via "
+"`ThreadPoolExecutor(max_workers=3)` reliably produced at least one 409). "
+"Unlike a network error or 5xx, this isn't ambiguous about whether the "
+"write applied -- Shopify says outright it didn't -- so "
+"`ShopifyAdmin._request` now retries a 409 with backoff regardless of HTTP"
+" method. See `tests/test_shopify_rest.py` for the retry-matrix coverage."
+msgstr ""
+
+#: ../../create_product_shopify.md:296 f5d61ed618d34ea19d34086f2cb36e8a
+msgid "Metrics and details"
+msgstr ""
+
+#: ../../create_product_shopify.md:298 4d84cd62adcd4813af2414096afb2a2d
+msgid "`GET /internal/scripts/create_product_shopify/runs` returns, per run:"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 782a495fbc9843639c3571d1feda4454
+msgid "Key"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 7dcafab90c3842dc8e0dc856b7d605f6
+msgid "Meaning"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 1d4887e5c8624920a7abc54f5fa27e8d
+msgid "`metrics.variants_created`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 9705d10139844aa690a1182dbbcbccda
+msgid ""
+"How many Shopify variants were actually created (0 forces failure -- see "
+"\"Deliberate deviations\" above)"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 4e9bcb6f856640449503144b1e479e93
+msgid "`metrics.images_uploaded`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 534e28b2302f4867be69fb3ae7df05c6
+msgid "How many images were successfully uploaded"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 416f02523cc74c34ae4e48728008de17
+msgid "`metrics.documentation_uploaded`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 5f38a66a8310463ca3d7dc483a9a9c11
+msgid "1 when the documentation PDF was attached, else 0"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 5807553227034a7d87ffa7e1e7307a31
+msgid "`details.documentation_status`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 165d9aa469444c07a8bf20daf772eb51
+msgid ""
+"`uploaded` / `absent` (no PDF in Airtable) / `failed` (product kept -- "
+"see \"Documentation PDF\")"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 7df1bd663176439da0e3ae029fdc0f69
+msgid "`details.documentation_error`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 bf79d38402174ce8a2f0cd1dc09bc455
+msgid "Present when `documentation_status` is `failed`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 311267ef152b49b2b4b153380fbd3537
+msgid "`details.model_id`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 b818251db6a94993aee1ebe18370c4be
+msgid "The Model record this run was for"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 efec56e8df1e4f43be01521d3764a352
+msgid ""
+"`details.shopify_product_id` / `details.shopify_product_url` / "
+"`details.airtable_listing_url`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 05cd8164795944bdb1c4a291b3e571f6
+msgid ""
+"The created (or, on a skip/\"already exists\" failure, the existing) "
+"Shopify product and its Annonces Shopify record"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 796aff85f45447beb60fbb0eb4717735
+msgid "`details.documentation_file_id`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 078a7349e8a5485fb49b52b86eeff483
+msgid "The Shopify file id, when `documentation_status` is `uploaded`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 8d9613e32d66467e8a58f77c6f716496
+msgid ""
+"`details.documentation_compressed` / "
+"`details.documentation_original_size` / "
+"`details.documentation_uploaded_size`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 5de3c323bbd342e7ab5d98aea783fbe6
+msgid "Present when the PDF had to be compressed to fit Shopify's 20 MB limit"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 cf319e91054748b1b237b7b14edc6cf4
+msgid "`details.title`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 68230e03b6a34fe59c70a611972da4b7
+msgid ""
+"The Model's name, for quick scanning in the run history -- present on "
+"**every** outcome (success, skip, or `_ValidationFailed`), not just "
+"success: it defaults to `\"Produit inconnu\"` at the top of `run()` and "
+"is filled in from the Model record (or, for the existence-check skip, "
+"from `_check_existing_listing`'s own cached fetch) as soon as it's known."
+msgstr ""
+
+#: ../../create_product_shopify.md:112 388d1e265d8647469f97373f5d384ba1
+msgid "`details.skipped_reason`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 27cf0d2951d84aa38f18fe5964a3c4e0
+msgid ""
+"Present (with `status: \"success\"`) when an existing-listing guard "
+"stopped the run before creating anything -- not a failure; with `status: "
+"\"skipped\"` during the rollback cooldown"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 2343f02c4e8244168f752f201d9284a2
+msgid "`details.error`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 77cb7dc713514da79183464205efdcce
+msgid "Present on failure: the validation message or the unexpected exception"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 73693bae019d491abe85e451a63abd89
+msgid "`details.rolled_back` / `details.cleanup_error`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 4f035a6f35d24bd080ddc3530a15f03c
+msgid ""
+"`rolled_back: true` when the created product was rolled back; "
+"`cleanup_error` when the Shopify product couldn't be deleted (its "
+"Annonces Shopify record is then kept)"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 2a67375eca2740f890925ed7c3e746ad
+msgid "`details.failed_at_stage`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 ca55ced9884d45b0807417cb19c5b43d
+msgid "Present on an unexpected exception (recorded by `api/tasks.py`)"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 293af62a108a43b8b698a633d29cde73
+msgid "`details.airtable_model_url`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 0baf14521e92484ba27d6ed4cd39bf2e
+msgid ""
+"Present on every `_ValidationFailed` -- a link to the Model record the "
+"failing check is about, even for a Model-level check with no more "
+"specific link (e.g. a missing description)"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 dd7e7ffbe1ce4ec88f1c175eb071793e
+msgid ""
+"`details.airtable_unit_url` / `details.airtable_variation_url` / "
+"`details.airtable_type_url`"
+msgstr ""
+
+#: ../../create_product_shopify.md:112 e7d59255c5f54eb6ae4a42fafe8639e5
+msgid ""
+"Present when the specific failing check is scoped to a Unit, Variation, "
+"or Type record rather than the Model as a whole (e.g. a per-unit sale-"
+"price-vs-buyback-price check) -- lets a human jump straight to the "
+"*actual* record that's wrong, not just the Model it belongs to"
+msgstr ""
+
+#: ../../create_product_shopify.md:319 478afddfd2514e15aa9dff223b068bed
+msgid "Where to look"
+msgstr ""
+
+#: ../../create_product_shopify.md:321 0f2be146d06f4d888afb151b80b6e0f3
+#, python-brace-format
+msgid ""
+"**Trigger/history:** `POST "
+"/internal/scripts/create_product_shopify/run?record_id=recXXX`, `GET "
+"/internal/scripts/status/{task_id}`, `GET "
+"/internal/scripts/create_product_shopify/runs`, `GET "
+"/internal/scripts/create_product_shopify/current` (live stage while "
+"running)."
+msgstr ""
+
+#: ../../create_product_shopify.md:325 5f334456ce434633aaa3062472e408d3
+msgid ""
+"**Logs:** `structlog`, logger `api.scripts.create_product_shopify` "
+"(business logic) and `api.tasks` (stage/lifecycle events) -- stdout, the "
+"rotating file, and Grafana/Loki (`script=\"create_product_shopify\"`)."
+msgstr ""
+
+#: ../../create_product_shopify.md:328 4ec7564d481c4ad0aa24bf25060b1a9a
+msgid ""
+"**Error alerts:** email, via `api.services.gmail.send_alert_email` -- "
+"`ALERT_EMAIL_SENDER`/`ALERT_EMAIL_RECIPIENTS` in `.env`."
+msgstr ""
+
+#: ../../create_product_shopify.md:330 6223efe681074a21b8b61e92d640769a
+msgid ""
+"**Source:** `api/scripts/create_product_shopify.py`, "
+"`api/integrations/shopify_rest.py` (the Shopify Admin REST client, "
+"mutation-focused -- distinct from `api/integrations/shopify.py`'s read-"
+"only GraphQL client used by `shopify_catalog_reconciliation`)."
+msgstr ""
+
+#: ../../create_product_shopify.md:334 043cf6950fda42798d1fca29aadf7287
+msgid ""
+"**Tests:** `tests/test_create_product_shopify.py`, "
+"`tests/test_shopify_rest.py`, `tests/test_product_documentation.py`."
+msgstr ""
+

@@ -1,0 +1,102 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Rewake
+# This file is distributed under the same license as the Rewake API package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Rewake API \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-15 11:41+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../index.rst:55 ../../index.rst:76 297eea3bd96640bdbf1ba7cea58d9139
+msgid "Manuals"
+msgstr ""
+
+#: ../../index.rst:2 e2e25087f6384d7685db917015b947ef
+msgid "Rewake API"
+msgstr ""
+
+#: ../../index.rst:4 c298f1544ae54bb8bc6afbe0fb313842
+msgid ""
+"The back-end API for Rewake -- internal tooling (used by the "
+"``app.rewake.fr`` intranet app) and external integrations (HelloPro, "
+"Machinio), served at `api.rewake.fr <https://api.rewake.fr>`_."
+msgstr ""
+
+#: ../../index.rst:8 63b01b53d21042c38bb7cb8af511a5d1
+msgid ""
+"This documentation set is new (see :doc:`development` for why and what's "
+"still missing); the API and its endpoints existed and were in production "
+"well before it."
+msgstr ""
+
+#: ../../index.rst:36 400e8a9337f5407fbbf590500523aa58
+msgid "Reference"
+msgstr ""
+
+#: ../../index.rst:38 fa2020e9ab11416aa7c31bb5a4e41fdf
+msgid ":doc:`routes` -- every endpoint, its access rules, and example responses."
+msgstr ""
+
+#: ../../index.rst:39 9530ed4075044f008acb30f6decd52f4
+msgid ":doc:`authentication` -- the token/origin model behind those access rules."
+msgstr ""
+
+#: ../../index.rst:40 4aceb09980d34349811a5aa6d7d0be50
+msgid ""
+":doc:`architecture` -- how the project fits together, including the "
+"Celery/Redis queued tasks (scripts, OCR, AI research)."
+msgstr ""
+
+#: ../../index.rst:42 4a693d5b3c594fcead7e757d67bf4338
+msgid ":doc:`operations` -- configuration, deployment, and logging."
+msgstr ""
+
+#: ../../index.rst:43 e42da0299b004ad69921bd421561eeae
+msgid ""
+":doc:`development` -- environment setup, Airtable/Shopify dev "
+"credentials, and the ``scripts/`` dev tooling."
+msgstr ""
+
+#: ../../index.rst:45 fd45209cc26a4c128748b697bf27be8b
+msgid ""
+":doc:`scripts` -- what each registered script does, on demand or "
+"scheduled."
+msgstr ""
+
+#: ../../index.rst:47 fd0b3cbcbc3d4ae6a6c445ffb5658d5b
+msgid ""
+":doc:`catalog_model` -- how Model, Variation and units are linked, how "
+"they become a Shopify product, and how to create a new one."
+msgstr ""
+
+#: ../../index.rst:49 b5becaf598634680b043ec7a41a36624
+msgid ""
+":doc:`catalog_intake` -- the ``/internal/catalog`` routes behind the "
+"app's receiving workflow (draft push, validation, units, reprises, label "
+"OCR, reference suggestion) and commercial review (review queue, model "
+"sheet, verification), plus the central AI service behind "
+"``/internal/ai``."
+msgstr ""
+
+#: ../../index.rst:57 2581057646384f0b9fadb8a786816d03
+msgid "Step-by-step guides for the teams using the tools (in French):"
+msgstr ""
+
+#: ../../index.rst:59 2591bd2ca85640038ed4a244ec7c8668
+msgid ""
+":doc:`manuals/reception-produits` -- receiving products in the intranet, "
+"article by article (operations team)."
+msgstr ""
+
