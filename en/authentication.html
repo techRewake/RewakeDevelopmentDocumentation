@@ -1,0 +1,281 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Authentication &mdash; Rewake API  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Architecture" href="architecture.html" />
+    <link rel="prev" title="Routes" href="routes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Rewake API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="routes.html">Routes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Authentication</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#tokens">Tokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#origines-autorisees">Allowed origins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logique-de-verification">Verification logic</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#avec-admin-token">With <code class="docutils literal notranslate"><span class="pre">ADMIN_TOKEN</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regles-par-route">Rules by route</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#exemples-de-requetes">Request examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#token-seul-admin-token">Token only (ADMIN_TOKEN)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#app-token-origin">APP_TOKEN + Origin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#app-token-sans-origin">APP_TOKEN without Origin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hellopro-token-pas-de-verification-d-origine">HELLOPRO_TOKEN (no origin check)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#automatisation-airtable-airtable-automation-token">Airtable automation (AIRTABLE_AUTOMATION_TOKEN)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#origin-sans-token">Origin without a token</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">Scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="catalog_model.html">Catalog model: Model, Variation, Unit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="catalog_intake.html">Catalog intake: receiving batches to Airtable</a></li>
+<li class="toctree-l1"><a class="reference internal" href="translations.html">Translations and publishing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Manuals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manuals/index.html">Manuals</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Rewake API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Authentication</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="authentification">
+<h1>Authentication<a class="headerlink" href="#authentification" title="Link to this heading"></a></h1>
+<p>Rewake API authentication relies on <strong>Bearer tokens</strong> and an optional origin/referer check.</p>
+<hr class="docutils" />
+<section id="tokens">
+<h2>Tokens<a class="headerlink" href="#tokens" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Token</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Access</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ADMIN_TOKEN</span></code></p></td>
+<td><p>Administrator token</p></td>
+<td><p><strong>All routes</strong>; bypasses the origin check</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">HELLOPRO_TOKEN</span></code></p></td>
+<td><p>Dedicated HelloPro token</p></td>
+<td><p>Only <code class="docutils literal notranslate"><span class="pre">/hellopro/*</span></code> routes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MACHINIO_TOKEN</span></code></p></td>
+<td><p>Dedicated Machinio token</p></td>
+<td><p>Only <code class="docutils literal notranslate"><span class="pre">/machinio/*</span></code> routes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code></p></td>
+<td><p>Token dedicated to the internal app</p></td>
+<td><p>Only <code class="docutils literal notranslate"><span class="pre">/internal/*</span></code> routes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AIRTABLE_AUTOMATION_TOKEN</span></code></p></td>
+<td><p>Token sent by Airtable automations (≠ <code class="docutils literal notranslate"><span class="pre">AIRTABLE_TOKEN</span></code>, which the API sends to Airtable)</p></td>
+<td><p>Only <code class="docutils literal notranslate"><span class="pre">/internal/scripts/*</span></code> routes</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>[!WARNING] Tokens must be set in <code class="docutils literal notranslate"><span class="pre">.env</span></code> and <strong>must never be committed</strong>.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="origines-autorisees">
+<h2>Allowed origins<a class="headerlink" href="#origines-autorisees" title="Link to this heading"></a></h2>
+<p>The API accepts requests from the following domains when the origin check is enabled, using either the <code class="docutils literal notranslate"><span class="pre">Origin</span></code> <strong>or</strong> <code class="docutils literal notranslate"><span class="pre">Referer</span></code> header (<code class="docutils literal notranslate"><span class="pre">ALLOWED_ORIGINS</span></code> in <code class="docutils literal notranslate"><span class="pre">api/utils/auth.py</span></code>):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">https://app.rewake.fr</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">https://sav.rewake.fr</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">https://info.rewake.fr</span></code></p></li>
+</ul>
+<p>CORS (<code class="docutils literal notranslate"><span class="pre">api/main.py</span></code>), however, only allows <code class="docutils literal notranslate"><span class="pre">app.rewake.fr</span></code> and <code class="docutils literal notranslate"><span class="pre">sav.rewake.fr</span></code>.</p>
+<p>Public routes (<code class="docutils literal notranslate"><span class="pre">/health/</span></code>, <code class="docutils literal notranslate"><span class="pre">/metrics</span></code>, <code class="docutils literal notranslate"><span class="pre">/invoice/get</span></code>, <code class="docutils literal notranslate"><span class="pre">/pdf/{filename}</span></code>, <code class="docutils literal notranslate"><span class="pre">/formulaire/photos/*</span></code>) require neither a token nor an origin (see <a class="reference internal" href="routes.html"><span class="std std-doc">routes</span></a>).</p>
+</section>
+<hr class="docutils" />
+<section id="logique-de-verification">
+<h2>Verification logic<a class="headerlink" href="#logique-de-verification" title="Link to this heading"></a></h2>
+<section id="avec-admin-token">
+<h3>With <code class="docutils literal notranslate"><span class="pre">ADMIN_TOKEN</span></code><a class="headerlink" href="#avec-admin-token" title="Link to this heading"></a></h3>
+<p><strong>Automatic</strong> access to all routes, <strong>without an origin/referer check</strong>.</p>
+</section>
+<section id="regles-par-route">
+<h3>Rules by route<a class="headerlink" href="#regles-par-route" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Route</p></th>
+<th class="head"><p>Origin check</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/hellopro/*</span></code></p></td>
+<td><p>❌ No (<code class="docutils literal notranslate"><span class="pre">HELLOPRO_TOKEN</span></code> required only)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/machinio/*</span></code></p></td>
+<td><p>❌ No (<code class="docutils literal notranslate"><span class="pre">MACHINIO_TOKEN</span></code> required only)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/internal/*</span></code></p></td>
+<td><p>✅ Yes (<code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> <strong>and</strong> a valid origin/referer)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/internal/scripts/*</span></code></p></td>
+<td><p>✅ Yes with <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code>; ❌ No with <code class="docutils literal notranslate"><span class="pre">AIRTABLE_AUTOMATION_TOKEN</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>[!IMPORTANT] <code class="docutils literal notranslate"><span class="pre">ADMIN_TOKEN</span></code> always bypasses the origin check on every route.</p>
+</div></blockquote>
+<p>When an origin is checked, the check happens <strong>before</strong> the token check: a request without a valid origin receives <code class="docutils literal notranslate"><span class="pre">403</span> <span class="pre">Access</span> <span class="pre">denied:</span> <span class="pre">invalid</span> <span class="pre">domain</span></code>, regardless of its token; with a valid origin but an invalid token, it receives <code class="docutils literal notranslate"><span class="pre">403</span> <span class="pre">Access</span> <span class="pre">denied:</span> <span class="pre">invalid</span> <span class="pre">token</span></code>. If a token’s environment variable is not set, only <code class="docutils literal notranslate"><span class="pre">ADMIN_TOKEN</span></code> grants access to the corresponding routes.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="exemples-de-requetes">
+<h2>Request examples<a class="headerlink" href="#exemples-de-requetes" title="Link to this heading"></a></h2>
+<section id="token-seul-admin-token">
+<h3>Token only (ADMIN_TOKEN)<a class="headerlink" href="#token-seul-admin-token" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer ADMIN_TOKEN"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>http://localhost:3002/internal/logs/
+<span class="c1"># ✅ 200 - Accès autorisé (contourne l'origine)</span>
+</pre></div>
+</div>
+</section>
+<section id="app-token-origin">
+<h3>APP_TOKEN + Origin<a class="headerlink" href="#app-token-origin" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer APP_TOKEN"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-H<span class="w"> </span><span class="s2">"Origin: https://app.rewake.fr"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>http://localhost:3002/internal/logs/
+<span class="c1"># ✅ 200 - Token valide + origine autorisée</span>
+</pre></div>
+</div>
+</section>
+<section id="app-token-sans-origin">
+<h3>APP_TOKEN without Origin<a class="headerlink" href="#app-token-sans-origin" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer APP_TOKEN"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>http://localhost:3002/internal/logs/
+<span class="c1"># ❌ 403 - Origin/Referer manquant</span>
+</pre></div>
+</div>
+</section>
+<section id="hellopro-token-pas-de-verification-d-origine">
+<h3>HELLOPRO_TOKEN (no origin check)<a class="headerlink" href="#hellopro-token-pas-de-verification-d-origine" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer HELLOPRO_TOKEN"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>http://localhost:3002/hellopro/csv/
+<span class="c1"># ✅ 200 - Token valide, l'origine n'est pas vérifiée</span>
+</pre></div>
+</div>
+</section>
+<section id="automatisation-airtable-airtable-automation-token">
+<h3>Airtable automation (AIRTABLE_AUTOMATION_TOKEN)<a class="headerlink" href="#automatisation-airtable-airtable-automation-token" title="Link to this heading"></a></h3>
+<p>Airtable automations run on Airtable’s servers, without an <code class="docutils literal notranslate"><span class="pre">Origin</span></code> header. The dedicated <code class="docutils literal notranslate"><span class="pre">AIRTABLE_AUTOMATION_TOKEN</span></code> is accepted on <code class="docutils literal notranslate"><span class="pre">/internal/scripts/*</span></code> only.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer AIRTABLE_AUTOMATION_TOKEN"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="s2">"http://localhost:3002/internal/scripts/create_product_shopify/run?record_id=recXXX"</span>
+<span class="c1"># ✅ 200 - {"task_id": ..., "status": "queued", ...}</span>
+
+curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer AIRTABLE_AUTOMATION_TOKEN"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>http://localhost:3002/internal/backups/
+<span class="c1"># ❌ 403 - hors de /internal/scripts/*</span>
+</pre></div>
+</div>
+</section>
+<section id="origin-sans-token">
+<h3>Origin without a token<a class="headerlink" href="#origin-sans-token" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Origin: https://app.rewake.fr"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>http://localhost:3002/internal/logs/
+<span class="c1"># ❌ 403 - Token manquant</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="routes.html" class="btn btn-neutral float-left" title="Routes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="architecture.html" class="btn btn-neutral float-right" title="Architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Rewake.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

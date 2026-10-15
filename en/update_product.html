@@ -1,0 +1,931 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Update Product &mdash; Rewake API  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Create Product Shopify" href="create_product_shopify.html" />
+    <link rel="prev" title="Scripts" href="scripts.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Rewake API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="routes.html">Routes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="scripts.html">Scripts</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Update Product</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-it-does">What it does</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#triggering-from-airtable">Triggering from Airtable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#images">Images</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#documentation-pdf">Documentation PDF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#locking-runs-for-one-model-never-overlap-and-never-get-dropped">Locking: runs for one Model never overlap, and never get dropped</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-it-touches">Data it touches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-it-works">How it works</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deliberate-deviations-from-the-source-update-product">Deliberate deviations from the source (<code class="docutils literal notranslate"><span class="pre">Update-Product</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#known-risks-things-worth-reviewing">Known risks / things worth reviewing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metrics-and-details">Metrics and details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#where-to-look">Where to look</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="create_product_shopify.html">Create Product Shopify</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shopify_catalog_reconciliation.html">Shopify Catalog Reconciliation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="airtable_catalog_stats.html">Airtable Catalog Stats</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="catalog_model.html">Catalog model: Model, Variation, Unit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="catalog_intake.html">Catalog intake: receiving batches to Airtable</a></li>
+<li class="toctree-l1"><a class="reference internal" href="translations.html">Translations and publishing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Manuals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manuals/index.html">Manuals</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Rewake API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="scripts.html">Scripts</a></li>
+      <li class="breadcrumb-item active">Update Product</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="update-product">
+<h1>Update Product<a class="headerlink" href="#update-product" title="Link to this heading"></a></h1>
+<p><img src="https://cdn.simpleicons.org/airtable" alt="Airtable" width="28" height="28"> <img src="https://cdn.simpleicons.org/shopify" alt="Shopify" width="28" height="28"></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Module</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">api.scripts.update_product</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Schedule</strong></p></td>
+<td><p>on-demand only (<code class="docutils literal notranslate"><span class="pre">schedule</span> <span class="pre">=</span> <span class="pre">None</span></code>) – requires exactly one of <code class="docutils literal notranslate"><span class="pre">record_id</span></code> (a Variation) or <code class="docutils literal notranslate"><span class="pre">model_id</span></code> (a Model)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Reads</strong></p></td>
+<td><p>Airtable (Model, Variation, Toutes les unités, Annonces Shopify, Type d’équipement, Marque, Familles, Specification) + the live Shopify product</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Requires</strong></p></td>
+<td><p>Airtable + Shopify settings and <code class="docutils literal notranslate"><span class="pre">SHOPIFY_LOCATION_ID</span></code>, otherwise the run is recorded as <code class="docutils literal notranslate"><span class="pre">skipped</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Writes</strong></p></td>
+<td><p><strong>Shopify</strong> – the other script here that writes anything, alongside <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> (which creates a brand-new listing; this one only ever updates one that already exists, or deletes it when <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> is “Non”) – and deletes the “Annonces Shopify” record in that case</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Origin</strong></p></td>
+<td><p>ported in-process from a sibling project (<code class="docutils literal notranslate"><span class="pre">Update-Product</span></code>, a separate git repository) that this script previously shelled out to as a subprocess – see “Deliberate deviations” below</p></td>
+</tr>
+</tbody>
+</table>
+<section id="what-it-does">
+<h2>What it does<a class="headerlink" href="#what-it-does" title="Link to this heading"></a></h2>
+<p>Syncs an existing Shopify product from Airtable. <strong>Airtable is the source of truth</strong>
+for everything it writes:</p>
+<ul class="simple">
+<li><p><strong>Product:</strong> title (<code class="docutils literal notranslate"><span class="pre">Name</span></code>), description (<code class="docutils literal notranslate"><span class="pre">Short</span> <span class="pre">description</span></code>), vendor (<code class="docutils literal notranslate"><span class="pre">Marque</span></code>,
+or <code class="docutils literal notranslate"><span class="pre">Sans</span> <span class="pre">marque</span></code>), product type (the Type’s <code class="docutils literal notranslate"><span class="pre">Name</span></code>), and status (the linked
+“Annonces Shopify” record’s <code class="docutils literal notranslate"><span class="pre">Status</span></code>: <code class="docutils literal notranslate"><span class="pre">active</span></code>/<code class="docutils literal notranslate"><span class="pre">draft</span></code>/<code class="docutils literal notranslate"><span class="pre">archived</span></code>/<code class="docutils literal notranslate"><span class="pre">unlisted</span></code>, case
+ignored; left as is when empty, a failure when it’s anything else). An empty
+Airtable value never clears a Shopify field.</p></li>
+<li><p><strong>Metafields:</strong> the same set <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> writes – <code class="docutils literal notranslate"><span class="pre">long_description</span></code>,
+<code class="docutils literal notranslate"><span class="pre">reconditionnement</span></code>, <code class="docutils literal notranslate"><span class="pre">livraison</span></code>, <code class="docutils literal notranslate"><span class="pre">garantie</span></code>, <code class="docutils literal notranslate"><span class="pre">main_table</span></code> – plus the family
+“filter” metafields (<code class="docutils literal notranslate"><span class="pre">FAMILY_FILTER_METAFIELDS</span></code>, currently only <code class="docutils literal notranslate"><span class="pre">Balances</span></code>). A
+filter spec Airtable doesn’t have is listed in <code class="docutils literal notranslate"><span class="pre">details.filter_specs_missing</span></code> (no
+alert email – this script runs on every stock change).</p></li>
+<li><p><strong>Images:</strong> the Model’s <code class="docutils literal notranslate"><span class="pre">Photo</span> <span class="pre">neuve</span></code>, then the <code class="docutils literal notranslate"><span class="pre">Photos</span> <span class="pre">marketplace</span></code> of its first
+sellable unit that has any – the same images <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> uploads (see
+“Images” below).</p></li>
+<li><p><strong>Documentation PDF:</strong> see below.</p></li>
+<li><p><strong>Options and variants:</strong> the product is reconciled to Airtable, never just
+patched. Options: “État esthétique”, plus the size option (the Variation’s
+<code class="docutils literal notranslate"><span class="pre">Variant_value</span></code>; label from the Type, see <code class="docutils literal notranslate"><span class="pre">_variant_option_name</span></code>) whenever <em>any</em> of
+the Model’s Variations has a <code class="docutils literal notranslate"><span class="pre">Variant_value</span></code> – with or without stock right now,
+since that’s what reconciliation matches a variant against. Variants: exactly one
+per sellable (condition[, variant value]) combination, with Airtable’s price,
+weight and stock – a missing one is <strong>created</strong>, one with nothing left to sell is
+<strong>deleted</strong>. When the options change (e.g. a product created without the size
+option), every variant is recreated under the new options. Shopify requires at
+least one variant, so when the whole Model has nothing left to sell, the existing
+variants are kept and <strong>set to a zero stock</strong>.</p></li>
+</ul>
+<p>When the Model’s <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> is <strong>“Non”</strong>, the run instead <strong>deletes the
+Shopify product and its “Annonces Shopify” record</strong> (every linked one). A product
+already gone from Shopify (404) still has its listing deleted; any other Shopify
+error stops before the listing is deleted, so a retry still knows what to delete. An
+empty (or unrecognized) <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> is a failure – deleting a live product
+over an unfilled field would be too destructive a guess. Accepted values: “Oui”/”Non”
+(or booleans).</p>
+<p>Two entry modes, both real (nothing here previews or dry-runs):</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">record_id</span></code></strong> (a Variation id, the default/existing convention): resolves that
+Variation’s parent Model, then updates the whole product. Shopify variants all belong
+to one product per Model anyway, so “update one variation” and “update its model”
+converge on the same write.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">model_id</span></code></strong>: the identical pipeline, entered directly from a Model id – what the
+Airtable automations use (see “Triggering from Airtable”).</p></li>
+</ul>
+<p>Nothing here creates a brand-new Shopify listing – see <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> for
+that. A Model with no Shopify product yet (<code class="docutils literal notranslate"><span class="pre">Aucun</span> <span class="pre">produit</span> <span class="pre">Shopify</span> <span class="pre">associé</span> <span class="pre">à</span> <span class="pre">ce</span> <span class="pre">modèle</span></code>) is a validation failure here, not something this script will fix.</p>
+<p>Like <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> (same <code class="docutils literal notranslate"><span class="pre">_collect_sellable_units</span></code>), it fails before any
+Shopify write when a sellable unit (A vendre, not Abimé/Très abimé) has a
+<code class="docutils literal notranslate"><span class="pre">Prix</span> <span class="pre">de</span> <span class="pre">vente</span> <span class="pre">HT</span></code> of 0, empty or invalid. The run history links to that unit.</p>
+</section>
+<section id="triggering-from-airtable">
+<h2>Triggering from Airtable<a class="headerlink" href="#triggering-from-airtable" title="Link to this heading"></a></h2>
+<p>The four automations that used to call the queue manager (“Update fiche shopify
+(vendus)”, “(Pas a vendre)”, “(modifs)”, “Update quantité shopify (entry)”) all run the
+same script (“Run script” action, input <code class="docutils literal notranslate"><span class="pre">model_id</span></code> = the Model’s record id), with
+<code class="docutils literal notranslate"><span class="pre">AIRTABLE_AUTOMATION_TOKEN</span></code>:</p>
+<div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">inputConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">input</span><span class="p">.</span><span class="nx">config</span><span class="p">();</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">API_URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"https://api.rewake.fr/internal/scripts/update_product/run"</span><span class="p">;</span>
+<span class="c1">// Airtable automation secret, same value as the API's AIRTABLE_AUTOMATION_TOKEN</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">API_TOKEN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">input</span><span class="p">.</span><span class="nx">secret</span><span class="p">(</span><span class="s2">"AIRTABLE_AUTOMATION_TOKEN"</span><span class="p">);</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="nx">model_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">inputConfig</span><span class="p">.</span><span class="nx">model_id</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nx">inputConfig</span><span class="p">.</span><span class="nx">model_id</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nx">inputConfig</span><span class="p">.</span><span class="nx">model_id</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">model_id</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s2">"Model ID manquant"</span><span class="p">);</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">API_URL</span><span class="si">}</span><span class="sb">?model_id=</span><span class="si">${</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">model_id</span><span class="p">)</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">method</span><span class="o">:</span><span class="w"> </span><span class="s2">"POST"</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">headers</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Authorization</span><span class="o">:</span><span class="w"> </span><span class="sb">`Bearer </span><span class="si">${</span><span class="nx">API_TOKEN</span><span class="si">}</span><span class="sb">`</span><span class="w"> </span><span class="p">}</span>
+<span class="p">});</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">response</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="sb">`Erreur API: </span><span class="si">${</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="si">}</span><span class="sb"> - </span><span class="si">${</span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">()</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"✅ Tâche ajoutée:"</span><span class="p">,</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">task_id</span><span class="p">,</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">status</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The response only confirms the run was queued; its outcome is in
+<code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/update_product/runs</span></code> (and the alert email on failure).</p>
+</section>
+<section id="images">
+<h2>Images<a class="headerlink" href="#images" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Source:</strong> the Model’s <code class="docutils literal notranslate"><span class="pre">Photo</span> <span class="pre">neuve</span></code> (all of them; missing, or any under 300x300px,
+is a failure), then the <code class="docutils literal notranslate"><span class="pre">Photos</span> <span class="pre">marketplace</span></code> of the first sellable unit that has any
+(under 300x300px or duplicating a <code class="docutils literal notranslate"><span class="pre">Photo</span> <span class="pre">neuve</span></code> url: skipped) – shared with
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> via <code class="docutils literal notranslate"><span class="pre">_marketplace_photo_attachments</span></code>.</p></li>
+<li><p><strong>Change detection:</strong> the Airtable attachment ids the Shopify images came from are
+recorded, in order, in the <code class="docutils literal notranslate"><span class="pre">custom.images_airtable_ids</span></code> metafield. Images are
+replaced only when that differs from Airtable’s current list, or when Shopify’s image
+count no longer matches. A product whose images predate this (no recorded ids) has
+them replaced once.</p></li>
+<li><p><strong>Replacement:</strong> new images are uploaded first (in order, with their position); the
+old ones are deleted only once every upload worked. A failed upload deletes what it
+added and leaves the old images in place.</p></li>
+<li><p><strong>Worth knowing:</strong> the marketplace photos follow the <em>first sellable</em> unit – when
+that unit is sold, the next one’s photos replace them on the next update.</p></li>
+</ul>
+</section>
+<section id="documentation-pdf">
+<h2>Documentation PDF<a class="headerlink" href="#documentation-pdf" title="Link to this heading"></a></h2>
+<p>Shared with <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> via <code class="docutils literal notranslate"><span class="pre">api/scripts/_product_documentation.py</span></code> (upload through
+<code class="docutils literal notranslate"><span class="pre">api/integrations/shopify_files.py</span></code>, GraphQL).</p>
+<ul class="simple">
+<li><p><strong>Source:</strong> the Model’s Airtable <code class="docutils literal notranslate"><span class="pre">Documentation</span></code> attachment field – the first attachment
+that is a PDF (MIME type, or a <code class="docutils literal notranslate"><span class="pre">.pdf</span></code> filename). Other attachments are ignored.</p></li>
+<li><p><strong>Target:</strong> the product metafield <code class="docutils literal notranslate"><span class="pre">SHOPIFY_PDF_METAFIELD_NAMESPACE</span></code>.<code class="docutils literal notranslate"><span class="pre">SHOPIFY_PDF_METAFIELD_KEY</span></code>
+(default <code class="docutils literal notranslate"><span class="pre">custom.pdf_descriptif</span></code>, the “PDF Descriptif” definition), type <code class="docutils literal notranslate"><span class="pre">file_reference</span></code>,
+plus a companion <code class="docutils literal notranslate"><span class="pre">single_line_text_field</span></code> (<code class="docutils literal notranslate"><span class="pre">custom.pdf_descriptif_airtable_id</span></code> by default)
+recording the Airtable attachment id the Shopify file came from.</p></li>
+<li><p><strong>Upload:</strong> the PDF is downloaded from Airtable (signed url, fetched fresh with the
+record) and sent through Shopify’s staged upload -&gt; <code class="docutils literal notranslate"><span class="pre">fileCreate</span></code> -&gt; poll until
+<code class="docutils literal notranslate"><span class="pre">READY</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">metafieldsSet</span></code> (both metafields in one atomic call).</p></li>
+<li><p><strong>Change detection:</strong> same “diff against live Shopify” approach as the rest of
+<code class="docutils literal notranslate"><span class="pre">update_product</span></code> – no extra state store (the two metafields are read through GraphQL
+first). Upload when Shopify has no PDF, or when the
+recorded source id differs from Airtable’s current attachment id (Airtable gives a
+replaced file a new id). A Shopify PDF set by hand before this sync existed has no
+source id, so it is replaced once by Airtable’s, then stays stable.</p></li>
+<li><p><strong>Never clears:</strong> an empty Airtable field writes nothing (<code class="docutils literal notranslate"><span class="pre">documentation_status:</span> <span class="pre">&quot;absent&quot;</span></code>) – there’s no deletion-sync convention in this project.</p></li>
+<li><p><strong>Size limit:</strong> a PDF over Shopify’s 20 MB limit is first compressed with Ghostscript
+(<code class="docutils literal notranslate"><span class="pre">api/utils/pdf_compression.py</span></code>); if it’s still too big, the sync fails with both
+sizes in the message (the Airtable original is never modified).</p></li>
+<li><p>The replaced Shopify file is not deleted from the Files library (it may be referenced
+elsewhere).</p></li>
+<li><p><strong>Scopes:</strong> the Shopify app needs <code class="docutils literal notranslate"><span class="pre">write_files</span></code> and <code class="docutils literal notranslate"><span class="pre">read_files</span></code> (confirmed missing on
+the RewakeDev token on 2026-09-28 – <code class="docutils literal notranslate"><span class="pre">fileCreate</span></code> answers ACCESS_DENIED without them).</p></li>
+<li><p><strong>Failure handling:</strong> runs inside the per-Model lock, after variants. A
+failed upload doesn’t stop the rest of the sync, but turns the run into a <code class="docutils literal notranslate"><span class="pre">failure</span></code>
+afterwards (same rule as a failed variant creation: it’s what reconciliation’s
+documentation bulk action runs this script for).</p></li>
+</ul>
+</section>
+<section id="locking-runs-for-one-model-never-overlap-and-never-get-dropped">
+<h2>Locking: runs for one Model never overlap, and never get dropped<a class="headerlink" href="#locking-runs-for-one-model-never-overlap-and-never-get-dropped" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>The per-<code class="docutils literal notranslate"><span class="pre">record_id</span></code> Redis lock in <code class="docutils literal notranslate"><span class="pre">api/tasks.py</span></code> (shared by every script) guards the
+outer request layer – keyed by whatever the caller passed in as <code class="docutils literal notranslate"><span class="pre">record_id</span></code>.
+<code class="docutils literal notranslate"><span class="pre">update_product</span></code> sets <code class="docutils literal notranslate"><span class="pre">requeue_when_locked</span></code>, so a run that finds it held is put
+back on the queue instead of being skipped.</p></li>
+<li><p>A second lock, acquired inside <code class="docutils literal notranslate"><span class="pre">run()</span></code> once the Model is resolved, keyed by the
+Model id (<code class="docutils literal notranslate"><span class="pre">RunStore.acquire_lock(&quot;update_product_model&quot;,</span> <span class="pre">model_id)</span></code>, the
+<code class="docutils literal notranslate"><span class="pre">SHOPIFY_MODEL_LOCK_NAME</span></code> of <code class="docutils literal notranslate"><span class="pre">api/scripts/_shopify_links.py</span></code>) – the one that
+actually matters, since a Variation id and a Model id (or two Variations of one
+Model) resolve to the same Shopify product. <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> takes the same
+lock, so an update never runs while the product is still being created. A run that finds it held raises
+<code class="docutils literal notranslate"><span class="pre">RequeueLater</span></code>, and <code class="docutils literal notranslate"><span class="pre">api/tasks.py</span></code> puts it back on the queue (5s countdown, up to
+<code class="docutils literal notranslate"><span class="pre">REQUEUE_MAX_RETRIES</span></code> = 120 times, then a <code class="docutils literal notranslate"><span class="pre">failure</span></code> run is recorded).</p></li>
+</ol>
+<p>Every Airtable read happens after the Model lock is acquired, with a fresh cache – a
+run that waited its turn syncs Airtable’s <em>latest</em> state, not what it saw when it was
+triggered. A waiting run isn’t recorded in the run history; only the run that actually
+happens is.</p>
+</section>
+<section id="data-it-touches">
+<h2>Data it touches<a class="headerlink" href="#data-it-touches" title="Link to this heading"></a></h2>
+<pre  class="mermaid">
+        flowchart LR
+    CALLER[[&quot;POST /internal/scripts/update_product/run?record_id=...&lt;br/&gt;or ?model_id=...&quot;]]
+    TASK[[&quot;api.tasks.run_script (Celery)&lt;br/&gt;per-record_id Redis lock&quot;]]
+    SCRIPT[[&quot;api.scripts.update_product&lt;br/&gt;(in-process)&quot;]]
+    LOCK[(&quot;Redis: per-Model lock&lt;br/&gt;(busy -&gt; requeued)&quot;)]
+    AT[(&quot;Airtable&lt;br/&gt;Model + Variation + Unit records&quot;)]
+    SH[(&quot;Shopify&lt;br/&gt;product/metafield/variant/inventory writes&quot;)]
+
+    CALLER --&gt; TASK --&gt; SCRIPT
+    SCRIPT -- acquires --&gt; LOCK
+    SCRIPT -- reads --&gt; AT
+    SCRIPT -- writes --&gt; SH
+
+    TASK --&gt; RUNS[(&quot;Redis run history&lt;br/&gt;GET /internal/scripts/update_product/runs&quot;)]
+    TASK --&gt; LOG[(&quot;structlog (api.scripts.update_product)&lt;br/&gt;-&gt; stdout / rotating file&quot;)]
+    </pre></section>
+<section id="how-it-works">
+<h2>How it works<a class="headerlink" href="#how-it-works" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Resolve the Model: <code class="docutils literal notranslate"><span class="pre">record_id</span></code> mode verifies the id really belongs to the
+<code class="docutils literal notranslate"><span class="pre">Variation</span></code> table (Airtable’s single-record GET doesn’t validate that – see
+<code class="docutils literal notranslate"><span class="pre">_assert_belongs_to_table</span></code>), then reads its <code class="docutils literal notranslate"><span class="pre">Model</span></code> link field; <code class="docutils literal notranslate"><span class="pre">model_id</span></code> mode
+verifies the id belongs to <code class="docutils literal notranslate"><span class="pre">Model</span></code> directly.</p></li>
+<li><p>Acquire the per-Model lock (or requeue – see above), then read the Model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> = “Non”: delete the Shopify product(s) and listing(s), done.</p></li>
+<li><p>Validate: a Shopify product is linked (via <code class="docutils literal notranslate"><span class="pre">Annonces</span> <span class="pre">Shopify</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">ID_shopify</span></code>, the
+same <code class="docutils literal notranslate"><span class="pre">_resolve_listing_ids</span></code> helper <code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code> uses), the listing’s
+<code class="docutils literal notranslate"><span class="pre">Status</span></code> is valid, the Type is set and exists, the weight (when set) is a number –
+an empty weight just leaves the variants’ weight alone. Collect the sellable units
+with the same <code class="docutils literal notranslate"><span class="pre">_collect_sellable_units</span></code>/<code class="docutils literal notranslate"><span class="pre">_build_variant_rows</span></code> helpers
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code> uses (<code class="docutils literal notranslate"><span class="pre">api/scripts/_shopify_links.py</span></code>, so both scripts
+agree on what the variants <em>should</em> be) – an empty result is fine here: it means
+zero stock everywhere.</p></li>
+<li><p>Fetch the live product, then sync, in this order: variants (stock first – it’s
+what matters most if anything later fails), product fields, metafields,
+documentation PDF, images. Each step diffs against the live product first – a
+no-op write is never sent. Variants go through one product PUT with the full
+variant list (Shopify REST: a listed variant with an <code class="docutils literal notranslate"><span class="pre">id</span></code> is kept and updated, one
+without is created, an unlisted one is deleted) – which is also what lets the
+options themselves change – then each variant’s stock is pushed. A variant’s
+identity is its option values, stripped, in position order.</p></li>
+<li><p>A failure in any step is collected, not fatal: every other step still runs, then the
+run reports <code class="docutils literal notranslate"><span class="pre">status=&quot;failure&quot;</span></code> with every reason (first 5 in <code class="docutils literal notranslate"><span class="pre">details.error</span></code>) and
+the partial progress (the details and metrics below, merged into <code class="docutils literal notranslate"><span class="pre">details</span></code>). A missing/invalid <code class="docutils literal notranslate"><span class="pre">Photo</span> <span class="pre">neuve</span></code> works the same way: images are
+skipped, everything else syncs, the run fails.</p></li>
+</ol>
+<p>Live stages (<code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/update_product/current</span></code>): <code class="docutils literal notranslate"><span class="pre">resolving_variation</span></code> or
+<code class="docutils literal notranslate"><span class="pre">resolving_model</span></code>, <code class="docutils literal notranslate"><span class="pre">validating_model</span></code>, then either <code class="docutils literal notranslate"><span class="pre">removing_from_shopify</span></code> or
+<code class="docutils literal notranslate"><span class="pre">validating_stock</span></code>, <code class="docutils literal notranslate"><span class="pre">fetching_shopify_product</span></code>, <code class="docutils literal notranslate"><span class="pre">syncing_variants</span></code>, <code class="docutils literal notranslate"><span class="pre">syncing_product</span></code>,
+<code class="docutils literal notranslate"><span class="pre">syncing_metafields</span></code>, <code class="docutils literal notranslate"><span class="pre">syncing_documentation</span></code>, <code class="docutils literal notranslate"><span class="pre">syncing_images</span></code>.</p>
+</section>
+<section id="deliberate-deviations-from-the-source-update-product">
+<h2>Deliberate deviations from the source (<code class="docutils literal notranslate"><span class="pre">Update-Product</span></code>)<a class="headerlink" href="#deliberate-deviations-from-the-source-update-product" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Queued, not skipped, when busy.</strong> An earlier version of this port skipped a run
+that found the product’s lock held (<code class="docutils literal notranslate"><span class="pre">status=&quot;skipped&quot;</span></code>) – but that run could be the
+one carrying the newer Airtable data (a sale triggering two automations at once), so
+it now waits its turn instead.</p></li>
+<li><p><strong>In-process, no subprocess.</strong> The source shelled out to
+<code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span> <span class="pre">Update-Product/main.py</span> <span class="pre">&lt;record_id&gt;</span></code>, parsing captured stdout/stderr to guess
+success (<code class="docutils literal notranslate"><span class="pre">stderr</span> <span class="pre">==</span> <span class="pre">&quot;&quot;</span></code>) – unreliable, since <code class="docutils literal notranslate"><span class="pre">Update-Product</span></code> logs structured JSON
+events to stderr <em>by design</em>, even on a clean run. This port sidesteps that signal
+entirely.</p></li>
+<li><p><strong>No sandbox/dry-run mode.</strong> The source defaulted to a sandbox mode (reads real data,
+logs what it <em>would</em> do, never actually writes) unless an <code class="docutils literal notranslate"><span class="pre">ENVIRONMENT</span></code>/<code class="docutils literal notranslate"><span class="pre">ENV</span></code> var said
+“prod”. This port always writes for real once triggered, matching
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code>’s own behavior and this codebase’s existing posture.</p></li>
+<li><p><strong>No <code class="docutils literal notranslate"><span class="pre">ALLOW_VARIANT_CREATE</span></code> permission gate.</strong> The source required an explicit opt-in
+env var before it would create a missing variant, defaulting to blocking that. This
+port always creates a missing variant – a routine, expected part of “update”, not an
+edge case to guard against (this is also exactly what makes reconciliation’s
+“Variations absentes de Shopify” -&gt; “Mettre à jour” button meaningful).</p></li>
+<li><p><strong>REST, not GraphQL, for every Shopify write.</strong> The source used Shopify’s GraphQL
+Admin API (<code class="docutils literal notranslate"><span class="pre">productUpdate</span></code>, <code class="docutils literal notranslate"><span class="pre">metafieldsSet</span></code>, <code class="docutils literal notranslate"><span class="pre">productVariantsBulkUpdate</span></code>,
+<code class="docutils literal notranslate"><span class="pre">productVariantsBulkCreate</span></code>) plus one REST inventory call. This port extends the
+existing REST-only <code class="docutils literal notranslate"><span class="pre">ShopifyAdmin</span></code> (<code class="docutils literal notranslate"><span class="pre">api/integrations/shopify_rest.py</span></code>) instead of
+introducing a second, GraphQL-based client alongside it – one consistent Shopify
+integration style for both scripts, same asymmetric retry semantics (see that
+module’s own docstring), same positional option/variant matching
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code>’s own <code class="docutils literal notranslate"><span class="pre">_create_variants</span></code> already established.</p></li>
+<li><p><strong>Inventory location: the existing <code class="docutils literal notranslate"><span class="pre">SHOPIFY_LOCATION_ID</span></code> constant, not a live
+lookup.</strong> The source queried Shopify for “the first location” on every run
+(<code class="docutils literal notranslate"><span class="pre">locations(first:</span> <span class="pre">1)</span></code>) and used whatever came back. This port reuses the
+already-configured <code class="docutils literal notranslate"><span class="pre">SHOPIFY_LOCATION_ID</span></code> (set up for <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code>) –
+the dev store alone has 3 locations, so “whichever one Shopify lists first” is a real
+correctness risk the source carried, not something worth preserving.</p></li>
+<li><p><strong>A single <code class="docutils literal notranslate"><span class="pre">_ValidationFailed</span></code> exception, not the source’s 9-class hierarchy.</strong>
+<code class="docutils literal notranslate"><span class="pre">Update-Product/errors.py</span></code>’s granular exceptions (<code class="docutils literal notranslate"><span class="pre">RecordNotInVariationTableError</span></code>,
+<code class="docutils literal notranslate"><span class="pre">NoUnitsLinkedError</span></code>, <code class="docutils literal notranslate"><span class="pre">NoPriceError</span></code>, etc.) map 1:1 to specific checks, but
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code> already established a single internal exception
+(message + <code class="docutils literal notranslate"><span class="pre">extra_details</span></code> for Airtable links) as this codebase’s own convention for
+exactly this kind of “one of several checks failed” flow. This port follows that
+precedent rather than introducing a second error-handling philosophy alongside it –
+each check still raises a distinct, specific message, just not a distinct class.</p></li>
+<li><p><strong>Alerts via the existing Gmail API service, not raw SMTP.</strong> The source sent alert
+emails via <code class="docutils literal notranslate"><span class="pre">smtplib</span></code> and a Gmail app password (<code class="docutils literal notranslate"><span class="pre">SMTP_GMAIL_PASSWORD</span></code>) – the same
+category of credential exposure flagged in <code class="docutils literal notranslate"><span class="pre">Update-Product/docs/incident-2026-08-shopify-duplicates.md</span></code>’s
+security remediation checklist. This port reuses <code class="docutils literal notranslate"><span class="pre">api/services/gmail.py</span></code>’s
+<code class="docutils literal notranslate"><span class="pre">send_alert_email</span></code> (Gmail API + a service account), exactly like
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code> already does.</p></li>
+<li><p><strong>This port is the incident doc’s own target architecture.</strong> That document’s
+“architecture cible” diagram explicitly names bringing this logic in-process behind
+an authenticated internal endpoint, with a per-Shopify-id lock and no silent-success
+masking of a real failure – this is that migration, not an unrelated refactor.</p></li>
+</ul>
+</section>
+<section id="known-risks-things-worth-reviewing">
+<h2>Known risks / things worth reviewing<a class="headerlink" href="#known-risks-things-worth-reviewing" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>A model_id-mode (or a Model’s <em>other</em> Variations’) update isn’t attributed back to
+an individual Variation in reconciliation’s cross-reference.</strong>
+<code class="docutils literal notranslate"><span class="pre">attach_update_attempts</span></code> in <code class="docutils literal notranslate"><span class="pre">shopify_catalog_reconciliation.py</span></code> only matches a stored
+<code class="docutils literal notranslate"><span class="pre">update_product</span></code> run against <code class="docutils literal notranslate"><span class="pre">variations_missing_in_shopify</span></code> via that run’s own
+<code class="docutils literal notranslate"><span class="pre">record_id</span></code> – a run triggered by <code class="docutils literal notranslate"><span class="pre">model_id</span></code> (or by a <em>different</em> sibling Variation of
+the same Model) has no <code class="docutils literal notranslate"><span class="pre">record_id</span></code> of its own to match on, so it won’t show up as
+“already tried” against a Variation it may well have actually updated.</p></li>
+<li><p><strong>Fixed: a product created without the size option could never get it.</strong>
+Confirmed live (dev store, “RT PCR Thermo Scientific QuantStudio 5”):
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> only added the size option when more than one size had
+stock at creation, and <code class="docutils literal notranslate"><span class="pre">update_product</span></code> read the option count from the live product,
+so its “0.1 mL / Très bon” row matched the existing condition-only “Très bon” variant
+and every run reported success without changing anything – while reconciliation
+kept listing “0.1 mL” as missing. Both scripts now decide the options from Airtable
+(<code class="docutils literal notranslate"><span class="pre">_model_has_variant_values</span></code>), and update restructures a product whose options
+differ. Worth knowing: a product whose option names differ from what Airtable
+implies (e.g. renamed by hand) has all its variants recreated once.</p></li>
+<li><p><strong>Option 1 is always “État esthétique”.</strong> Variants are matched by option values in
+position order under the options Airtable implies; a live product whose option names
+differ (an older or hand-edited one) isn’t matched value by value – all its variants
+are recreated once, with new variant ids.</p></li>
+<li><p>~~First real end-to-end verification against the dev store is still pending~~ –
+done: both entry modes and the reconciliation buttons were run live against the dev
+store, which is exactly what caught the bug below.</p></li>
+<li><p><strong>Fixed, but worth knowing about: variant option values must be compared stripped,
+not raw.</strong> Confirmed live: Airtable’s <code class="docutils literal notranslate"><span class="pre">Variant_value</span></code> can carry incidental trailing
+whitespace (<code class="docutils literal notranslate"><span class="pre">&quot;120x47</span> <span class="pre">&quot;</span></code>) that Shopify itself trims on save (<code class="docutils literal notranslate"><span class="pre">&quot;120x47&quot;</span></code>). Comparing
+the raw, untrimmed Airtable value against Shopify’s own (already-trimmed) option
+values meant an already-existing variant was never recognized as a match –
+<code class="docutils literal notranslate"><span class="pre">update_product</span></code> would then attempt to create a <em>duplicate</em> variant with the same
+option combination, which Shopify correctly rejects, and (before this fix) that
+rejection was silently logged and swallowed, with the run still reporting
+<code class="docutils literal notranslate"><span class="pre">status=&quot;success&quot;</span></code>. Both bugs are now fixed: <code class="docutils literal notranslate"><span class="pre">_variant_key</span></code> (used for both the
+Airtable rows and the live Shopify variants) strips both sides before comparing, and a failed variant
+<em>creation</em> now makes the whole run report <code class="docutils literal notranslate"><span class="pre">status=&quot;failure&quot;</span></code> (with the real Shopify
+rejection reason in <code class="docutils literal notranslate"><span class="pre">details.error</span></code>) instead of silently succeeding. Since then,
+every variant sync failure (price, weight, stock, zero stock) does the same.</p></li>
+<li><p><strong>A <code class="docutils literal notranslate"><span class="pre">requests.Response</span></code> is falsy for any non-2xx status</strong> (<code class="docutils literal notranslate"><span class="pre">Response.__bool__</span></code>
+returns <code class="docutils literal notranslate"><span class="pre">self.ok</span></code>) – code that checks <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">response</span> <span class="pre">else</span> <span class="pre">None</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">response</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">None</span> <span class="pre">else</span> <span class="pre">None</span></code> silently discards the real status code/body of
+a genuine error response. This exact mistake is what hid the bug above during initial
+testing (logs showed <code class="docutils literal notranslate"><span class="pre">&quot;status&quot;:</span> <span class="pre">null</span></code> for a real 422). Fixed via <code class="docutils literal notranslate"><span class="pre">_response_error_detail</span></code>,
+which checks <code class="docutils literal notranslate"><span class="pre">is</span> <span class="pre">not</span> <span class="pre">None</span></code> and includes the actual response body. Worth grepping for
+this same <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">response</span> <span class="pre">else</span> <span class="pre">...</span></code> pattern if it’s ever copied elsewhere.</p></li>
+</ul>
+</section>
+<section id="metrics-and-details">
+<h2>Metrics and details<a class="headerlink" href="#metrics-and-details" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/update_product/runs</span></code> returns, per run:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.variants_created</span></code></p></td>
+<td><p>How many Shopify variants were newly created this run</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.prices_updated</span></code> / <code class="docutils literal notranslate"><span class="pre">metrics.weights_updated</span></code> / <code class="docutils literal notranslate"><span class="pre">metrics.quantities_updated</span></code></p></td>
+<td><p>How many existing variants had their price/weight/inventory changed</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.variants_deleted</span></code></p></td>
+<td><p>How many Shopify variants with nothing left to sell were deleted</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.options_updated</span></code></p></td>
+<td><p>1 when the product’s options were changed (variants then all recreated)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.quantities_zeroed</span></code></p></td>
+<td><p>How many variants were set to a zero stock because the whole Model has nothing left to sell</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.metafields_updated</span></code></p></td>
+<td><p>How many metafields were actually written (0 if all already matched)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.images_uploaded</span></code></p></td>
+<td><p>How many images were uploaded this run (0 when unchanged)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metrics.documentation_updated</span></code></p></td>
+<td><p>1 when a documentation PDF was uploaded this run, else 0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.action</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">updated</span></code>, or <code class="docutils literal notranslate"><span class="pre">removed</span></code> (<code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> = “Non”; such a run has no metrics)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.deleted_shopify_product_ids</span></code> / <code class="docutils literal notranslate"><span class="pre">details.deleted_listing_record_ids</span></code></p></td>
+<td><p>What a <code class="docutils literal notranslate"><span class="pre">removed</span></code> run deleted</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.product_fields_updated</span></code></p></td>
+<td><p>Which of <code class="docutils literal notranslate"><span class="pre">title</span></code>/<code class="docutils literal notranslate"><span class="pre">body_html</span></code>/<code class="docutils literal notranslate"><span class="pre">vendor</span></code>/<code class="docutils literal notranslate"><span class="pre">product_type</span></code>/<code class="docutils literal notranslate"><span class="pre">status</span></code> were written</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.description_updated</span></code></p></td>
+<td><p>Whether <code class="docutils literal notranslate"><span class="pre">body_html</span></code> was among them</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.images_status</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uploaded</span></code> / <code class="docutils literal notranslate"><span class="pre">unchanged</span></code> / <code class="docutils literal notranslate"><span class="pre">failed</span></code> / <code class="docutils literal notranslate"><span class="pre">skipped</span></code> (no valid <code class="docutils literal notranslate"><span class="pre">Photo</span> <span class="pre">neuve</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.filter_specs_missing</span></code></p></td>
+<td><p>Family filter specs Airtable doesn’t have (only when some are missing)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.documentation_status</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uploaded</span></code> / <code class="docutils literal notranslate"><span class="pre">unchanged</span></code> / <code class="docutils literal notranslate"><span class="pre">absent</span></code> (no PDF in Airtable, Shopify untouched) / <code class="docutils literal notranslate"><span class="pre">failed</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.documentation_error</span></code> / <code class="docutils literal notranslate"><span class="pre">details.documentation_file_id</span></code></p></td>
+<td><p>The failure reason, or the new Shopify file id when <code class="docutils literal notranslate"><span class="pre">uploaded</span></code> (plus <code class="docutils literal notranslate"><span class="pre">documentation_compressed</span></code>/<code class="docutils literal notranslate"><span class="pre">_original_size</span></code>/<code class="docutils literal notranslate"><span class="pre">_uploaded_size</span></code> when the PDF had to be compressed)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.model_id</span></code></p></td>
+<td><p>The Model this run resolved to, regardless of entry mode</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.record_id</span></code></p></td>
+<td><p>The Variation id when that was the entry mode used (<code class="docutils literal notranslate"><span class="pre">null</span></code> in <code class="docutils literal notranslate"><span class="pre">model_id</span></code> mode)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.title</span></code></p></td>
+<td><p>The Model’s name, present on every outcome</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.shopify_product_id</span></code> / <code class="docutils literal notranslate"><span class="pre">details.shopify_product_url</span></code> / <code class="docutils literal notranslate"><span class="pre">details.airtable_listing_url</span></code></p></td>
+<td><p>Links to the product this run was about</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">details.error</span></code></p></td>
+<td><p>Present on failure</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">details.airtable_model_url</span></code> / <code class="docutils literal notranslate"><span class="pre">details.airtable_variation_url</span></code> / <code class="docutils literal notranslate"><span class="pre">details.airtable_unit_url</span></code></p></td>
+<td><p>Best-effort links to the Airtable record a validation failure is actually about – same convention as <code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="where-to-look">
+<h2>Where to look<a class="headerlink" href="#where-to-look" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Trigger/history:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/internal/scripts/update_product/run?record_id=recXXX</span></code>
+(or <code class="docutils literal notranslate"><span class="pre">?model_id=recXXX</span></code>), <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/status/{task_id}</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/update_product/runs</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/internal/scripts/update_product/current</span></code>
+(live stage while running).</p></li>
+<li><p><strong>Logs:</strong> <code class="docutils literal notranslate"><span class="pre">structlog</span></code>, logger <code class="docutils literal notranslate"><span class="pre">api.scripts.update_product</span></code> (business logic) and
+<code class="docutils literal notranslate"><span class="pre">api.tasks</span></code> (task lifecycle).</p></li>
+<li><p><strong>Source:</strong> <code class="docutils literal notranslate"><span class="pre">api/scripts/update_product.py</span></code>; shared helpers with
+<code class="docutils literal notranslate"><span class="pre">create_product_shopify.py</span></code> (the exception class, the Airtable cache, link builders,
+unit/spec aggregation) live in <code class="docutils literal notranslate"><span class="pre">api/scripts/_shopify_links.py</span></code>.</p></li>
+<li><p><strong>Tests:</strong> <code class="docutils literal notranslate"><span class="pre">tests/test_update_product.py</span></code>.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="scripts.html" class="btn btn-neutral float-left" title="Scripts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="create_product_shopify.html" class="btn btn-neutral float-right" title="Create Product Shopify" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Rewake.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rewake API &mdash; Rewake API  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Routes" href="routes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Rewake API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="routes.html">Routes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">Scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="catalog_model.html">Catalog model: Model, Variation, Unit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="catalog_intake.html">Catalog intake: receiving batches to Airtable</a></li>
+<li class="toctree-l1"><a class="reference internal" href="translations.html">Translations and publishing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Manuals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manuals/index.html">Manuals</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Rewake API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Rewake API</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="rewake-api">
+<h1>Rewake API<a class="headerlink" href="#rewake-api" title="Link to this heading"></a></h1>
+<p>The back-end API for Rewake – internal tooling (used by the
+<code class="docutils literal notranslate"><span class="pre">app.rewake.fr</span></code> intranet app) and external integrations (HelloPro,
+Machinio), served at <a class="reference external" href="https://api.rewake.fr">api.rewake.fr</a>.</p>
+<p>This documentation set is new (see <a class="reference internal" href="development.html"><span class="doc">Development</span></a> for why and what’s
+still missing); the API and its endpoints existed and were in production
+well before it.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:28px 0 36px">
+  <a href="https://app.rewake.fr" target="_blank" rel="noopener noreferrer" style="display:flex;flex-direction:column;justify-content:space-between;min-height:150px;padding:22px;border-radius:16px;background:linear-gradient(135deg,#152d4a,#2874a6);color:#fff;text-decoration:none;box-shadow:0 8px 22px #18334a30">
+    <img src="https://app.rewake.fr/favicon.ico" alt="" width="36" height="36" style="object-fit:contain"/><span><strong style="font-size:20px">App</strong><br/><span style="opacity:.85">Open the Rewake team app</span></span>
+  </a>
+  <a href="https://admin.shopify.com/store/rewakedev" target="_blank" rel="noopener noreferrer" style="display:flex;flex-direction:column;justify-content:space-between;min-height:150px;padding:22px;border-radius:16px;background:linear-gradient(135deg,#164b38,#36a675);color:#fff;text-decoration:none;box-shadow:0 8px 22px #18334a30">
+    <img src="https://cdn.simpleicons.org/shopify/ffffff" alt="" width="36" height="36" style="object-fit:contain"/><span><strong style="font-size:20px">Shopify Dev</strong><br/><span style="opacity:.85">Manage the development store</span></span>
+  </a>
+  <a href="https://grafana.rewake.fr" target="_blank" rel="noopener noreferrer" style="display:flex;flex-direction:column;justify-content:space-between;min-height:150px;padding:22px;border-radius:16px;background:linear-gradient(135deg,#713d19,#ef8b35);color:#fff;text-decoration:none;box-shadow:0 8px 22px #18334a30">
+    <img src="https://cdn.simpleicons.org/grafana/ffffff" alt="" width="36" height="36" style="object-fit:contain"/><span><strong style="font-size:20px">Grafana</strong><br/><span style="opacity:.85">Explore metrics and dashboards</span></span>
+  </a>
+  <a href="https://status.rewake.fr" target="_blank" rel="noopener noreferrer" style="display:flex;flex-direction:column;justify-content:space-between;min-height:150px;padding:22px;border-radius:16px;background:linear-gradient(135deg,#3c286c,#7958c7);color:#fff;text-decoration:none;box-shadow:0 8px 22px #18334a30">
+    <img src="https://raw.githubusercontent.com/louislam/uptime-kuma/master/public/icon.svg" alt="" width="36" height="36" style="object-fit:contain"/><span><strong style="font-size:20px">Kuma</strong><br/><span style="opacity:.85">Check service availability</span></span>
+  </a>
+  <a href="https://n8n.srv1336295.hstgr.cloud/home/workflows" target="_blank" rel="noopener noreferrer" style="display:flex;flex-direction:column;justify-content:space-between;min-height:150px;padding:22px;border-radius:16px;background:linear-gradient(135deg,#63254f,#d64a8b);color:#fff;text-decoration:none;box-shadow:0 8px 22px #18334a30">
+    <img src="https://cdn.simpleicons.org/n8n/ffffff" alt="" width="36" height="36" style="object-fit:contain"/><span><strong style="font-size:20px">n8n</strong><br/><span style="opacity:.85">Open workflow automation</span></span>
+  </a>
+  <a href="https://github.com/rewake-fr" target="_blank" rel="noopener noreferrer" style="display:flex;flex-direction:column;justify-content:space-between;min-height:150px;padding:22px;border-radius:16px;background:linear-gradient(135deg,#24292f,#57606a);color:#fff;text-decoration:none;box-shadow:0 8px 22px #18334a30">
+    <img src="https://cdn.simpleicons.org/github/ffffff" alt="" width="36" height="36" style="object-fit:contain"/><span><strong style="font-size:20px">GitHub</strong><br/><span style="opacity:.85">Browse Rewake repositories</span></span>
+  </a>
+</div><section id="reference">
+<h2>Reference<a class="headerlink" href="#reference" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="routes.html"><span class="doc">Routes</span></a> – every endpoint, its access rules, and example responses.</p></li>
+<li><p><a class="reference internal" href="authentication.html"><span class="doc">Authentication</span></a> – the token/origin model behind those access rules.</p></li>
+<li><p><a class="reference internal" href="architecture.html"><span class="doc">Architecture</span></a> – how the project fits together, including the
+Celery/Redis queued tasks (scripts, OCR, AI research).</p></li>
+<li><p><a class="reference internal" href="operations.html"><span class="doc">Operations</span></a> – configuration, deployment, and logging.</p></li>
+<li><p><a class="reference internal" href="development.html"><span class="doc">Development</span></a> – environment setup, Airtable/Shopify dev credentials,
+and the <code class="docutils literal notranslate"><span class="pre">scripts/</span></code> dev tooling.</p></li>
+<li><p><a class="reference internal" href="scripts.html"><span class="doc">Scripts</span></a> – what each registered script does, on demand or
+scheduled.</p></li>
+<li><p><a class="reference internal" href="catalog_model.html"><span class="doc">Catalog model: Model, Variation, Unit</span></a> – how Model, Variation and units are linked, how
+they become a Shopify product, and how to create a new one.</p></li>
+<li><p><a class="reference internal" href="catalog_intake.html"><span class="doc">Catalog intake: receiving batches to Airtable</span></a> – the <code class="docutils literal notranslate"><span class="pre">/internal/catalog</span></code> routes behind the app’s
+receiving workflow (draft push, validation, units, reprises, label OCR,
+reference suggestion) and commercial review (review queue, model sheet,
+verification), plus the central AI service behind <code class="docutils literal notranslate"><span class="pre">/internal/ai</span></code>.</p></li>
+</ul>
+</section>
+<section id="manuals">
+<h2>Manuals<a class="headerlink" href="#manuals" title="Link to this heading"></a></h2>
+<p>Step-by-step guides for the teams using the tools (in French):</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="manuals/reception-produits.html"><span class="doc">Manuel — Réception produits</span></a> – receiving products in the intranet,
+article by article (operations team).</p></li>
+</ul>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="routes.html" class="btn btn-neutral float-right" title="Routes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Rewake.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

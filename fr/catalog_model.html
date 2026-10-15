@@ -1,0 +1,715 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catalog model: Model, Variation, Unit &mdash; Documentation Rewake API </title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=91c739f9"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=e6b791cb"></script>
+      <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="next" title="Catalog intake: receiving batches to Airtable" href="catalog_intake.html" />
+    <link rel="prev" title="Airtable Catalog Stats" href="airtable_catalog_stats.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Rewake API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" aria-label="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="routes.html">Routes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">Scripts</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Catalog model: Model, Variation, Unit</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-chain">The chain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-a-variation-means">What a Variation means</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-it-becomes-a-shopify-product">How it becomes a Shopify product</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-product-we-ve-never-had">Creating a product we’ve never had</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-weak-spots">The weak spots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#suggested-improvements">Suggested improvements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="catalog_intake.html">Catalog intake: receiving batches to Airtable</a></li>
+<li class="toctree-l1"><a class="reference internal" href="translations.html">Traductions et publication</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides pratiques</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manuals/index.html">Manuels</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Rewake API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Catalog model: Model, Variation, Unit</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="catalog-model-model-variation-unit">
+<h1>Catalog model: Model, Variation, Unit<a class="headerlink" href="#catalog-model-model-variation-unit" title="Lien vers cette rubrique"></a></h1>
+<p>How a product is represented in Airtable, how the tables are linked, how that
+becomes a Shopify listing, and what to create when a product we’ve never had
+arrives. The figures come from the production base on 2026-10-02. How the
+receiving app creates and reviews these records through <code class="docutils literal notranslate"><span class="pre">/internal/catalog</span></code>
+is in <a class="reference internal" href="catalog_intake.html"><span class="std std-doc">Catalog intake</span></a>.</p>
+<section id="the-chain">
+<h2>The chain<a class="headerlink" href="#the-chain" title="Lien vers cette rubrique"></a></h2>
+<pre  class="mermaid">
+        flowchart LR
+    FAM[&quot;Familles&lt;br/&gt;(e.g. Balances)&quot;] --&gt; TYPE[&quot;Type d'équipement&lt;br/&gt;(e.g. Micropipette monocanal)&quot;]
+    TYPE --&gt; MODEL[&quot;Model&lt;br/&gt;Marque + Modèle&quot;]
+    MARQUE[&quot;Marque&quot;] --&gt; MODEL
+    MODEL --&gt; VAR[&quot;Variation&lt;br/&gt;1..n per Model&quot;]
+    VAR --&gt; UNIT[&quot;Toutes les unités&lt;br/&gt;1 record = 1 physical item&quot;]
+    VAR --&gt; SPEC[&quot;Specification&lt;br/&gt;key : value, one copy per Variation&quot;]
+    VAR -. &quot;Variant_name (1 spec)&quot; .-&gt; SPEC
+    MODEL --&gt; ANN[&quot;Annonces Shopify&lt;br/&gt;1 per Model = the Shopify product&quot;]
+    </pre><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Table</p></th>
+<th class="head"><p>One record is</p></th>
+<th class="head"><p>Holds</p></th>
+<th class="head"><p>Linked by</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Model</strong></p></td>
+<td><p>A commercial reference: brand + model name (<code class="docutils literal notranslate"><span class="pre">Name</span></code> = Type + Marque + Modèle)</p></td>
+<td><p>Descriptions, <code class="docutils literal notranslate"><span class="pre">Photo</span> <span class="pre">neuve</span></code>, weight, dimensions, <code class="docutils literal notranslate"><span class="pre">Prix</span> <span class="pre">neuf</span> <span class="pre">HT</span></code>, <code class="docutils literal notranslate"><span class="pre">Documentation</span></code>/<code class="docutils literal notranslate"><span class="pre">Manuel</span> <span class="pre">Operateur</span></code>/<code class="docutils literal notranslate"><span class="pre">Manuel</span> <span class="pre">de</span> <span class="pre">service</span></code>, <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code>, <code class="docutils literal notranslate"><span class="pre">Vérification</span> <span class="pre">pour</span> <span class="pre">site</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Type</span></code>, <code class="docutils literal notranslate"><span class="pre">Marque</span></code>, <code class="docutils literal notranslate"><span class="pre">Variation</span></code>, <code class="docutils literal notranslate"><span class="pre">Annonces</span> <span class="pre">Shopify</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Variation</strong></p></td>
+<td><p>One sellable version of a Model, e.g. a volume range of a micropipette</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">is_variant</span></code>, <code class="docutils literal notranslate"><span class="pre">Variant_name</span></code>/<code class="docutils literal notranslate"><span class="pre">Variant_value</span></code>, <code class="docutils literal notranslate"><span class="pre">Specifications</span></code>, <code class="docutils literal notranslate"><span class="pre">Statut</span> <span class="pre">validation</span> <span class="pre">Variation</span></code> (<code class="docutils literal notranslate"><span class="pre">À</span> <span class="pre">valider</span></code>/<code class="docutils literal notranslate"><span class="pre">Validé</span></code>), <code class="docutils literal notranslate"><span class="pre">Statut</span> <span class="pre">verification</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Model</span></code> (exactly one), <code class="docutils literal notranslate"><span class="pre">Toutes</span> <span class="pre">les</span> <span class="pre">unités</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Toutes les unités</strong></p></td>
+<td><p>One physical item in stock, with its own serial number</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Numéro</span> <span class="pre">de</span> <span class="pre">série</span></code>, <code class="docutils literal notranslate"><span class="pre">Etat</span> <span class="pre">esthétique</span></code>, <code class="docutils literal notranslate"><span class="pre">État</span> <span class="pre">fonctionnel</span></code>, <code class="docutils literal notranslate"><span class="pre">Statut</span> <span class="pre">commercial</span></code>, <code class="docutils literal notranslate"><span class="pre">Prix</span> <span class="pre">de</span> <span class="pre">vente</span> <span class="pre">HT</span></code>, <code class="docutils literal notranslate"><span class="pre">Prix</span> <span class="pre">de</span> <span class="pre">rachat</span></code>, <code class="docutils literal notranslate"><span class="pre">Photos</span> <span class="pre">marketplace</span></code>, <code class="docutils literal notranslate"><span class="pre">Photos</span> <span class="pre">client</span></code>, <code class="docutils literal notranslate"><span class="pre">Photos</span> <span class="pre">interne</span></code>, <code class="docutils literal notranslate"><span class="pre">Lieu</span> <span class="pre">de</span> <span class="pre">stockage</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Référence</span> <span class="pre">variant</span></code> → one Variation; <code class="docutils literal notranslate"><span class="pre">Opération</span> <span class="pre">reprise</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Specification</strong></p></td>
+<td><p>One <code class="docutils literal notranslate"><span class="pre">clé</span> <span class="pre">:</span> <span class="pre">valeur</span> <span class="pre">unité</span></code> line (e.g. <code class="docutils literal notranslate"><span class="pre">Portée</span> <span class="pre">max</span> <span class="pre">:</span> <span class="pre">220</span> <span class="pre">g</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">clé</span></code> (→ Specification type), <code class="docutils literal notranslate"><span class="pre">valeur</span></code>, <code class="docutils literal notranslate"><span class="pre">unité</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Variation</span> <span class="pre">associée</span></code> (as a spec), <code class="docutils literal notranslate"><span class="pre">Spec_variant</span></code> (as the variant axis)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Annonces Shopify</strong></p></td>
+<td><p>The Shopify product for a Model</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ID_shopify</span></code>, <code class="docutils literal notranslate"><span class="pre">Status</span></code> (draft/active/archived/unlisted)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Model</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>A unit has no direct link to its Model: it reaches it through its Variation.
+The Model fields shown on a unit are lookups.</p>
+</section>
+<section id="what-a-variation-means">
+<h2>What a Variation means<a class="headerlink" href="#what-a-variation-means" title="Lien vers cette rubrique"></a></h2>
+<p>A Variation answers the question « which version of this Model is this unit? ».
+There are two cases:</p>
+<ul class="simple">
+<li><p><strong>The Model comes in several versions</strong> (<code class="docutils literal notranslate"><span class="pre">is_variant</span> <span class="pre">=</span> <span class="pre">Oui</span></code>). There is one
+Variation per version, and each points to one Specification through
+<code class="docutils literal notranslate"><span class="pre">Variant_name</span></code> (its <code class="docutils literal notranslate"><span class="pre">valeur</span></code> becomes <code class="docutils literal notranslate"><span class="pre">Variant_value</span></code>, e.g. <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">-</span> <span class="pre">20</span></code>). Example:
+<em>Finnpipette F1 | 2 - 20</em>, <em>Finnpipette F1 | 10 - 100</em>. The Variation’s
+<code class="docutils literal notranslate"><span class="pre">Name</span></code> gets <code class="docutils literal notranslate"> <span class="pre">|</span> <span class="pre">&lt;value&gt;</span></code> appended.</p></li>
+<li><p><strong>The Model has only one version</strong> (<code class="docutils literal notranslate"><span class="pre">is_variant</span> <span class="pre">=</span> <span class="pre">Non</span></code>). There is still exactly
+one Variation, a « default » one with no <code class="docutils literal notranslate"><span class="pre">Variant_name</span></code>, because units can only
+attach to a Variation. It is created automatically with the Model:
+<code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/internal/model/create</span></code> (the intranet’s <em>Création de modèle</em>) creates
+the Model, then its <code class="docutils literal notranslate"><span class="pre">is_variant</span> <span class="pre">=</span> <span class="pre">Non</span></code> Variation. The receiving app’s group
+push (<code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/internal/catalog/groups/push</span></code>) also creates the Model with its
+Variation(s), as drafts (<code class="docutils literal notranslate"><span class="pre">Statut</span> <span class="pre">validation</span> <span class="pre">Variation</span> <span class="pre">=</span> <span class="pre">À</span> <span class="pre">valider</span></code>).</p></li>
+</ul>
+<p>The <strong>condition is not a Variation.</strong> <code class="docutils literal notranslate"><span class="pre">Etat</span> <span class="pre">esthétique</span></code> (Neuf, Neuf déclassé,
+Très bon, Bon, Abimé, Très abimé) is stored on each unit, because two items of
+the same version can be in different states.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Today (production)</p></th>
+<th class="head"><p></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Models</p></td>
+<td><p>1,786 (1,445 <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span> <span class="pre">=</span> <span class="pre">Oui</span></code>, 296 with a Shopify listing)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Models with exactly 1 Variation</p></td>
+<td><p>1,685 (94%)</p></td>
+</tr>
+<tr class="row-even"><td><p>Models with 2 to 22 Variations</p></td>
+<td><p>99</p></td>
+</tr>
+<tr class="row-odd"><td><p>Variations <code class="docutils literal notranslate"><span class="pre">is_variant</span> <span class="pre">=</span> <span class="pre">Non</span></code> / <code class="docutils literal notranslate"><span class="pre">Oui</span></code> / empty</p></td>
+<td><p>1,633 / 547 / 3</p></td>
+</tr>
+<tr class="row-even"><td><p>Units</p></td>
+<td><p>3,905 (1,411 <em>A vendre</em>, 2,131 <em>Vendu</em>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Specifications</p></td>
+<td><p>8,106, all but 3 linked to a single Variation</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-it-becomes-a-shopify-product">
+<h2>How it becomes a Shopify product<a class="headerlink" href="#how-it-becomes-a-shopify-product" title="Lien vers cette rubrique"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">create_product_shopify</span></code> and <code class="docutils literal notranslate"><span class="pre">update_product</span></code> build it the same way:</p>
+<ul class="simple">
+<li><p><strong>Shopify product</strong> = the Model (title, descriptions, photos, vendor = Marque,
+product type = Type). Its Shopify id is stored in Annonces Shopify.</p></li>
+<li><p><strong>Shopify options</strong>: <code class="docutils literal notranslate"><span class="pre">État</span> <span class="pre">esthétique</span></code> always. A second option is added only
+if a Variation has a <code class="docutils literal notranslate"><span class="pre">Variant_value</span></code>, and its label is hard-coded from the
+Type: « Plage de volume [µL] » for micropipettes, « Dimensions [cm] » for
+paillasses, « Variante » for anything else.</p></li>
+<li><p><strong>Shopify variant</strong> = one per <em>(Variant_value, Etat esthétique)</em> pair found
+among the sellable units. Sellable means <code class="docutils literal notranslate"><span class="pre">Statut</span> <span class="pre">commercial</span> <span class="pre">=</span> <span class="pre">A</span> <span class="pre">vendre</span></code> and a
+condition other than Abimé/Très abimé.</p>
+<ul>
+<li><p><strong>Quantity</strong> = the number of those units.</p></li>
+<li><p><strong>Price</strong> = the lowest <code class="docutils literal notranslate"><span class="pre">Prix</span> <span class="pre">de</span> <span class="pre">vente</span> <span class="pre">HT</span></code> among them.</p></li>
+</ul>
+</li>
+<li><p><strong>Spec table</strong> (<code class="docutils literal notranslate"><span class="pre">main_table</span></code> metafield) = weight, dimensions, and the
+Specifications of the <strong>first</strong> Variation only, minus its variant spec.</p></li>
+</ul>
+<p>So <strong>stock and price come from units, structure comes from Variations, and
+content comes from the Model.</strong></p>
+<pre  class="mermaid">
+        flowchart LR
+    U1[&quot;Unit · 2-20 · Bon · 120 €&quot;] --&gt; V1[&quot;Shopify variant&lt;br/&gt;Bon / 2-20&lt;br/&gt;qty 2, 110 €&quot;]
+    U2[&quot;Unit · 2-20 · Bon · 110 €&quot;] --&gt; V1
+    U3[&quot;Unit · 2-20 · Très bon · 150 €&quot;] --&gt; V2[&quot;Shopify variant&lt;br/&gt;Très bon / 2-20&lt;br/&gt;qty 1, 150 €&quot;]
+    U4[&quot;Unit · 2-20 · Abimé&quot;] -. &quot;never listed&quot; .-&gt; X(( ))
+    </pre></section>
+<section id="creating-a-product-we-ve-never-had">
+<h2>Creating a product we’ve never had<a class="headerlink" href="#creating-a-product-we-ve-never-had" title="Lien vers cette rubrique"></a></h2>
+<pre  class="mermaid">
+        flowchart TD
+    A[&quot;New item received&quot;] --&gt; B{&quot;Model exists?&lt;br/&gt;(same Marque + Modèle)&quot;}
+    B -- yes --&gt; C{&quot;Matching Variation exists?&quot;}
+    B -- no --&gt; D[&quot;Create the Model&lt;br/&gt;Type, Marque, Modèle, descriptions,&lt;br/&gt;Photo neuve ≥ 300 px, weight, dimensions&quot;]
+    D --&gt; E{&quot;Does this Model come&lt;br/&gt;in several versions?&quot;}
+    E -- no --&gt; F[&quot;Default Variation, is_variant = Non&lt;br/&gt;(created with the Model)&lt;br/&gt;+ its Specifications&quot;]
+    E -- yes --&gt; G[&quot;1 Variation per version, is_variant = Oui&lt;br/&gt;Variant_name = the spec that differs&lt;br/&gt;+ each one's Specifications&quot;]
+    C -- yes --&gt; H[&quot;Create the unit&quot;]
+    C -- &quot;no (new version)&quot; --&gt; G
+    F --&gt; H
+    G --&gt; H
+    H[&quot;Create the unit in Toutes les unités&lt;br/&gt;Référence variant, Etat esthétique,&lt;br/&gt;Prix de vente HT, Statut commercial&quot;]
+    </pre><p>The <code class="docutils literal notranslate"><span class="pre">create-rewake-model</span></code> skill automates the Model + Variation +
+Specifications part. In the receiving workflow, the app does it through
+<code class="docutils literal notranslate"><span class="pre">/internal/catalog</span></code>: operations push the group (a variant Variation gets its
+axis spec through <code class="docutils literal notranslate"><span class="pre">Spec_variant</span></code>), and the commercial team reviews the Model
+(<code class="docutils literal notranslate"><span class="pre">Vérification</span> <span class="pre">pour</span> <span class="pre">site</span></code>) before it is sold; see
+<a class="reference internal" href="catalog_intake.html"><span class="std std-doc">Catalog intake</span></a>.</p>
+<p>Rules that the scripts rely on:</p>
+<ol class="arabic simple">
+<li><p><strong>Every unit needs exactly one Variation</strong> (<code class="docutils literal notranslate"><span class="pre">Référence</span> <span class="pre">variant</span></code>). A unit
+without one is invisible to Shopify and to the reconciliation (52 such
+units today, plus 1 linked to two Variations).</p></li>
+<li><p><strong>Every Variation needs exactly one Model</strong> (5 have none today).</p></li>
+<li><p><strong>A Model is either all <code class="docutils literal notranslate"><span class="pre">Non</span></code> (one Variation) or all <code class="docutils literal notranslate"><span class="pre">Oui</span></code>.</strong> Never mix them:
+a <code class="docutils literal notranslate"><span class="pre">Non</span></code> Variation next to <code class="docutils literal notranslate"><span class="pre">Oui</span></code> ones would end up as a Shopify variant whose
+option value is <code class="docutils literal notranslate"><span class="pre">0</span></code>. No Model mixes them today.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">is_variant</span> <span class="pre">=</span> <span class="pre">Oui</span></code> needs a <code class="docutils literal notranslate"><span class="pre">Variant_name</span></code>.</strong> 5 Variations break this today,
+and 3 have <code class="docutils literal notranslate"><span class="pre">is_variant</span></code> empty. The intake push refuses a variant without
+its axis (<code class="docutils literal notranslate"><span class="pre">missing_variant_axis</span></code>).</p></li>
+<li><p><strong>Only one dimension can vary.</strong> <code class="docutils literal notranslate"><span class="pre">Variant_name</span></code> holds a single spec, so a
+pipette range can be a variant axis, but « range × number of channels » can’t.
+Make those separate Models.</p></li>
+<li><p><strong>Specs that differ between versions, other than the variant axis, are
+lost on Shopify.</strong> Only the first Variation’s specs go into the spec table.</p></li>
+</ol>
+</section>
+<section id="the-weak-spots">
+<h2>The weak spots<a class="headerlink" href="#the-weak-spots" title="Lien vers cette rubrique"></a></h2>
+<ul class="simple">
+<li><p><strong>The default Variation duplicates the Model.</strong> For 94% of Models it’s a copy
+of the Model that exists only so units have something to link to. It’s created
+automatically, so it costs no work, but it’s still a second record per
+product, and it’s where the Model’s specs end up (see the next point).</p></li>
+<li><p><strong>Specs are copied for every Variation.</strong> A 10-version pipette has 10 copies
+of « Nombre de canaux : 1 », which have to be kept consistent by hand. Only the
+first copy is used.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">is_variant</span></code> is typed by hand</strong> (the API only sets it on the records it
+creates or converts) but can be worked out from the data (<code class="docutils literal notranslate"><span class="pre">Variant_name</span></code>
+filled or not), so it drifts (8 inconsistent records).</p></li>
+<li><p><strong>The second option’s label is hard-coded</strong> by Type name in the code
+(<code class="docutils literal notranslate"><span class="pre">_variant_option_name</span></code> in <code class="docutils literal notranslate"><span class="pre">api/scripts/_shopify_links.py</span></code>), so a new Type
+with versions just gets « Variante ».</p></li>
+<li><p><strong>Prices live in two places.</strong> Each unit has its own <code class="docutils literal notranslate"><span class="pre">Prix</span> <span class="pre">de</span> <span class="pre">vente</span> <span class="pre">HT</span></code> (what
+Shopify uses), and the Variation also has <code class="docutils literal notranslate"><span class="pre">Prix</span> <span class="pre">bon</span> <span class="pre">état</span> <span class="pre">€HT</span></code>, <code class="docutils literal notranslate"><span class="pre">Prix</span> <span class="pre">abimé</span> <span class="pre">€HT</span></code>
+and <code class="docutils literal notranslate"><span class="pre">Prix</span> <span class="pre">de</span> <span class="pre">la</span> <span class="pre">variation</span></code>, which nothing in the API reads.</p></li>
+</ul>
+</section>
+<section id="suggested-improvements">
+<h2>Suggested improvements<a class="headerlink" href="#suggested-improvements" title="Lien vers cette rubrique"></a></h2>
+<p>They are ordered from cheapest to most structural. Each one can be done on its
+own, without changing what Shopify shows.</p>
+<ol class="arabic simple">
+<li><p><strong>Make <code class="docutils literal notranslate"><span class="pre">is_variant</span></code> a formula:</strong> <code class="docutils literal notranslate"><span class="pre">IF({Variant_name},</span> <span class="pre">&quot;Oui&quot;,</span> <span class="pre">&quot;Non&quot;)</span></code>. The code
+only compares it to <code class="docutils literal notranslate"><span class="pre">&quot;Oui&quot;</span></code>, so nothing breaks, and the 8 inconsistent
+records disappear.</p></li>
+<li><p><strong>Add data-quality views,</strong> and have the reconciliation flag the same cases:
+units without a Variation, Variations without a Model, Models that mix <code class="docutils literal notranslate"><span class="pre">Oui</span></code>
+and <code class="docutils literal notranslate"><span class="pre">Non</span></code>.</p></li>
+<li><p><strong>Move the variant label to the Type:</strong> add an « Axe de variante » field on
+Type d’équipement (e.g. « Plage de volume [µL] ») and read it instead of the
+hard-coded names.</p></li>
+<li><p><strong>Put common specs on the Model:</strong> link Specification to Model for what all
+versions share, and keep on each Variation only the spec that defines it
+(<code class="docutils literal notranslate"><span class="pre">Variant_name</span></code>). This removes the copies (most of the 8,106 records) and the
+« first Variation only » rule, and the spec table reads Model specs + the
+variant value.</p></li>
+<li><p><strong>Keep the default Variation.</strong> It’s already created automatically, so the
+duplication costs no work; what it still costs is the specs stored on it,
+which suggestion 4 moves to the Model. Removing the level altogether (units
+linking straight to a Model) would mean two different ways for a unit to
+find its Model and two code paths in every script, so a Variation that
+always exists is the simpler rule: <strong>Model → ≥1 Variation → units</strong>, always.</p></li>
+<li><p><strong>Choose one source of truth for price:</strong> either the unit’s
+<code class="docutils literal notranslate"><span class="pre">Prix</span> <span class="pre">de</span> <span class="pre">vente</span> <span class="pre">HT</span></code> (today’s behaviour), with the Variation prices removed or
+turned into suggestions, or a price per (Variation, condition) that is
+copied onto new units.</p></li>
+</ol>
+<p>The condition stays on the unit. It describes one physical item, and the
+current mapping to Shopify (condition = an option, units = quantity) is right.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
+        <a href="airtable_catalog_stats.html" class="btn btn-neutral float-left" title="Airtable Catalog Stats" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+        <a href="catalog_intake.html" class="btn btn-neutral float-right" title="Catalog intake: receiving batches to Airtable" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Droits d'auteur Rewake.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

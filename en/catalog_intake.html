@@ -1,0 +1,634 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catalog intake: receiving batches to Airtable &mdash; Rewake API  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Translations and publishing" href="translations.html" />
+    <link rel="prev" title="Catalog model: Model, Variation, Unit" href="catalog_model.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Rewake API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="routes.html">Routes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">Scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="catalog_model.html">Catalog model: Model, Variation, Unit</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Catalog intake: receiving batches to Airtable</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#endpoints">Endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#push">Push</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#units-of-received-items-catalogsync-sync-unit-api-services-unit-photos-py">Units of received items (<code class="docutils literal notranslate"><span class="pre">CatalogSync.sync_unit</span></code>, <code class="docutils literal notranslate"><span class="pre">api/services/unit_photos.py</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reprises-api-services-catalog-reprise-py">Reprises (<code class="docutils literal notranslate"><span class="pre">api/services/catalog_reprise.py</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#not-written-by-the-api">Not written by the API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#label-ocr-api-services-label-ocr-py">Label OCR (<code class="docutils literal notranslate"><span class="pre">api/services/label_ocr.py</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ai-product-research-api-services-product-research-py">AI product research (<code class="docutils literal notranslate"><span class="pre">api/services/product_research.py</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#central-ai-service-api-services-ai">Central AI service (<code class="docutils literal notranslate"><span class="pre">api/services/ai/</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#commercial-review-api-services-review-queue-py-api-services-model-sheet-py-api-services-product-assist-py">Commercial review (<code class="docutils literal notranslate"><span class="pre">api/services/review_queue.py</span></code>, <code class="docutils literal notranslate"><span class="pre">api/services/model_sheet.py</span></code>, <code class="docutils literal notranslate"><span class="pre">api/services/product_assist.py</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reference-suggestion-api-services-reference-suggestion-py">Reference suggestion (<code class="docutils literal notranslate"><span class="pre">api/services/reference_suggestion.py</span></code>)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="translations.html">Translations and publishing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Manuals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manuals/index.html">Manuals</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Rewake API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Catalog intake: receiving batches to Airtable</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="catalog-intake-receiving-batches-to-airtable">
+<h1>Catalog intake: receiving batches to Airtable<a class="headerlink" href="#catalog-intake-receiving-batches-to-airtable" title="Link to this heading"></a></h1>
+<p>The Airtable side of the product intake workflow run by <code class="docutils literal notranslate"><span class="pre">app.rewake.fr</span></code>.
+Operations register arriving products in the app (receiving batches, product
+groups); the app pushes each group to Airtable as a <strong>draft</strong> once it has the
+minimum fields, then a reviewer <strong>validates</strong> it. The app owns the workflow
+state; the API only writes Airtable. Code: <code class="docutils literal notranslate"><span class="pre">api/services/catalog_sync.py</span></code>,
+<code class="docutils literal notranslate"><span class="pre">api/services/catalog_lookup.py</span></code>, <code class="docutils literal notranslate"><span class="pre">api/domain/intake.py</span></code>,
+<code class="docutils literal notranslate"><span class="pre">api/routes/internal/catalog/</span></code> (how the tables fit together:
+<a class="reference internal" href="catalog_model.html"><span class="std std-doc">Catalog model</span></a>).</p>
+<p>All routes are under <code class="docutils literal notranslate"><span class="pre">/internal/catalog</span></code>, with <code class="docutils literal notranslate"><span class="pre">APP_TOKEN</span></code> + <code class="docutils literal notranslate"><span class="pre">app.rewake.fr</span></code>
+origin (like other internal routes).</p>
+<section id="endpoints">
+<h2>Endpoints<a class="headerlink" href="#endpoints" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Route</p></th>
+<th class="head"><p>Does</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/options</span></code></p></td>
+<td><p>Brands, equipment types (with family), specification keys (with their <code class="docutils literal notranslate"><span class="pre">kind</span></code>), expected specs per family, Unit condition choices (<code class="docutils literal notranslate"><span class="pre">Etat</span> <span class="pre">esthétique</span></code>, <code class="docutils literal notranslate"><span class="pre">État</span> <span class="pre">fonctionnel</span></code>). Cached 10 min; <code class="docutils literal notranslate"><span class="pre">?refresh=true</span></code> reloads.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/match</span></code></p></td>
+<td><p>Existing Models matching brand + model, with their Variations, through the catalog search below (Airtable formula lookup if the index is unavailable). A suggestion: a human picks.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/airtable-links</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">base_id</span></code> and the table ids of Model, Variation and Units (<code class="docutils literal notranslate"><span class="pre">tables.model</span></code>, <code class="docutils literal notranslate"><span class="pre">.variation</span></code>, <code class="docutils literal notranslate"><span class="pre">.unit</span></code>), so the app can open a record at <code class="docutils literal notranslate"><span class="pre">https://airtable.com/{base}/{table}/{record}</span></code> (schema cached).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/search</span></code></p></td>
+<td><p>Catalog search for the app: <code class="docutils literal notranslate"><span class="pre">results</span></code> for <code class="docutils literal notranslate"><span class="pre">q</span></code> (every word must match, partial words, any order, most relevant first; <code class="docutils literal notranslate"><span class="pre">limit</span></code> 10, max 30) and, separately, <code class="docutils literal notranslate"><span class="pre">suggestions</span></code> (default 3, max 10) from the item’s <code class="docutils literal notranslate"><span class="pre">identity</span></code> (brand, model, serial, product_hint, label_text). 503 when the catalog index is unavailable.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/units/sync</span></code></p></td>
+<td><p>Create or complete the Unit of one received item, as soon as operations finish it (see “Units of received items” below).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/units/{id}/photos</span></code></p></td>
+<td><p>Add one of the operations’ photos to the Unit’s <code class="docutils literal notranslate"><span class="pre">Photos</span> <span class="pre">interne</span></code> (<code class="docutils literal notranslate"><span class="pre">image_b64</span></code>, <code class="docutils literal notranslate"><span class="pre">content_type</span></code> JPEG/PNG/WebP, <code class="docutils literal notranslate"><span class="pre">filename</span></code> <code class="docutils literal notranslate"><span class="pre">rw-&lt;photo&gt;-&lt;kind&gt;.&lt;ext&gt;</span></code>; 5 MB max); idempotent by file name → <code class="docutils literal notranslate"><span class="pre">attachment_id</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/units/{id}/photos/remove</span></code></p></td>
+<td><p>Remove these attachments (<code class="docutils literal notranslate"><span class="pre">attachment_ids</span></code>, 100 max), keep every other one → <code class="docutils literal notranslate"><span class="pre">removed</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/units/{id}/remove</span></code></p></td>
+<td><p>Delete a Unit the app created. <strong>409 <code class="docutils literal notranslate"><span class="pre">unit_locked</span></code></strong> once engaged commercially; already gone: 200.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/units/{id}/restore</span></code></p></td>
+<td><p>Put a pre-created reprise Unit’s <code class="docutils literal notranslate"><span class="pre">fields</span></code> (snapshot) back; <code class="docutils literal notranslate"><span class="pre">restored:</span> <span class="pre">false</span></code> if it no longer exists.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/groups/push</span></code></p></td>
+<td><p>Create or update a group: Model → Variation(s) → Specification(s) → Unit(s).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/groups/validate</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Statut</span> <span class="pre">validation</span> <span class="pre">Variation</span> <span class="pre">=</span> <span class="pre">Validé</span></code> on the group’s <code class="docutils literal notranslate"><span class="pre">variation_ids</span></code>; <code class="docutils literal notranslate"><span class="pre">conversions</span></code> turn an existing default Variation into a variant (axis spec created, <code class="docutils literal notranslate"><span class="pre">is_variant</span> <span class="pre">=</span> <span class="pre">Oui</span></code>). <strong>409 <code class="docutils literal notranslate"><span class="pre">shopify_confirmation_required</span></code></strong> when converting on a Model on Shopify without <code class="docutils literal notranslate"><span class="pre">confirm_shopify</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/groups/unvalidate</span></code></p></td>
+<td><p>Back to <code class="docutils literal notranslate"><span class="pre">À</span> <span class="pre">valider</span></code>. <strong>409 <code class="docutils literal notranslate"><span class="pre">on_shopify</span></code></strong> if the Model has a <code class="docutils literal notranslate"><span class="pre">ShopifyID</span></code> or an <code class="docutils literal notranslate"><span class="pre">Annonces</span> <span class="pre">Shopify</span></code> record.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/groups/cancel</span></code></p></td>
+<td><p>Delete what the group created (the Model only if <code class="docutils literal notranslate"><span class="pre">model_created</span></code>), give pre-created reprise Units their snapshot back (<code class="docutils literal notranslate"><span class="pre">restore_units</span></code>) and remove its accessory links (<code class="docutils literal notranslate"><span class="pre">compat_links</span></code>). <strong>409 <code class="docutils literal notranslate"><span class="pre">on_shopify</span></code></strong> / <strong><code class="docutils literal notranslate"><span class="pre">unit_locked</span></code></strong>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/relationships/accessory</span></code></p></td>
+<td><p>Add an accessory Model to a host’s <code class="docutils literal notranslate"><span class="pre">Compatibilité</span></code> row (<code class="docutils literal notranslate"><span class="pre">Machine</span> <span class="pre">fille</span></code>), creating the row if needed, and tick the accessory’s <code class="docutils literal notranslate"><span class="pre">is_accessory</span></code>; idempotent. <strong>409 <code class="docutils literal notranslate"><span class="pre">self_link</span></code></strong> for a Model as its own accessory.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/relationships/accessory/remove</span></code></p></td>
+<td><p>Remove it again (<code class="docutils literal notranslate"><span class="pre">removed</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/reprises?q=</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Opération</span> <span class="pre">reprise</span></code> records to receive: <code class="docutils literal notranslate"><span class="pre">Statut</span> <span class="pre">logistique</span> <span class="pre">=</span> <span class="pre">Appareils</span> <span class="pre">reçus</span></code> (set by the operations team when the equipment arrives) and <code class="docutils literal notranslate"><span class="pre">Statut</span> <span class="pre">opérationnel</span></code> not <code class="docutils literal notranslate"><span class="pre">Inventaire</span> <span class="pre">terminé</span></code>, newest first (100 max); <code class="docutils literal notranslate"><span class="pre">q</span></code> filters on the name and the seller company.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/reprises/{id}</span></code></p></td>
+<td><p>The operation, its pre-created Units (each with the matched equipment row of its proposition) and unmatched equipment.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/units/{id}</span></code></p></td>
+<td><p>A Unit’s catalog fields, with the <code class="docutils literal notranslate"><span class="pre">snapshot</span></code> to restore if the item is removed.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/units/photos</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Photos</span> <span class="pre">client</span></code> (attachments on the Unit) of several Units, <code class="docutils literal notranslate"><span class="pre">{ids}</span></code> (200 max) → <code class="docutils literal notranslate"><span class="pre">{photos:</span> <span class="pre">{id:</span> <span class="pre">[{url,</span> <span class="pre">thumbnail,</span> <span class="pre">name}]}}</span></code>, images only, one Airtable call per 50 ids. Links expire after a few hours: the app caches them briefly, never stores them.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/variations/{id}</span></code></p></td>
+<td><p>A Variation’s name, <code class="docutils literal notranslate"><span class="pre">model_id</span></code>, <code class="docutils literal notranslate"><span class="pre">is_variant</span></code> and status (Référence variant checks), its Model’s brand, reference and type (<code class="docutils literal notranslate"><span class="pre">brand</span></code>, <code class="docutils literal notranslate"><span class="pre">modele</span></code>, <code class="docutils literal notranslate"><span class="pre">type</span></code>: the item’s known identity) and known <code class="docutils literal notranslate"><span class="pre">dimensions</span></code> (to pre-fill measurements).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/reprises/{id}/received</span></code></p></td>
+<td><p>Operation <code class="docutils literal notranslate"><span class="pre">Statut</span> <span class="pre">logistique</span> <span class="pre">=</span> <span class="pre">Appareils</span> <span class="pre">reçus</span></code> (+ <code class="docutils literal notranslate"><span class="pre">Date</span> <span class="pre">de</span> <span class="pre">réception</span></code> if empty); returns the previous values.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/reprises/{id}/received/undo</span></code></p></td>
+<td><p>Put the previous values back (409 <code class="docutils literal notranslate"><span class="pre">operation_changed</span></code> if the status moved meanwhile).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/ocr</span></code></p></td>
+<td><p>Queue a label photo (<code class="docutils literal notranslate"><span class="pre">image_b64</span></code>, <code class="docutils literal notranslate"><span class="pre">content_type</span></code>; 8 MB max) for OCR; returns <code class="docutils literal notranslate"><span class="pre">job_id</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ocr/{job_id}</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">queued</span></code> / <code class="docutils literal notranslate"><span class="pre">running</span></code> / <code class="docutils literal notranslate"><span class="pre">done</span></code> (+ <code class="docutils literal notranslate"><span class="pre">result</span></code>: <code class="docutils literal notranslate"><span class="pre">lines</span></code>, <code class="docutils literal notranslate"><span class="pre">fields</span></code>) / <code class="docutils literal notranslate"><span class="pre">failed</span></code> (+ <code class="docutils literal notranslate"><span class="pre">error</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/suggest-reference</span></code></p></td>
+<td><p>Référence variant of a received item (<code class="docutils literal notranslate"><span class="pre">brand</span></code>, <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">serial</span></code>, <code class="docutils literal notranslate"><span class="pre">product_hint</span></code>, <code class="docutils literal notranslate"><span class="pre">label_text</span></code>, <code class="docutils literal notranslate"><span class="pre">photos_text</span></code>, up to 4 <code class="docutils literal notranslate"><span class="pre">images</span></code>): existing Variations first (catalog index ranking, then the AI decides within the shortlist, with confidences), else a new reference mapped to the closest existing brands / models / types (a brand not in Airtable is flagged <code class="docutils literal notranslate"><span class="pre">new</span></code>). Heuristic ranking alone when the AI is off or unavailable (<code class="docutils literal notranslate"><span class="pre">ai_error</span></code>). The AI also reads the serial number (<code class="docutils literal notranslate"><span class="pre">read.serial</span></code>). Without a confident match, a second pass with <code class="docutils literal notranslate"><span class="pre">photos_text</span></code> (OCR of the other photos) when the <code class="docutils literal notranslate"><span class="pre">ocr_fallback</span></code> setting is on (<code class="docutils literal notranslate"><span class="pre">fallback_used</span></code>). 503 when the catalog is unavailable. See “Reference suggestion” below.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/brands</span></code>, <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/types</span></code></p></td>
+<td><p>Create a brand / equipment type the operator confirmed as new (idempotent by normalized name: an existing one comes back with <code class="docutils literal notranslate"><span class="pre">created:</span> <span class="pre">false</span></code>; a type’s optional <code class="docutils literal notranslate"><span class="pre">famille</span></code> must be an existing family name, else 400).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/spec-types</span></code></p></td>
+<td><p>Create a specification key (variant axis) the operator confirmed as new, with its <code class="docutils literal notranslate"><span class="pre">kind</span></code> (<code class="docutils literal notranslate"><span class="pre">Numérique</span></code> default, <code class="docutils literal notranslate"><span class="pre">Boolean</span></code>, <code class="docutils literal notranslate"><span class="pre">Text</span></code>); idempotent by normalized name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/research</span></code></p></td>
+<td><p>Queue the AI research of one product identity (<code class="docutils literal notranslate"><span class="pre">brand</span></code>, <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">product_hint</span></code>, <code class="docutils literal notranslate"><span class="pre">serial_example</span></code>, <code class="docutils literal notranslate"><span class="pre">label_text</span></code>; 422 without <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">product_hint</span></code> or <code class="docutils literal notranslate"><span class="pre">label_text</span></code>). Refused by the AI settings: <strong>503 <code class="docutils literal notranslate"><span class="pre">not_configured</span></code></strong> (no AI provider has a key), <strong>409 <code class="docutils literal notranslate"><span class="pre">disabled</span></code></strong>, <strong>429 <code class="docutils literal notranslate"><span class="pre">daily_limit</span></code></strong> / <strong><code class="docutils literal notranslate"><span class="pre">budget</span></code></strong>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/research/{job_id}</span></code></p></td>
+<td><p>Same states as OCR; <code class="docutils literal notranslate"><span class="pre">result</span></code> is the proposal below.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/review-queue</span></code></p></td>
+<td><p>Models to verify for the site, most urgent first (see “Commercial review” below); <code class="docutils literal notranslate"><span class="pre">?refresh=true</span></code> rebuilds now. <code class="docutils literal notranslate"><span class="pre">{models,</span> <span class="pre">age_seconds}</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/models/{id}/verify</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Vérification</span> <span class="pre">pour</span> <span class="pre">site</span></code> checked, its Variations <code class="docutils literal notranslate"><span class="pre">Statut</span> <span class="pre">verification</span> <span class="pre">=</span> <span class="pre">Vérifié</span></code> (and <code class="docutils literal notranslate"><span class="pre">Validé</span></code> when still <code class="docutils literal notranslate"><span class="pre">À</span> <span class="pre">valider</span></code>: <code class="docutils literal notranslate"><span class="pre">validated_variations</span></code>). <strong>409 <code class="docutils literal notranslate"><span class="pre">shopify_decision_required</span></code></strong> while <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> is empty.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/models/{id}/unverify</span></code></p></td>
+<td><p>Back to review: unchecked, Variations <code class="docutils literal notranslate"><span class="pre">Non</span> <span class="pre">vérifié</span></code> (a <code class="docutils literal notranslate"><span class="pre">Validé</span></code> status stays).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/models/{id}/sheet</span></code></p></td>
+<td><p>A Model’s full sheet for the commercial review (<code class="docutils literal notranslate"><span class="pre">?variation_id=</span></code> adds that Variation’s status, unit count and specifications, the variant’s own first; <code class="docutils literal notranslate"><span class="pre">?all_variations=true</span></code> adds <code class="docutils literal notranslate"><span class="pre">variation_list</span></code>: every Variation with its statuses, specifications and Units in stock with their <code class="docutils literal notranslate"><span class="pre">Photos</span> <span class="pre">interne</span></code>): identity, editable <code class="docutils literal notranslate"><span class="pre">fields</span></code>, <code class="docutils literal notranslate"><span class="pre">photos</span></code> (Photo neuve), <code class="docutils literal notranslate"><span class="pre">documents</span></code> (Documentation, Manuel Operateur, Manuel de service), <code class="docutils literal notranslate"><span class="pre">verified</span></code>, Shopify / accessory / compatibility flags. Attachment links expire: never stored.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PATCH</span> <span class="pre">/models/{id}</span></code></p></td>
+<td><p>Correct the Model: <code class="docutils literal notranslate"><span class="pre">{changes,</span> <span class="pre">expected}</span></code> with keys <code class="docutils literal notranslate"><span class="pre">short_description</span></code>, <code class="docutils literal notranslate"><span class="pre">long_description</span></code>, <code class="docutils literal notranslate"><span class="pre">longueur_mm</span></code>, <code class="docutils literal notranslate"><span class="pre">hauteur_mm</span></code>, <code class="docutils literal notranslate"><span class="pre">profondeur_mm</span></code>, <code class="docutils literal notranslate"><span class="pre">poids_kg</span></code>, <code class="docutils literal notranslate"><span class="pre">prix_neuf_ht</span></code>, <code class="docutils literal notranslate"><span class="pre">dimension_exacte</span></code>, <code class="docutils literal notranslate"><span class="pre">poids_estime</span></code>, <code class="docutils literal notranslate"><span class="pre">notice_introuvable</span></code>, <code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> (<code class="docutils literal notranslate"><span class="pre">Oui</span></code> / <code class="docutils literal notranslate"><span class="pre">Non</span></code>). <strong>409 <code class="docutils literal notranslate"><span class="pre">changed_in_airtable</span></code></strong> when Airtable no longer holds <code class="docutils literal notranslate"><span class="pre">expected</span></code> (nothing written); 422 for a bad value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/models/{id}/pdf</span></code></p></td>
+<td><p>The sales team’s PDF of the model (<code class="docutils literal notranslate"><span class="pre">pdf_b64</span></code>, <code class="docutils literal notranslate"><span class="pre">filename</span></code>, <code class="docutils literal notranslate"><span class="pre">attach</span></code>, default true; 10 MB max, 422 if not a PDF): added to <code class="docutils literal notranslate"><span class="pre">Documentation</span></code> and read by the AI → the proposed sheet (see “Commercial review”). Synchronous (1-2 min). AI refusals as for <code class="docutils literal notranslate"><span class="pre">/research</span></code> (503 / 409 / 429); <strong>502</strong> when no AI model answered.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/models/{id}/variants</span></code></p></td>
+<td><p>Create a proposed variant: <code class="docutils literal notranslate"><span class="pre">{axis,</span> <span class="pre">specs,</span> <span class="pre">convert_variation_id?}</span></code> (each <code class="docutils literal notranslate"><span class="pre">{spec_type_id,</span> <span class="pre">valeur,</span> <span class="pre">unite}</span></code>) → <code class="docutils literal notranslate"><span class="pre">{variation_id,</span> <span class="pre">created}</span></code>. <strong>409 <code class="docutils literal notranslate"><span class="pre">on_shopify</span></code></strong> / <strong><code class="docutils literal notranslate"><span class="pre">already_variant</span></code></strong> when converting.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/variations/{id}/specs</span></code></p></td>
+<td><p>Add a specification (<code class="docutils literal notranslate"><span class="pre">spec_type_id</span></code>, <code class="docutils literal notranslate"><span class="pre">valeur</span></code>, <code class="docutils literal notranslate"><span class="pre">unite</span></code>) to a Variation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PATCH</span> <span class="pre">/specs/{id}</span></code>, <code class="docutils literal notranslate"><span class="pre">DELETE</span> <span class="pre">/specs/{id}</span></code></p></td>
+<td><p>Change a specification’s <code class="docutils literal notranslate"><span class="pre">valeur</span></code> / <code class="docutils literal notranslate"><span class="pre">unite</span></code> (value required, 200 characters max; 422 otherwise), or remove it (<strong>409 <code class="docutils literal notranslate"><span class="pre">variant_axis</span></code></strong> for the spec that tells a variant apart).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/models/{id}/documents</span></code></p></td>
+<td><p>Add a PDF by URL (<code class="docutils literal notranslate"><span class="pre">field</span></code>, <code class="docutils literal notranslate"><span class="pre">url</span></code>, optional <code class="docutils literal notranslate"><span class="pre">filename</span></code>) to <code class="docutils literal notranslate"><span class="pre">documentation</span></code>, <code class="docutils literal notranslate"><span class="pre">manuel_operateur</span></code> or <code class="docutils literal notranslate"><span class="pre">manuel_service</span></code> (others kept, same file name not added twice; a document in the first two clears « Notice Introuvable »). The link is checked first: 422 unless it is a reachable PDF on a public host.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/describe</span></code></p></td>
+<td><p>AI rewrite of a product’s descriptions (<code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">brand</span></code>, <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">type</span></code>, <code class="docutils literal notranslate"><span class="pre">famille</span></code>, current texts, <code class="docutils literal notranslate"><span class="pre">specs</span></code>, optional <code class="docutils literal notranslate"><span class="pre">instruction</span></code>; 422 without <code class="docutils literal notranslate"><span class="pre">name</span></code> or <code class="docutils literal notranslate"><span class="pre">model</span></code>) → <code class="docutils literal notranslate"><span class="pre">short_description</span></code>, <code class="docutils literal notranslate"><span class="pre">long_description</span></code>, <code class="docutils literal notranslate"><span class="pre">issues</span></code> (e.g. the current text describes another product), <code class="docutils literal notranslate"><span class="pre">ai_call_id</span></code>, <code class="docutils literal notranslate"><span class="pre">ai_model</span></code>. A proposal: nothing written. AI refusals and 502 as for <code class="docutils literal notranslate"><span class="pre">/models/{id}/pdf</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/documents/search</span></code></p></td>
+<td><p>Queue the AI web search of a model’s PDF documents (same identity; AI refusals as for <code class="docutils literal notranslate"><span class="pre">/research</span></code>); <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/documents/search/{job_id}</span></code> → <code class="docutils literal notranslate"><span class="pre">documents</span></code> (<code class="docutils literal notranslate"><span class="pre">url</span></code>, <code class="docutils literal notranslate"><span class="pre">title</span></code>, <code class="docutils literal notranslate"><span class="pre">kind</span></code>, <code class="docutils literal notranslate"><span class="pre">language</span></code>, <code class="docutils literal notranslate"><span class="pre">covers</span></code>, <code class="docutils literal notranslate"><span class="pre">filename</span></code>, <code class="docutils literal notranslate"><span class="pre">size</span></code>), each checked to be a reachable PDF (<code class="docutils literal notranslate"><span class="pre">rejected</span></code> counts the others), and <code class="docutils literal notranslate"><span class="pre">notes</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Refusals are <code class="docutils literal notranslate"><span class="pre">409</span></code> with <code class="docutils literal notranslate"><span class="pre">detail</span> <span class="pre">=</span> <span class="pre">{&quot;code&quot;,</span> <span class="pre">&quot;message&quot;,</span> <span class="pre">...}</span></code>; the app shows
+the message.</p>
+</section>
+<section id="push">
+<h2>Push<a class="headerlink" href="#push" title="Link to this heading"></a></h2>
+<p>Every entity in the request has a <code class="docutils literal notranslate"><span class="pre">ref</span></code>, a stable app-side id (<code class="docutils literal notranslate"><span class="pre">model</span></code>,
+<code class="docutils literal notranslate"><span class="pre">variation:12</span></code>, <code class="docutils literal notranslate"><span class="pre">spec:40</span></code>, <code class="docutils literal notranslate"><span class="pre">unit:7</span></code>). The response maps each ref to its
+Airtable record id (<code class="docutils literal notranslate"><span class="pre">ids</span></code>) and returns the fields written per record
+(<code class="docutils literal notranslate"><span class="pre">written</span></code>), which the app sends back as <code class="docutils literal notranslate"><span class="pre">baseline</span></code> on the next push.</p>
+<ul class="simple">
+<li><p><strong>Created records</strong>: Variations start as <code class="docutils literal notranslate"><span class="pre">À</span> <span class="pre">valider</span></code>. A variant Variation
+needs an <code class="docutils literal notranslate"><span class="pre">axis</span></code> spec: it is created with both <code class="docutils literal notranslate"><span class="pre">Variation</span> <span class="pre">associée</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Spec_variant</span></code>, which makes it the Variation’s <code class="docutils literal notranslate"><span class="pre">Variant_name</span></code>
+(<code class="docutils literal notranslate"><span class="pre">Variant_value</span></code> is a lookup of its <code class="docutils literal notranslate"><span class="pre">valeur</span></code>).</p></li>
+<li><p><strong>Selected records</strong> (<code class="docutils literal notranslate"><span class="pre">created_by_group:</span> <span class="pre">false</span></code>): an existing Model or
+Variation is linked to, never edited.</p></li>
+<li><p><strong>Refusals</strong> (409): <code class="docutils literal notranslate"><span class="pre">incomplete_model</span></code> (a created Model needs name, brand
+and type), <code class="docutils literal notranslate"><span class="pre">missing_model_id</span></code> / <code class="docutils literal notranslate"><span class="pre">missing_variation_id</span></code> (a selected record
+without its id), <code class="docutils literal notranslate"><span class="pre">missing_variant_axis</span></code>, <code class="docutils literal notranslate"><span class="pre">unknown_variation</span></code> (a Unit
+pointing to a Variation absent from the group).</p></li>
+<li><p><strong>No duplicates on retry</strong>: each created record id is stored in Redis
+(<code class="docutils literal notranslate"><span class="pre">api:catalog:refs:&lt;idempotency_key&gt;</span></code>, 90 days) as soon as Airtable
+returns it. The <code class="docutils literal notranslate"><span class="pre">idempotency_key</span></code> must be stable per product group. A push
+that fails midway answers <code class="docutils literal notranslate"><span class="pre">502</span></code> with the <code class="docutils literal notranslate"><span class="pre">ids</span></code> created so far; sending the
+same push again resumes.</p></li>
+<li><p><strong>Conflicts</strong>: for a record with a <code class="docutils literal notranslate"><span class="pre">baseline</span></code>, the current Airtable values
+are compared first. A field changed in Airtable since the last push (and
+not to the value the app wants) makes the record a conflict: it is not
+written, and the response has <code class="docutils literal notranslate"><span class="pre">status:</span> <span class="pre">&quot;conflict&quot;</span></code> with the differences.</p></li>
+<li><p><strong>Removed records</strong> the group created earlier and no longer has:
+<code class="docutils literal notranslate"><span class="pre">removed_unit_ids</span></code> (refused if the Unit is engaged commercially: status
+Vendu/Commandé/Réservé/En enchères, or linked to a Vente, Devis or Vente
+aux enchères), <code class="docutils literal notranslate"><span class="pre">removed_spec_ids</span></code>, <code class="docutils literal notranslate"><span class="pre">removed_variation_ids</span></code> (refused,
+<code class="docutils literal notranslate"><span class="pre">variation_has_units</span></code>, if the Variation still has Units after this push
+re-linked them).</p></li>
+<li><p><strong>Restored Units</strong> (<code class="docutils literal notranslate"><span class="pre">restored_units</span></code>): pre-created reprise Units given
+their snapshot back.</p></li>
+</ul>
+<p>Airtable calls are retried on 429/5xx (1, 2, 4, 8 s).</p>
+</section>
+<section id="units-of-received-items-catalogsync-sync-unit-api-services-unit-photos-py">
+<h2>Units of received items (<code class="docutils literal notranslate"><span class="pre">CatalogSync.sync_unit</span></code>, <code class="docutils literal notranslate"><span class="pre">api/services/unit_photos.py</span></code>)<a class="headerlink" href="#units-of-received-items-catalogsync-sync-unit-api-services-unit-photos-py" title="Link to this heading"></a></h2>
+<p>The app writes an item’s Unit as soon as operations finish it, with no
+commercial step (also for a new reference: the Unit links to its <code class="docutils literal notranslate"><span class="pre">À</span> <span class="pre">valider</span></code>
+Variation). <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/units/sync</span></code> writes <code class="docutils literal notranslate"><span class="pre">Référence</span> <span class="pre">variant</span></code>, <code class="docutils literal notranslate"><span class="pre">Numéro</span> <span class="pre">de</span> <span class="pre">série</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Etat</span> <span class="pre">esthétique</span></code>, <code class="docutils literal notranslate"><span class="pre">État</span> <span class="pre">fonctionnel</span></code>, <code class="docutils literal notranslate"><span class="pre">Commentaire</span> <span class="pre">atelier</span> <span class="pre">(état</span> <span class="pre">&amp;</span> <span class="pre">accessoires)</span></code> (written empty when cleared) and <code class="docutils literal notranslate"><span class="pre">Modules/Accessoires/Consommables</span></code>
+(<code class="docutils literal notranslate"><span class="pre">host_variation_id</span></code>):</p>
+<ul class="simple">
+<li><p>with <code class="docutils literal notranslate"><span class="pre">airtable_id</span></code> (a pre-created reprise Unit, or one written before) it
+<strong>completes</strong> that record; <code class="docutils literal notranslate"><span class="pre">baseline</span></code> gives conflict detection as for a
+push (<code class="docutils literal notranslate"><span class="pre">status:</span> <span class="pre">&quot;conflict&quot;</span></code>, nothing written);</p></li>
+<li><p>without, it <strong>creates</strong> the Unit, remembered under <code class="docutils literal notranslate"><span class="pre">idempotency_key</span></code>
+(<code class="docutils literal notranslate"><span class="pre">app-unit:&lt;item&gt;</span></code>, Redis) so a retry never creates a second one (a
+remembered Unit deleted since is created again). Only at creation:
+<code class="docutils literal notranslate"><span class="pre">Opération</span> <span class="pre">reprise</span></code> (<code class="docutils literal notranslate"><span class="pre">creation.operation_id</span></code>) and, for an item of the
+reprise proposal (<code class="docutils literal notranslate"><span class="pre">creation.equipment_id</span></code>), that equipment row’s
+<code class="docutils literal notranslate"><span class="pre">Prix</span> <span class="pre">de</span> <span class="pre">rachat</span></code> and <code class="docutils literal notranslate"><span class="pre">Photos</span></code> (as <code class="docutils literal notranslate"><span class="pre">Photos</span> <span class="pre">client</span></code>, read at that moment:
+attachment links expire).</p></li>
+</ul>
+<p>The operations’ photos go to <code class="docutils literal notranslate"><span class="pre">Photos</span> <span class="pre">interne</span></code>, one upload each through
+Airtable’s content API (<code class="docutils literal notranslate"><span class="pre">content.airtable.com/.../uploadAttachment</span></code>, base64,
+5 MB max), named <code class="docutils literal notranslate"><span class="pre">rw-&lt;photo</span> <span class="pre">id&gt;-&lt;kind&gt;.&lt;ext&gt;</span></code>: a retry finds the attachment by
+that name instead of adding it twice. Removing photos keeps every attachment
+added by people. A removed item’s Unit is deleted (<code class="docutils literal notranslate"><span class="pre">/units/{id}/remove</span></code>,
+refused once engaged commercially) or, for a pre-created reprise Unit, given
+its snapshot back (<code class="docutils literal notranslate"><span class="pre">/units/{id}/restore</span></code>) and the app’s photos removed.</p>
+</section>
+<section id="reprises-api-services-catalog-reprise-py">
+<h2>Reprises (<code class="docutils literal notranslate"><span class="pre">api/services/catalog_reprise.py</span></code>)<a class="headerlink" href="#reprises-api-services-catalog-reprise-py" title="Link to this heading"></a></h2>
+<p>An accepted reprise’s Units already exist (<code class="docutils literal notranslate"><span class="pre">Opération</span> <span class="pre">reprise.Équipement</span> <span class="pre">rachetés</span></code>), usually without a Variation. A receiving batch seeded from the
+operation <strong>completes</strong> them (<code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/units/sync</span></code> with the pre-created Unit’s
+id). Such a Unit is never deleted: removing the item gives it back the
+snapshot taken when it was received.</p>
+<p>Equipment rows (<code class="docutils literal notranslate"><span class="pre">Équipements</span> <span class="pre">liés</span> <span class="pre">aux</span> <span class="pre">propositions</span> <span class="pre">de</span> <span class="pre">reprises</span></code>) of the
+linked <code class="docutils literal notranslate"><span class="pre">Propositions</span> <span class="pre">de</span> <span class="pre">reprises</span></code> record have no link to the
+Units: they are matched by normalized serial number (exact first, then one
+containing the other, 5+ characters), one to one. When exactly one Unit and
+one row are left and one of them has no serial, they are the same item.</p>
+<p>The Unit’s <code class="docutils literal notranslate"><span class="pre">Statut</span> <span class="pre">logistique</span> <span class="pre">reprise</span></code> is a lookup of the operation’s
+<code class="docutils literal notranslate"><span class="pre">Statut</span> <span class="pre">logistique</span></code>, so the received status is set on the operation.</p>
+</section>
+<section id="not-written-by-the-api">
+<h2>Not written by the API<a class="headerlink" href="#not-written-by-the-api" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Variation <code class="docutils literal notranslate"><span class="pre">Short</span> <span class="pre">description</span></code>/<code class="docutils literal notranslate"><span class="pre">Long</span> <span class="pre">description</span></code>, <code class="docutils literal notranslate"><span class="pre">Variant_value</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ShopifyID</span></code>, <code class="docutils literal notranslate"><span class="pre">Status</span> <span class="pre">Shopify</span></code>: lookups. Descriptions go on the Model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Statut</span> <span class="pre">commercial</span></code>, <code class="docutils literal notranslate"><span class="pre">Prix</span> <span class="pre">de</span> <span class="pre">vente</span> <span class="pre">HT</span></code>: entered by people, never
+inferred. <code class="docutils literal notranslate"><span class="pre">Prix</span> <span class="pre">de</span> <span class="pre">rachat</span></code> is only copied from the reprise equipment row,
+<code class="docutils literal notranslate"><span class="pre">Prix</span> <span class="pre">neuf</span> <span class="pre">HT</span></code> only written by an explicit correction (<code class="docutils literal notranslate"><span class="pre">PATCH</span> <span class="pre">/models/{id}</span></code>).</p></li>
+<li><p>Shopify: drafts (<code class="docutils literal notranslate"><span class="pre">À</span> <span class="pre">valider</span></code>) are kept off Shopify by the existing filter;
+nothing here touches Shopify.</p></li>
+</ul>
+</section>
+<section id="label-ocr-api-services-label-ocr-py">
+<h2>Label OCR (<code class="docutils literal notranslate"><span class="pre">api/services/label_ocr.py</span></code>)<a class="headerlink" href="#label-ocr-api-services-label-ocr-py" title="Link to this heading"></a></h2>
+<p>The app sends each receiving photo right after it is stored (every kind: the
+label’s fields are used now, the other photos’ text feeds the reference
+suggestion’s fallback pass); capture never waits. <code class="docutils literal notranslate"><span class="pre">run_label_ocr</span></code> (Celery) posts the image to the <code class="docutils literal notranslate"><span class="pre">ocr</span></code> sidecar
+(<code class="docutils literal notranslate"><span class="pre">ocr/</span></code>: RapidOCR, i.e. PaddleOCR models on ONNX Runtime, CPU, about 1 s per
+label), then extracts candidates from the text lines in reading order:</p>
+<ul class="simple">
+<li><p><strong>serial</strong>, from the surest to the least sure:</p>
+<ol class="arabic simple">
+<li><p>value after <code class="docutils literal notranslate"><span class="pre">SN:</span></code> (the usual form), <code class="docutils literal notranslate"><span class="pre">S/N</span></code>, <code class="docutils literal notranslate"><span class="pre">Serial</span> <span class="pre">No.</span></code> (also as the OCR
+misreads it: <code class="docutils literal notranslate"><span class="pre">Serlal</span></code>, <code class="docutils literal notranslate"><span class="pre">Seria1</span></code>), <code class="docutils literal notranslate"><span class="pre">N°</span> <span class="pre">de</span> <span class="pre">série</span></code>, <code class="docutils literal notranslate"><span class="pre">Serien-Nr.</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Ser.-Nr.</span></code>… (same line or the line below, or glued to the previous
+value: <code class="docutils literal notranslate"><span class="pre">ECN:390-1544SN:ICV18230008</span></code>), containing at least one digit;</p></li>
+<li><p>a line starting with <code class="docutils literal notranslate"><span class="pre">N:</span></code> (a cut <code class="docutils literal notranslate"><span class="pre">S/N:</span></code>), at half confidence;</p></li>
+<li><p>a word that only <em>looks like</em> a serial label (approximate match with
+<code class="docutils literal notranslate"><span class="pre">serial</span></code>, <code class="docutils literal notranslate"><span class="pre">seriennummer</span></code>, <code class="docutils literal notranslate"><span class="pre">numéro</span> <span class="pre">de</span> <span class="pre">série</span></code>…, e.g. <code class="docutils literal notranslate"><span class="pre">SeralHo.:</span></code>), at
+0.8 x confidence, flagged <code class="docutils literal notranslate"><span class="pre">guess</span></code>;</p></li>
+<li><p>no label at all: the token shaped most like a serial (digits, letters
+and digits mixed, 8-14 characters), skipping ratings (<code class="docutils literal notranslate"><span class="pre">220V-240V</span></code>),
+dates, file names, addresses and model / part / contact lines, at 0.3 x
+confidence, flagged <code class="docutils literal notranslate"><span class="pre">guess</span></code>;</p></li>
+</ol>
+</li>
+<li><p><strong>model</strong>: value after <code class="docutils literal notranslate"><span class="pre">Model</span></code> / <code class="docutils literal notranslate"><span class="pre">Model</span> <span class="pre">No.</span></code>, <code class="docutils literal notranslate"><span class="pre">Type</span></code>, <code class="docutils literal notranslate"><span class="pre">Device</span></code>, <code class="docutils literal notranslate"><span class="pre">Réf.</span></code>;
+only without one of these, <code class="docutils literal notranslate"><span class="pre">Cat.</span> <span class="pre">No.</span></code>, <code class="docutils literal notranslate"><span class="pre">P/N</span></code>, <code class="docutils literal notranslate"><span class="pre">Part</span> <span class="pre">No.</span></code>, <code class="docutils literal notranslate"><span class="pre">Art.-Nr.</span></code>;</p></li>
+<li><p><strong>brand</strong>: the longest Airtable <code class="docutils literal notranslate"><span class="pre">Marque</span></code> name found as a word.</p></li>
+</ul>
+<p>Each comes with the OCR confidence and the line it was read from; <code class="docutils literal notranslate"><span class="pre">fields</span></code>
+also holds the whole <code class="docutils literal notranslate"><span class="pre">text</span></code> in reading order. Nothing is written to Airtable.
+The task retries (3 times) when the sidecar is unreachable or slow. The sidecar is internal (<code class="docutils literal notranslate"><span class="pre">OCR_URL</span></code>, default
+<code class="docutils literal notranslate"><span class="pre">http://ocr:8000</span></code>); CI builds and pushes it as <code class="docutils literal notranslate"><span class="pre">ghcr.io/&lt;repo&gt;-ocr</span></code> with the
+same tags as the API image.</p>
+</section>
+<section id="ai-product-research-api-services-product-research-py">
+<h2>AI product research (<code class="docutils literal notranslate"><span class="pre">api/services/product_research.py</span></code>)<a class="headerlink" href="#ai-product-research-api-services-product-research-py" title="Link to this heading"></a></h2>
+<p>Started by the app when operations mark a reception done: one job per
+distinct product identity (brand + model read on the labels, else the reprise
+equipment row or the devis line). Celery task <code class="docutils literal notranslate"><span class="pre">run_product_research</span></code>. Two
+calls through the AI service, each on the feature’s chain of AI models
+(default: Claude Opus 5.5, then Sonnet 5.5, then OpenRouter once configured):</p>
+<ol class="arabic simple">
+<li><p><strong>research</strong>: web search with adaptive thinking and high effort (Claude:
+server-side <code class="docutils literal notranslate"><span class="pre">web_search</span></code> + <code class="docutils literal notranslate"><span class="pre">web_fetch</span></code>, <code class="docutils literal notranslate"><span class="pre">pause_turn</span></code> resumed up to 4
+times; OpenRouter: the <code class="docutils literal notranslate"><span class="pre">web</span></code> plugin); the model writes notes with a source
+URL per fact and lists PDF datasheets/manuals;</p></li>
+<li><p><strong>extraction</strong>: notes -&gt; strict JSON schema: French short and long
+descriptions, specifications <strong>using existing <code class="docutils literal notranslate"><span class="pre">Specification</span> <span class="pre">type</span></code> names
+only</strong> (anything else goes to <code class="docutils literal notranslate"><span class="pre">unmapped_facts</span></code>, enforced again in code),
+dimensions (mm) and weight (kg), documents, sources (plus the web
+results seen), confidence and <code class="docutils literal notranslate"><span class="pre">missing</span></code> fields.</p></li>
+</ol>
+<p>The result also carries the research <code class="docutils literal notranslate"><span class="pre">notes</span></code>, <code class="docutils literal notranslate"><span class="pre">ai_call_id</span></code> (the extraction,
+for feedback), <code class="docutils literal notranslate"><span class="pre">ai_call_ids</span></code> and <code class="docutils literal notranslate"><span class="pre">ai_models</span></code>.</p>
+<p>A proposal only: nothing is written to Airtable here; the commercial team
+creates the product from it in the app and reviews every value. Web content is
+treated as data, never as instructions. The job fails when the whole chain is
+unavailable (every AI model skipped or failed).</p>
+</section>
+<section id="central-ai-service-api-services-ai">
+<h2>Central AI service (<code class="docutils literal notranslate"><span class="pre">api/services/ai/</span></code>)<a class="headerlink" href="#central-ai-service-api-services-ai" title="Link to this heading"></a></h2>
+<p>Every AI call of the API goes through <code class="docutils literal notranslate"><span class="pre">AIService.run(feature,</span> <span class="pre">request)</span></code>: one
+provider-neutral request (<code class="docutils literal notranslate"><span class="pre">AIRequest</span></code>: system prompt, text, image and PDF
+parts, optional JSON schema, web search, thinking, effort) tried on the feature’s
+<strong>chain of AI models</strong>, in order, until one answers.</p>
+<ul class="simple">
+<li><p><strong>Providers</strong> (<code class="docutils literal notranslate"><span class="pre">providers/</span></code>): <code class="docutils literal notranslate"><span class="pre">anthropic</span></code> (Anthropic SDK, Messages API) and
+<code class="docutils literal notranslate"><span class="pre">openrouter</span></code> (chat completions, <code class="docutils literal notranslate"><span class="pre">https://openrouter.ai/api/v1</span></code>). Keys come
+from the environment only (<code class="docutils literal notranslate"><span class="pre">ANTHROPIC_API_KEY</span></code> or <code class="docutils literal notranslate"><span class="pre">ANTHROPIC_AUTH_TOKEN</span></code>,
+<code class="docutils literal notranslate"><span class="pre">OPENROUTER_API_KEY</span></code>). Each provider translates the request (images, PDF,
+JSON schema, web search, effort) and maps its errors to one code:
+<code class="docutils literal notranslate"><span class="pre">rate_limited</span></code>, <code class="docutils literal notranslate"><span class="pre">no_credit</span></code>, <code class="docutils literal notranslate"><span class="pre">overloaded</span></code>, <code class="docutils literal notranslate"><span class="pre">timeout</span></code>, <code class="docutils literal notranslate"><span class="pre">connection</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bad_request</span></code>, <code class="docutils literal notranslate"><span class="pre">refused</span></code>, <code class="docutils literal notranslate"><span class="pre">invalid_response</span></code>, <code class="docutils literal notranslate"><span class="pre">truncated</span></code>, <code class="docutils literal notranslate"><span class="pre">error</span></code>.</p></li>
+<li><p><strong>AI models</strong> (<code class="docutils literal notranslate"><span class="pre">ModelProfile</span></code>, editable in the app’s <code class="docutils literal notranslate"><span class="pre">/settings/ia</span></code>): an id,
+a label, a provider and its model id (e.g. <code class="docutils literal notranslate"><span class="pre">claude-opus-5-5</span></code>,
+<code class="docutils literal notranslate"><span class="pre">openai/gpt-5.2</span></code>), an optional manual price (USD per million tokens, input
+and output; overrides the list price in Anthropic cost estimates; 0 and 0 =
+<strong>free</strong>), on/off, <strong>directives</strong> appended to every request it
+serves, effort and max output tokens overrides, capabilities (reads images,
+web search, structured JSON) and its own limits (calls per day, monthly
+budget). Several AI models may share a provider model with different
+directives. Defaults: <code class="docutils literal notranslate"><span class="pre">claude-opus</span></code>, <code class="docutils literal notranslate"><span class="pre">claude-sonnet</span></code> (both with web
+search), <code class="docutils literal notranslate"><span class="pre">claude-haiku</span></code>, and <code class="docutils literal notranslate"><span class="pre">openrouter</span></code> (disabled until a model id is
+set).</p></li>
+<li><p><strong>Chains:</strong> each feature lists AI model ids in priority order. An AI model
+is <strong>skipped</strong> when it is disabled, its provider is disabled or has no key,
+it lacks a capability the feature requires (<code class="docutils literal notranslate"><span class="pre">product_research</span></code> and
+<code class="docutils literal notranslate"><span class="pre">document_search</span></code>: web + JSON; <code class="docutils literal notranslate"><span class="pre">reference_suggestion</span></code>,
+<code class="docutils literal notranslate"><span class="pre">description_writing</span></code> and <code class="docutils literal notranslate"><span class="pre">pdf_extraction</span></code>: JSON; images are dropped for
+models without vision), or one of its limits is reached (model or provider daily calls /
+monthly budget, global budget). Free AI models skip every budget check, and
+a feature stays available past the global budget while its chain holds an
+enabled free model. It <strong>fails over</strong> to the next on any provider error, an
+invalid JSON answer or a JSON answer cut by the token limit (<code class="docutils literal notranslate"><span class="pre">truncated</span></code>) —
+without retrying it, except after a <strong>rate limit</strong>
+(429): the AI model then cools down (<code class="docutils literal notranslate"><span class="pre">general.retry_after_seconds</span></code>, 30 s, or
+its own <code class="docutils literal notranslate"><span class="pre">retry_after_seconds</span></code>) while the next usable model is tried at once;
+when only cooling models are left, the service waits for the first one and
+tries it again, up to <code class="docutils literal notranslate"><span class="pre">general.rate_limit_retries</span></code> new tries per model and
+<code class="docutils literal notranslate"><span class="pre">general.max_wait_seconds</span></code> of waiting per request (≤ 240 s, under the app’s
+HTTP timeout). Cooldowns carry over between requests and processes (read
+from the call log). When nothing answers, <code class="docutils literal notranslate"><span class="pre">AIUnavailable</span></code> lists every
+attempt and its reason (synchronous routes answer 502; an async job
+fails; the reference suggestion falls back to its heuristic ranking).</p></li>
+<li><p><strong>Limits and budgets</strong> (provider, AI model, feature, global): empty
+(<code class="docutils literal notranslate"><span class="pre">None</span></code>) = no limit, <code class="docutils literal notranslate"><span class="pre">0</span></code> = a real zero (no calls / nothing to spend).
+Settings version 2 used <code class="docutils literal notranslate"><span class="pre">0</span></code> for “no limit” and are migrated to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>Feature settings:</strong> on/off, chain, daily call limit, image analysis and
+max images (reference suggestion: also <code class="docutils literal notranslate"><span class="pre">suggestions</span></code> and <code class="docutils literal notranslate"><span class="pre">ocr_fallback</span></code>),
+plus a global monthly budget (default 100 USD); these are checked before
+the chain (<code class="docutils literal notranslate"><span class="pre">AIBlocked</span></code>: 503 <code class="docutils literal notranslate"><span class="pre">not_configured</span></code>, 409 <code class="docutils literal notranslate"><span class="pre">disabled</span></code>, 429
+<code class="docutils literal notranslate"><span class="pre">daily_limit</span></code> / <code class="docutils literal notranslate"><span class="pre">budget</span></code>) and blocked attempts are recorded as <code class="docutils literal notranslate"><span class="pre">blocked</span></code>.
+Default daily limits: <code class="docutils literal notranslate"><span class="pre">product_research</span></code> 50, <code class="docutils literal notranslate"><span class="pre">reference_suggestion</span></code> 300
+(2 images), <code class="docutils literal notranslate"><span class="pre">description_writing</span></code> 200, <code class="docutils literal notranslate"><span class="pre">document_search</span></code> and
+<code class="docutils literal notranslate"><span class="pre">pdf_extraction</span></code> 100. Settings v1 (one model per feature) are migrated on
+read.</p></li>
+<li><p><strong>Recorded per attempt</strong> (SQLite <code class="docutils literal notranslate"><span class="pre">AI_DB_PATH</span></code>, default
+<code class="docutils literal notranslate"><span class="pre">/home/rewake/DB/ai.sqlite</span></code>): feature, provider, AI model, served model,
+tokens (input, output, cache read/write), web searches, images, cost
+(Anthropic: estimated at list prices; OpenRouter: the <code class="docutils literal notranslate"><span class="pre">usage.cost</span></code> it
+bills), duration, status, error code, request id and subject. Limit skips
+are recorded as <code class="docutils literal notranslate"><span class="pre">blocked</span></code>; configuration skips are not.</p></li>
+<li><p><strong>Feedback:</strong> results the app shows are reported back as <code class="docutils literal notranslate"><span class="pre">accepted</span></code> /
+<code class="docutils literal notranslate"><span class="pre">edited</span></code> / <code class="docutils literal notranslate"><span class="pre">rejected</span></code>, giving each feature’s acceptance rate.</p></li>
+<li><p><strong>Errors:</strong> stored as <code class="docutils literal notranslate"><span class="pre">code:</span> <span class="pre">message</span></code>; OpenRouter errors carry the
+upstream provider and its own reason (<code class="docutils literal notranslate"><span class="pre">metadata.raw</span></code>, also for errors
+returned with HTTP 200), invalid JSON keeps the start of the answer. A
+failed or limit-skipped attempt points to the call that answered instead
+(<code class="docutils literal notranslate"><span class="pre">fallback_call_id</span></code>).</p></li>
+<li><p><strong>Test:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/internal/ai/models/test</span></code> (an AI model, saved or not) sends
+a tiny real request — “pong”, a red test image if it reads images, a JSON
+schema if structured — and returns the answer, checks, served model,
+duration, cost and the catalog entry (or close ids). Recorded as feature
+<code class="docutils literal notranslate"><span class="pre">model_test</span></code> (<code class="docutils literal notranslate"><span class="pre">model_test.py</span></code>).</p></li>
+<li><p><strong>Routes</strong> (<code class="docutils literal notranslate"><span class="pre">/internal/ai/*</span></code>): <code class="docutils literal notranslate"><span class="pre">GET/PUT</span> <span class="pre">/settings</span></code> (GET adds which
+providers have a key, each feature’s label and requirements, and the price
+<code class="docutils literal notranslate"><span class="pre">catalog</span></code> in USD per million tokens: Anthropic list prices, OpenRouter’s
+public <code class="docutils literal notranslate"><span class="pre">/api/v1/models</span></code> cached 6 h — <code class="docutils literal notranslate"><span class="pre">pricing.py</span></code>; PUT
+validates ids and chains and rejects unknown fields, 422), <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/usage?days=</span></code> (per feature, per
+provider + AI model, per day), <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/calls?limit=&amp;feature=</span></code>,
+<code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/feedback</span></code> (<code class="docutils literal notranslate"><span class="pre">call_id</span></code>, <code class="docutils literal notranslate"><span class="pre">outcome</span></code>, optional <code class="docutils literal notranslate"><span class="pre">detail</span></code>),
+<code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/models/test</span></code>.</p></li>
+<li><p><strong>Token limit and reasoning:</strong> a reasoning model spends hidden reasoning
+tokens within its output limit. On OpenRouter the limit sent is twice the
+answer’s (<code class="docutils literal notranslate"><span class="pre">max_tokens</span></code>), with reasoning capped at the answer’s size
+(<code class="docutils literal notranslate"><span class="pre">reasoning.max_tokens</span></code>) unless the AI model sets an effort or the request
+asks for thinking (then <code class="docutils literal notranslate"><span class="pre">reasoning.effort</span></code>); a JSON answer
+still cut (<code class="docutils literal notranslate"><span class="pre">finish_reason:</span> <span class="pre">length</span></code>, or Claude’s <code class="docutils literal notranslate"><span class="pre">max_tokens</span></code>) is reported as
+<code class="docutils literal notranslate"><span class="pre">truncated</span></code>, with the reasoning tokens spent.</p></li>
+<li><p><strong>Claude specifics:</strong> Opus/Sonnet 5.5 get adaptive thinking (when the
+feature asks for it), an explicit effort and the server-side refusal
+fallback (<code class="docutils literal notranslate"><span class="pre">fallbacks:</span> <span class="pre">&quot;default&quot;</span></code>); other Claude models (Haiku 4.5) get none
+of these and have no web search. Web turns and turns over 16,000 output
+tokens are streamed.</p></li>
+</ul>
+<p>The features are <code class="docutils literal notranslate"><span class="pre">product_research</span></code> (web + JSON), <code class="docutils literal notranslate"><span class="pre">reference_suggestion</span></code>
+(JSON), <code class="docutils literal notranslate"><span class="pre">description_writing</span></code> (JSON), <code class="docutils literal notranslate"><span class="pre">document_search</span></code> (web + JSON) and
+<code class="docutils literal notranslate"><span class="pre">pdf_extraction</span></code> (JSON; the PDF is sent as a document: Claude reads it
+natively, OpenRouter as a <code class="docutils literal notranslate"><span class="pre">file</span></code> part). <code class="docutils literal notranslate"><span class="pre">reference_suggestion</span></code>’s
+system prompt holds the full brand, type and key lists and is cached
+(<code class="docutils literal notranslate"><span class="pre">cache_control</span></code> on Claude; OpenRouter models cache per their provider), so
+repeated suggestions mostly pay cache reads.</p>
+</section>
+<section id="commercial-review-api-services-review-queue-py-api-services-model-sheet-py-api-services-product-assist-py">
+<h2>Commercial review (<code class="docutils literal notranslate"><span class="pre">api/services/review_queue.py</span></code>, <code class="docutils literal notranslate"><span class="pre">api/services/model_sheet.py</span></code>, <code class="docutils literal notranslate"><span class="pre">api/services/product_assist.py</span></code>)<a class="headerlink" href="#commercial-review-api-services-review-queue-py-api-services-model-sheet-py-api-services-product-assist-py" title="Link to this heading"></a></h2>
+<p>Units reach Airtable without the commercial team (see “Units of received
+items” above); what they review is the <strong>Model</strong>, for the site.</p>
+<p><strong>The queue</strong> (<code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/review-queue</span></code>): every Model whose <code class="docutils literal notranslate"><span class="pre">Vérification</span> <span class="pre">pour</span> <span class="pre">site</span></code> is unchecked and that has Units <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">vendre</span></code> or <code class="docutils literal notranslate"><span class="pre">Non</span> <span class="pre">traité</span></code>, or a
+Variation still <code class="docutils literal notranslate"><span class="pre">À</span> <span class="pre">valider</span></code> (a new reference created by operations). Order:
+Models with Units <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">vendre</span></code> first, those meant for the site
+(<code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code> not <code class="docutils literal notranslate"><span class="pre">Non</span></code>) before the others, by number of Units on
+sale; then by Units <code class="docutils literal notranslate"><span class="pre">Non</span> <span class="pre">traité</span></code>; newest stock first among equals. Each entry
+has its counts (<code class="docutils literal notranslate"><span class="pre">a_vendre</span></code>, <code class="docutils literal notranslate"><span class="pre">non_traite</span></code>, <code class="docutils literal notranslate"><span class="pre">non_teste</span></code>), <code class="docutils literal notranslate"><span class="pre">is_new</span></code>, <code class="docutils literal notranslate"><span class="pre">to_sell</span></code>,
+<code class="docutils literal notranslate"><span class="pre">on_shopify</span></code>, <code class="docutils literal notranslate"><span class="pre">is_accessory</span></code>, and what its sheet lacks (<code class="docutils literal notranslate"><span class="pre">missing</span></code>: <code class="docutils literal notranslate"><span class="pre">description</span></code>, <code class="docutils literal notranslate"><span class="pre">photos</span></code>, <code class="docutils literal notranslate"><span class="pre">dimensions</span></code>,
+<code class="docutils literal notranslate"><span class="pre">poids</span></code>, <code class="docutils literal notranslate"><span class="pre">shopify</span></code>). Reading it pages through the stock (~15 s): it is cached
+in the process and rebuilt in the background after 5 minutes; a verified
+Model leaves it at once, an unverified one comes back at the next rebuild.</p>
+<p><strong>Verifying</strong> (<code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/models/{id}/verify</span></code>) needs the Shopify decision
+(<code class="docutils literal notranslate"><span class="pre">to_sell_on_shopify</span></code>, editable through <code class="docutils literal notranslate"><span class="pre">PATCH</span> <span class="pre">/models/{id}</span></code>), then checks
+<code class="docutils literal notranslate"><span class="pre">Vérification</span> <span class="pre">pour</span> <span class="pre">site</span></code> and sets every Variation <code class="docutils literal notranslate"><span class="pre">Statut</span> <span class="pre">verification</span> <span class="pre">=</span> <span class="pre">Vérifié</span></code>; a Variation still <code class="docutils literal notranslate"><span class="pre">À</span> <span class="pre">valider</span></code> becomes <code class="docutils literal notranslate"><span class="pre">Validé</span></code>.</p>
+<p>The sheet (<code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/models/{id}/sheet?all_variations=true</span></code>) shows everything to
+check. Corrections are explicit (<code class="docutils literal notranslate"><span class="pre">PATCH</span> <span class="pre">/models/{id}</span></code>) and optimistic: the app
+sends the values it showed, and a field changed in Airtable meanwhile refuses
+the whole edit rather than overwriting it. Specifications are edited per
+Variation (<code class="docutils literal notranslate"><span class="pre">/variations/{id}/specs</span></code>, <code class="docutils literal notranslate"><span class="pre">/specs/{id}</span></code>).</p>
+<p>AI help, proposals only:</p>
+<ul class="simple">
+<li><p><strong>The product’s PDF</strong> (<code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/models/{id}/pdf</span></code>, <code class="docutils literal notranslate"><span class="pre">pdf_extraction</span></code>): the
+sales team uploads the PDF they prepared for this model (10 MB max). It is
+added to the Model’s <code class="docutils literal notranslate"><span class="pre">Documentation</span></code> (Airtable’s content API, 5 MB max;
+<code class="docutils literal notranslate"><span class="pre">attached.reason</span></code>: <code class="docutils literal notranslate"><span class="pre">already_there</span></code> / <code class="docutils literal notranslate"><span class="pre">too_large</span></code> / <code class="docutils literal notranslate"><span class="pre">error</span></code> otherwise,
+<code class="docutils literal notranslate"><span class="pre">not_asked</span></code> with <code class="docutils literal notranslate"><span class="pre">attach:</span> <span class="pre">false</span></code>), then
+the AI reads it with the list of Airtable specification keys and returns
+the sheet in the web research’s shape (<code class="docutils literal notranslate"><span class="pre">source:</span> <span class="pre">&quot;pdf&quot;</span></code>): descriptions,
+dimensions, weight, new price, specifications (Airtable spelling when the
+key exists), <code class="docutils literal notranslate"><span class="pre">variants</span></code> (axis key, value, unit, their own specifications),
+<code class="docutils literal notranslate"><span class="pre">unmapped_facts</span></code>, <code class="docutils literal notranslate"><span class="pre">issues</span></code> and <code class="docutils literal notranslate"><span class="pre">confidence</span></code> (<code class="docutils literal notranslate"><span class="pre">identified</span></code> is false when
+there are issues). Only what the PDF states; nothing is written
+besides the attachment. A proposed variant is created on request with
+<code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/models/{id}/variants</span></code> (<code class="docutils literal notranslate"><span class="pre">CatalogSync.add_variant</span></code>): a new Variation
+<code class="docutils literal notranslate"><span class="pre">À</span> <span class="pre">valider</span></code> with its axis and specifications (idempotent per Model, axis
+key and value: push key <code class="docutils literal notranslate"><span class="pre">app-variant:&lt;model&gt;:&lt;key&gt;:&lt;value&gt;</span></code>), or, with
+<code class="docutils literal notranslate"><span class="pre">convert_variation_id</span></code>, the Model’s default Variation turned into that
+variant (refused on Shopify: <code class="docutils literal notranslate"><span class="pre">on_shopify</span></code>; already a variant:
+<code class="docutils literal notranslate"><span class="pre">already_variant</span></code>).</p></li>
+<li><p><strong>Descriptions</strong> (<code class="docutils literal notranslate"><span class="pre">description_writing</span></code>): French, factual, short (one
+sentence) and long (2-4 paragraphs), from the identity, the specifications
+and the current texts; a current text about another product is not reused
+and is reported in <code class="docutils literal notranslate"><span class="pre">issues</span></code>.</p></li>
+<li><p><strong>PDF documents</strong> (<code class="docutils literal notranslate"><span class="pre">document_search</span></code>, Celery task <code class="docutils literal notranslate"><span class="pre">run_document_search</span></code>):
+one web call with structured output (at most 6 documents, kinds <code class="docutils literal notranslate"><span class="pre">manual</span></code>,
+<code class="docutils literal notranslate"><span class="pre">service_manual</span></code>, <code class="docutils literal notranslate"><span class="pre">datasheet</span></code>, <code class="docutils literal notranslate"><span class="pre">brochure</span></code>, <code class="docutils literal notranslate"><span class="pre">other</span></code>, plus <code class="docutils literal notranslate"><span class="pre">notes</span></code> for the
+sales team); every link is then fetched (first bytes only, up to 5
+redirects followed by hand) and kept only if it is a PDF on a
+public host (no private, loopback or link-local address, at any hop). The
+same check runs again before a link is attached to the Model; Airtable then
+downloads the file from the URL.</p></li>
+</ul>
+</section>
+<section id="reference-suggestion-api-services-reference-suggestion-py">
+<h2>Reference suggestion (<code class="docutils literal notranslate"><span class="pre">api/services/reference_suggestion.py</span></code>)<a class="headerlink" href="#reference-suggestion-api-services-reference-suggestion-py" title="Link to this heading"></a></h2>
+<p>Called by the app for one received item (<code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/suggest-reference</span></code>): which
+<strong>existing</strong> Variation it is, else what new reference to create. Never raises
+for AI reasons: without AI (disabled, limit, unavailable) the heuristic
+ranking alone is returned with <code class="docutils literal notranslate"><span class="pre">ai_error</span></code>.</p>
+<ol class="arabic simple">
+<li><p>The catalog index ranks every Variation against what is known of the item
+(brand, model, serial, seller’s product name — for an accessory, also what
+it was found in — label text) and keeps a shortlist of 12.</p></li>
+<li><p>The AI (feature <code class="docutils literal notranslate"><span class="pre">reference_suggestion</span></code>, its chain of AI models; photos if
+the settings allow: <code class="docutils literal notranslate"><span class="pre">use_images</span></code>, up to <code class="docutils literal notranslate"><span class="pre">max_images</span></code>) returns <code class="docutils literal notranslate"><span class="pre">matches</span></code> among the numbered candidates with
+a confidence and a reason, the new-reference fields (brand as in the brand
+list, model reference, type from the type list, variant axis from the
+specification keys) and the <strong>serial number</strong> read on the label or photos
+(labels usually print it <code class="docutils literal notranslate"><span class="pre">SN:</span></code>).</p></li>
+<li><p><strong>Fallback pass:</strong> when no candidate reaches 0.6 and <code class="docutils literal notranslate"><span class="pre">photos_text</span></code> (OCR
+of the item’s other photos) is given, a second call adds that text
+(<code class="docutils literal notranslate"><span class="pre">ocr_fallback</span></code>, on by default); what only the first pass read is kept.</p></li>
+<li><p>Result: <code class="docutils literal notranslate"><span class="pre">match</span></code> (<code class="docutils literal notranslate"><span class="pre">existing</span></code> from 0.6), <code class="docutils literal notranslate"><span class="pre">variations</span></code> (the AI’s
+matches; the heuristic ranking only when no AI answered; <code class="docutils literal notranslate"><span class="pre">suggestions</span></code>
+items), <code class="docutils literal notranslate"><span class="pre">new_reference</span></code> (closest
+existing brands, models and types with confidences; <code class="docutils literal notranslate"><span class="pre">brand_proposal</span></code>
+flagged <code class="docutils literal notranslate"><span class="pre">new</span></code> when not in Airtable — created only once the operator
+confirms, through <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/brands</span></code>), <code class="docutils literal notranslate"><span class="pre">read.serial</span></code>, <code class="docutils literal notranslate"><span class="pre">fallback_used</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rationale</span></code>, <code class="docutils literal notranslate"><span class="pre">ai_call_id</span></code> for feedback, <code class="docutils literal notranslate"><span class="pre">ai_model</span></code>,
+<code class="docutils literal notranslate"><span class="pre">images_used</span></code>.</p></li>
+</ol>
+<p>The app keeps the result, so reloading never pays twice.</p>
+<p><strong>Catalog search</strong> (<code class="docutils literal notranslate"><span class="pre">CatalogIndex.search_models</span></code>): each searched word is
+matched against the Model’s brand, reference, equipment type, Variation
+names and variant values — whole word 1, start of a word 0.85, inside a word 0.7, across
+separators 0.65 (<code class="docutils literal notranslate"><span class="pre">ub90060</span></code> in <code class="docutils literal notranslate"><span class="pre">UB90.060.089</span></code>), close spelling 0.5. Every word
+must match (with 3+ words, all but one, ranked lower); an exact or contained
+reference adds to the score, popularity breaks ties. “2424”, “Rotor” and
+“rotor 2424” all find Rotor 2424. <code class="docutils literal notranslate"><span class="pre">suggest_models</span></code> turns the item ranking
+below into up to 3 Models with their best Variation.</p>
+<p><strong>Catalog index</strong> (<code class="docutils literal notranslate"><span class="pre">api/services/catalog_index.py</span></code>): brands, types, Models
+(with dimensions) and Variations (with unit counts) loaded from Airtable and
+reloaded in the background when used after 15 minutes (invalidated after
+pushes and brand / type / spec-type creations). It scores every Variation against the item — brand 0.35, model
+reference 0.45, type 0.08, variant value on the label 0.05, popularity 0.07 —
+and the top 12 go to the AI as numbered candidates; invented candidate
+numbers are dropped. This replaces an MCP lookup: the full Variation list is
+too large for a prompt, the shortlist is not. The number of proposals per
+list is <code class="docutils literal notranslate"><span class="pre">reference_suggestion.suggestions</span></code> (1-5, default 3).</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="catalog_model.html" class="btn btn-neutral float-left" title="Catalog model: Model, Variation, Unit" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="translations.html" class="btn btn-neutral float-right" title="Translations and publishing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Rewake.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

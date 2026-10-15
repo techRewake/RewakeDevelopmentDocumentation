@@ -1,0 +1,279 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Images du manuel « Réception produits » &mdash; Rewake API  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=7f41d439"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Manuel — Réception produits" href="reception-produits.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Rewake API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../routes.html">Routes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operations.html">Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scripts.html">Scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../catalog_model.html">Catalog model: Model, Variation, Unit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../catalog_intake.html">Catalog intake: receiving batches to Airtable</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../translations.html">Translations and publishing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Manuals</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Manuals</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="reception-produits.html">Manuel — Réception produits</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Images du manuel « Réception produits »</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Rewake API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Manuals</a></li>
+      <li class="breadcrumb-item active">Images du manuel « Réception produits »</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="images-du-manuel-reception-produits">
+<h1>Images du manuel « Réception produits »<a class="headerlink" href="#images-du-manuel-reception-produits" title="Link to this heading"></a></h1>
+<p>Emplacements utilisés par le manuel <a class="reference internal" href="reception-produits.html"><span class="std std-doc">Réception produits</span></a>.
+Une image « Provisoire » (colonne « État ») est grise (numéro et
+description). Remplacez-la par la vraie capture dans
+<code class="docutils literal notranslate"><span class="pre">docs/manuals/images/reception-produits/</span></code>, sous <strong>exactement</strong> le même nom.</p>
+<p><strong>Captures de l’application</strong> (recommandé) : déposez la capture brute
+(téléphone, 1x) dans <code class="docutils literal notranslate"><span class="pre">images/reception-produits/raw/</span></code>, décrivez ses
+pastilles dans <code class="docutils literal notranslate"><span class="pre">frames.json</span></code> (cadre cible en pixels de la capture, texte,
+côté), puis :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>docs/manuals/tools/phone_frame.py<span class="w"> </span>docs/manuals/images/reception-produits/frames.json
+</pre></div>
+</div>
+<p>Le script met la capture dans un téléphone, ajoute les pastilles numérotées
+et retire la bande du bas où se trouve le badge « N » de Next.js en
+développement (mieux : capturer avec <code class="docutils literal notranslate"><span class="pre">devIndicators:</span> <span class="pre">false</span></code>). Images déjà
+produites ainsi : 02 à 15, 17, 18, 20, 21 et 22.</p>
+<p><strong>À refaire</strong> (colonne « État ») : les captures 05 à 15, 17, 18, 21 et 22
+montrent l’ancienne interface (page d’article en 4 étapes, récapitulatif par
+ligne attendue). La réception se fait maintenant produit par produit en
+5 étapes (Photos, N° de série, Variante, Mesures, État) ; la colonne
+« Contenu attendu » décrit l’écran actuel. Après une nouvelle capture,
+mettez à jour <code class="docutils literal notranslate"><span class="pre">frames.json</span></code> (pastilles) et la légende de l’image dans le
+manuel, et retirez la mention « Ancienne interface ».</p>
+<p>Pour les générer avec une IA d’images : un prompt par image dans
+<code class="docutils literal notranslate"><span class="pre">docs/manuals/images/reception-produits/PROMPTS.md</span></code> (style commun inclus).</p>
+<p>Conseils : captures sur téléphone (portrait), PNG, largeur ~1080 px ;
+entourez en rouge l’élément à toucher ; floutez les noms de clients si besoin.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Fichier</p></th>
+<th class="head"><p>Titre</p></th>
+<th class="head"><p>Contenu attendu</p></th>
+<th class="head"><p>État</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>00-cycle-article.png</p></td>
+<td><p>Le cycle d’un produit</p></td>
+<td><p>Schéma : les 5 étapes d’un produit en boucle (photos, n° de série, marque et modèle, mesures, état), puis « Produit complet » → produit suivant.</p></td>
+<td><p>Provisoire</p></td>
+</tr>
+<tr class="row-odd"><td><p>01-autoriser-camera.png</p></td>
+<td><p>Autoriser la caméra</p></td>
+<td><p>Capture de la fenêtre du navigateur « Autoriser l’accès à la caméra ? » avec le bouton « Autoriser » entouré.</p></td>
+<td><p>Provisoire</p></td>
+</tr>
+<tr class="row-even"><td><p>02-tuile-reception.png</p></td>
+<td><p>La tuile Réception produits</p></td>
+<td><p>Page d’accueil de l’intranet, tuile « 📦 Réception produits » entourée.</p></td>
+<td><p>À jour</p></td>
+</tr>
+<tr class="row-odd"><td><p>03-accueil-onglets.png</p></td>
+<td><p>L’accueil et ses trois onglets</p></td>
+<td><p>Accueil « Réception produits » : barre de recherche en haut, les trois onglets avec leur nombre, et quelques lignes en dessous.</p></td>
+<td><p>À jour</p></td>
+</tr>
+<tr class="row-even"><td><p>04-reprise-receptionner.png</p></td>
+<td><p>Réceptionner une reprise</p></td>
+<td><p>Onglet « À réceptionner », une ligne de reprise (nom, entreprise, nombre d’unités), bouton « Réceptionner » entouré, et une reprise déjà ouverte avec « Ouvrir ».</p></td>
+<td><p>À jour</p></td>
+</tr>
+<tr class="row-odd"><td><p>05-demarrer-reception.png</p></td>
+<td><p>Démarrer la réception</p></td>
+<td><p>Liste des produits d’une réception qui vient d’être ouverte : « 0/N produit(s) complet(s) », lignes « À recevoir · touchez pour photographier », la première entourée.</p></td>
+<td><p>À refaire (montre l’encadré « Démarrer la réception », supprimé)</p></td>
+</tr>
+<tr class="row-even"><td><p>06-camera-article-attendu.png</p></td>
+<td><p>La caméra et le produit attendu</p></td>
+<td><p>Écran caméra : nom du produit en haut avec les 5 étapes, consigne, cadre de l’étiquette, pastilles Étiquette / Produit entier / +0, gros déclencheur blanc, « Sans étiquette » et « Importer ».</p></td>
+<td><p>À refaire (montre la liste des articles et « Imprévu », supprimés)</p></td>
+</tr>
+<tr class="row-odd"><td><p>07-photo-etiquette.png</p></td>
+<td><p>Photo de l’étiquette</p></td>
+<td><p>Étiquette bien cadrée dans le cadre (texte net, sans reflet) ; à côté, un exemple raté (flou, reflet) barré d’une croix rouge.</p></td>
+<td><p>À refaire</p></td>
+</tr>
+<tr class="row-even"><td><p>08-photo-unite-entiere.png</p></td>
+<td><p>Photo du produit entier</p></td>
+<td><p>Appareil entier à l’écran, fond dégagé, consigne « Photographiez le produit entier ».</p></td>
+<td><p>À refaire</p></td>
+</tr>
+<tr class="row-odd"><td><p>09-photos-facultatives.png</p></td>
+<td><p>Photos facultatives</p></td>
+<td><p>Rangée de pastilles avec leurs icônes, « Arrière » sélectionnée, « Branchement » cochée ✓.</p></td>
+<td><p>À refaire</p></td>
+</tr>
+<tr class="row-even"><td><p>10-camera-suite.png</p></td>
+<td><p>Passer à la suite</p></td>
+<td><p>Bas de l’écran caméra : bouton blanc « Suivant : n° de série → » entouré.</p></td>
+<td><p>À refaire (montre « Photos seules », supprimé)</p></td>
+</tr>
+<tr class="row-odd"><td><p>11-page-article.png</p></td>
+<td><p>L’écran d’un produit</p></td>
+<td><p>Haut de l’écran d’un produit : nom, compteur « 3/5 », les 5 étapes (deux cochées), la troisième en cours.</p></td>
+<td><p>À refaire (montre « Article précédent / suivant », supprimé)</p></td>
+</tr>
+<tr class="row-even"><td><p>12-champs-etiquette.png</p></td>
+<td><p>N° de série</p></td>
+<td><p>Étape « N° de série » : photo de l’étiquette, champ pré-rempli « Lu sur l’étiquette », ligne « L’IA lit : 221209B038 — Utiliser », bouton « Valider le n° de série ».</p></td>
+<td><p>À refaire</p></td>
+</tr>
+<tr class="row-odd"><td><p>13-reference-deja-liee.png</p></td>
+<td><p>Référence déjà reliée</p></td>
+<td><p>Étape « Marque et modèle » : référence avec le badge « Existe dans Airtable », boutons « Oui, c’est bien ce produit » (entouré) et « Non, ce n’est pas ce produit ».</p></td>
+<td><p>À refaire</p></td>
+</tr>
+<tr class="row-even"><td><p>14-suggestions-references.png</p></td>
+<td><p>Proposé par l’IA</p></td>
+<td><p>« Proposé par l’IA » avec « Relancer » : trois références « Existe dans Airtable » avec 92 %, 41 %, 12 % sûr, la première choisie, bouton « Choisir cette référence ».</p></td>
+<td><p>À refaire</p></td>
+</tr>
+<tr class="row-odd"><td><p>15-nouvelle-reference.png</p></td>
+<td><p>Créer une nouvelle référence</p></td>
+<td><p>Écran « Nouvelle référence » : Marque, Modèle, Type d’équipement (un badge « nouveau dans Airtable »), « Ajouter une variante », récapitulatif « Sera créé dans Airtable », bouton « Créer dans Airtable ».</p></td>
+<td><p>À refaire (montre la case « J’ai vérifié… », supprimée)</p></td>
+</tr>
+<tr class="row-even"><td><p>16-mesures.png</p></td>
+<td><p>Mesures</p></td>
+<td><p>Les 4 champs de mesure, deux en violet « connu (Airtable) », bouton « Confirmer les valeurs connues », bouton « Valider les mesures » en bas.</p></td>
+<td><p>Provisoire</p></td>
+</tr>
+<tr class="row-odd"><td><p>17-etat.png</p></td>
+<td><p>État</p></td>
+<td><p>Gros boutons « Aspect (esthétique) » et « Fonctionnement » (« Bon » et « Non testé » par défaut), commentaire atelier, encadré « Pièces incluses ».</p></td>
+<td><p>À refaire</p></td>
+</tr>
+<tr class="row-even"><td><p>18-accessoires-pieces.png</p></td>
+<td><p>Accessoires et pièces incluses</p></td>
+<td><p>À gauche, la fenêtre « Quel type de produit ? » avec « Un accessoire » entouré ; à droite, l’encadré « Pièces incluses » de l’étape État avec « câble d’alimentation », « spatule ».</p></td>
+<td><p>À refaire</p></td>
+</tr>
+<tr class="row-odd"><td><p>19-article-termine.png</p></td>
+<td><p>Produit complet</p></td>
+<td><p>Écran « Produit complet » : coche verte, les 5 étapes résumées, boutons « Produit suivant : … » et « Retour à la liste ».</p></td>
+<td><p>Provisoire</p></td>
+</tr>
+<tr class="row-even"><td><p>20-reprendre.png</p></td>
+<td><p>Reprendre une réception</p></td>
+<td><p>Onglet « En cours » : une réception avec « Reçus 5/8 » et « Traités 3/5 », bouton « Reprendre » entouré.</p></td>
+<td><p>À jour</p></td>
+</tr>
+<tr class="row-odd"><td><p>21-recapitulatif.png</p></td>
+<td><p>La liste des produits</p></td>
+<td><p>Liste d’une réception : « x/y produit(s) complet(s) » et %, un produit complet ✓, un « À recevoir », un « Imprévu », un accessoire 🧩, « Dans Airtable » sous un produit, menu ⋮ ouvert.</p></td>
+<td><p>À refaire (montre l’ancien récapitulatif par ligne attendue)</p></td>
+</tr>
+<tr class="row-even"><td><p>22-terminer.png</p></td>
+<td><p>Terminer</p></td>
+<td><p>Bas de la liste : « Tous les produits sont complets. », bouton « Terminer la réception » entouré, et la fenêtre « Terminer la réception ? ».</p></td>
+<td><p>À refaire (montre l’encadré « 5. Fin des opérations », supprimé)</p></td>
+</tr>
+<tr class="row-odd"><td><p>23-icones-photos.png</p></td>
+<td><p>Icônes des types de photo</p></td>
+<td><p>Planche des 11 icônes de types de photo avec leur nom.</p></td>
+<td><p>Provisoire</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="reception-produits.html" class="btn btn-neutral float-left" title="Manuel — Réception produits" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Rewake.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

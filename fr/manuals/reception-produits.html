@@ -1,0 +1,825 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manuel — Réception produits &mdash; Documentation Rewake API </title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=91c739f9"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/translations.js?v=e6b791cb"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Recherche" href="../search.html" />
+    <link rel="next" title="Images du manuel « Réception produits »" href="reception-produits-images.html" />
+    <link rel="prev" title="Manuels" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Rewake API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" aria-label="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../routes.html">Routes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authentication.html">Authentification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operations.html">Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scripts.html">Scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../catalog_model.html">Catalog model: Model, Variation, Unit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../catalog_intake.html">Catalog intake: receiving batches to Airtable</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../translations.html">Traductions et publication</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides pratiques</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Manuels</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Manuel — Réception produits</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#le-principe-en-une-image">Le principe en une image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sommaire">Sommaire</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#avant-de-commencer">1. Avant de commencer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ouvrir-reception-produits">2. Ouvrir « Réception produits »</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#l-accueil-trois-onglets">3. L’accueil : trois onglets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#commencer-une-nouvelle-reception">4. Commencer une nouvelle réception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#prendre-les-photos-d-un-produit-camera">5. Prendre les photos d’un produit (caméra)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#photo-de-l-etiquette">5.1 Photo de l’étiquette 🏷️</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#photo-du-produit-entier">5.2 Photo du produit entier 📦</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#photos-facultatives">5.3 Photos facultatives</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#passer-a-la-suite">5.4 Passer à la suite</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#les-autres-boutons-de-la-camera">Les autres boutons de la caméra</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#completer-le-produit-etape-par-etape">6. Compléter le produit, étape par étape</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#n-de-serie">6.1 N° de série</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#marque-et-modele-la-reference-variant">6.2 Marque et modèle (la Référence variant)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mesures">6.3 Mesures 📏</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#etat">6.4 État 📋</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#accessoires-et-pieces-incluses-facultatif">6.5 Accessoires et pièces incluses (facultatif)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#produit-complet-produit-suivant">7. Produit complet → produit suivant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reprendre-une-reception-plus-tard">8. Reprendre une réception plus tard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#la-liste-des-produits-de-la-reception">9. La liste des produits de la réception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#terminer-la-reception">10. Terminer la réception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#astuces">11. Astuces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#problemes-frequents">12. Problèmes fréquents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#legende-des-icones-et-couleurs">13. Légende des icônes et couleurs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reception-produits-images.html">Images du manuel « Réception produits »</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Rewake API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Manuels</a></li>
+      <li class="breadcrumb-item active">Manuel — Réception produits</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="manuel-reception-produits">
+<h1>Manuel — Réception produits<a class="headerlink" href="#manuel-reception-produits" title="Lien vers cette rubrique"></a></h1>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Pour qui ?</strong> L’équipe opérations, et toute personne qui réceptionne des
+appareils de reprise.</p></li>
+<li><p><strong>Durée moyenne par produit :</strong> 2 à 5 minutes.</p></li>
+<li><p><strong>Ce qu’il vous faut :</strong> un téléphone ou une tablette, un mètre, l’accès
+« Réception produits » sur l’intranet.</p></li>
+</ul>
+</div></blockquote>
+<p>Les images grises sont provisoires (numéro et contenu attendu). Les captures
+marquées « ancienne interface » montrent la version précédente des écrans :
+le texte du manuel fait foi. Voir la
+<a class="reference internal" href="reception-produits-images.html"><span class="std std-doc">liste des images à fournir</span></a>.</p>
+<hr class="docutils" />
+<section id="le-principe-en-une-image">
+<h2>Le principe en une image<a class="headerlink" href="#le-principe-en-une-image" title="Lien vers cette rubrique"></a></h2>
+<p>On réceptionne <strong>un produit à la fois</strong>, toujours dans le même ordre, puis on
+passe au suivant :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> 📷 Photos → 🔢 N° de série → 🏷️ Marque et modèle → 📏 Mesures → 📋 État → ✅ Produit complet
+                                                                              │
+                     ┌──────────────────────── produit suivant ◄──────────────┘
+</pre></div>
+</div>
+<p><img alt="Image 0 — Le cycle d'un produit" src="../_images/00-cycle-article.png" />
+<em>🖼️ Image 0 — Schéma : les 5 étapes d’un produit en boucle (photos, n° de
+série, marque et modèle, mesures, état), puis « Produit complet » → produit
+suivant.</em></p>
+<p>Chaque <strong>produit complet part tout seul dans Airtable</strong> (son unité, avec
+toutes ses photos). À la fin, on touche <strong>Terminer la réception</strong> : c’est
+fini, il n’y a pas d’autre étape.</p>
+</section>
+<hr class="docutils" />
+<section id="sommaire">
+<h2>Sommaire<a class="headerlink" href="#sommaire" title="Lien vers cette rubrique"></a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#avant-de-commencer">Avant de commencer</a></p></li>
+<li><p><a class="reference internal" href="#ouvrir-reception-produits">Ouvrir « Réception produits »</a></p></li>
+<li><p><a class="reference internal" href="#l-accueil-trois-onglets">L’accueil : trois onglets</a></p></li>
+<li><p><a class="reference internal" href="#commencer-une-nouvelle-reception">Commencer une nouvelle réception</a></p></li>
+<li><p><a class="reference internal" href="#prendre-les-photos-d-un-produit-camera">Prendre les photos d’un produit (caméra)</a></p></li>
+<li><p><a class="reference internal" href="#completer-le-produit-etape-par-etape">Compléter le produit, étape par étape</a></p></li>
+<li><p><a class="reference internal" href="#produit-complet-produit-suivant">Produit complet → produit suivant</a></p></li>
+<li><p><a class="reference internal" href="#reprendre-une-reception-plus-tard">Reprendre une réception plus tard</a></p></li>
+<li><p><a class="reference internal" href="#la-liste-des-produits-de-la-reception">La liste des produits de la réception</a></p></li>
+<li><p><a class="reference internal" href="#terminer-la-reception">Terminer la réception</a></p></li>
+<li><p><a class="reference internal" href="#astuces">Astuces</a></p></li>
+<li><p><a class="reference internal" href="#problemes-frequents">Problèmes fréquents</a></p></li>
+<li><p><a class="reference internal" href="#legende-des-icones-et-couleurs">Légende des icônes et couleurs</a></p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="avant-de-commencer">
+<h2>1. Avant de commencer<a class="headerlink" href="#avant-de-commencer" title="Lien vers cette rubrique"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>✅</p></th>
+<th class="head"><p>À vérifier</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>🚚</p></td>
+<td><p>Dans Airtable, le <strong>Statut logistique</strong> de l’opération de reprise est <strong>« Appareils reçus »</strong> (voir <a class="reference internal" href="#commencer-une-nouvelle-reception">§ 4</a>).</p></td>
+</tr>
+<tr class="row-odd"><td><p>🔋</p></td>
+<td><p>Téléphone ou tablette chargé.</p></td>
+</tr>
+<tr class="row-even"><td><p>🔒</p></td>
+<td><p>Adresse en <strong>https</strong> (sinon la caméra ne s’ouvre pas).</p></td>
+</tr>
+<tr class="row-odd"><td><p>📷</p></td>
+<td><p>Autoriser la caméra la première fois que le navigateur le demande.</p></td>
+</tr>
+<tr class="row-even"><td><p>💡</p></td>
+<td><p>Un endroit bien éclairé, sans reflet direct sur les étiquettes.</p></td>
+</tr>
+<tr class="row-odd"><td><p>📏</p></td>
+<td><p>Un mètre à portée de main.</p></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Image 1 — Autoriser la caméra" src="../_images/01-autoriser-camera.png" />
+<em>🖼️ Image 1 — Capture de la fenêtre du navigateur « Autoriser l’accès à la
+caméra ? » avec le bouton « Autoriser » entouré.</em></p>
+</section>
+<hr class="docutils" />
+<section id="ouvrir-reception-produits">
+<h2>2. Ouvrir « Réception produits »<a class="headerlink" href="#ouvrir-reception-produits" title="Lien vers cette rubrique"></a></h2>
+<ol class="arabic simple">
+<li><p>Ouvrez l’intranet.</p></li>
+<li><p>Touchez la tuile <strong>📦 Réception produits</strong>.</p></li>
+</ol>
+<p><img alt="Image 2 — La tuile Réception produits" src="../_images/02-tuile-reception.png" />
+<em>Image 2 — ① Réception produits.</em></p>
+<blockquote>
+<div><p>💡 Dès que vous touchez un bouton, une <strong>barre de chargement</strong> apparaît en
+haut de l’écran (et « Chargement… » si cela prend plus d’un instant). Pas
+besoin de toucher deux fois.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="l-accueil-trois-onglets">
+<h2>3. L’accueil : trois onglets<a class="headerlink" href="#l-accueil-trois-onglets" title="Lien vers cette rubrique"></a></h2>
+<p><img alt="Image 3 — L'accueil et ses trois onglets" src="../_images/03-accueil-onglets.png" />
+<em>Image 3 — ① Rechercher · ② Les trois onglets.</em></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Onglet</p></th>
+<th class="head"><p>Ce que vous y trouvez</p></th>
+<th class="head"><p>Bouton</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>▶ En cours</strong></p></td>
+<td><p>Les réceptions ouvertes et pas terminées.</p></td>
+<td><p><strong>Reprendre</strong> (ou <strong>Commencer</strong> si rien n’est encore reçu)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>🚚 À réceptionner</strong></p></td>
+<td><p>Les reprises dont le Statut logistique est <strong>« Appareils reçus »</strong> dans Airtable, pas encore réceptionnées ici.</p></td>
+<td><p><strong>Réceptionner</strong> (ou <strong>Ouvrir</strong>)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>🕓 Historique</strong></p></td>
+<td><p>Les réceptions terminées ou annulées.</p></td>
+<td><p><strong>Voir</strong></p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>🔎 La <strong>barre de recherche</strong> (« Rechercher une reprise, un devis, une
+entreprise… ») filtre les trois onglets à la fois. Le nombre de chaque
+onglet se met à jour.</p></li>
+<li><p>L’application <strong>se souvient de l’onglet</strong> que vous avez choisi.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="commencer-une-nouvelle-reception">
+<h2>4. Commencer une nouvelle réception<a class="headerlink" href="#commencer-une-nouvelle-reception" title="Lien vers cette rubrique"></a></h2>
+<p><strong>Étape 0.</strong> Quand le matériel arrive, dans Airtable, passez le <strong>Statut
+logistique</strong> de l’opération de reprise à <strong>« Appareils reçus »</strong>. Sans ça, la
+reprise n’apparaît pas dans l’application (une aide ⓘ le rappelle en bas de
+la liste). Une reprise dont le Statut opérationnel est « Inventaire terminé »
+n’apparaît pas non plus.</p>
+<p><strong>Étape 1.</strong> Onglet <strong>🚚 À réceptionner</strong> : trouvez la reprise (tapez le nom
+ou l’entreprise dans la recherche).</p>
+<p><strong>Étape 2.</strong> Touchez <strong>Réceptionner</strong>.</p>
+<p><img alt="Image 4 — Réceptionner une reprise" src="../_images/04-reprise-receptionner.png" />
+<em>Image 4 — ① Réceptionner · ② Déjà ouverte : Ouvrir.</em></p>
+<blockquote>
+<div><p>ℹ️ Si une réception est déjà ouverte pour cette reprise, le bouton s’appelle
+<strong>Ouvrir</strong> : il vous y emmène, rien n’est créé en double.</p>
+</div></blockquote>
+<p><strong>Étape 3.</strong> La page de la réception s’ouvre : la <strong>liste des produits</strong>
+attendus. Touchez un produit marqué <strong>« À recevoir · touchez pour
+photographier »</strong> : la caméra s’ouvre. La première photo le compte comme
+reçu.</p>
+<p><img alt="Image 5 — Démarrer la réception" src="../_images/05-demarrer-reception.png" />
+<em>Image 5 — ① Commencer · ② Ou touchez la caméra. (Ancienne interface : ce
+bouton n’existe plus, touchez directement un produit de la liste.)</em></p>
+</section>
+<hr class="docutils" />
+<section id="prendre-les-photos-d-un-produit-camera">
+<h2>5. Prendre les photos d’un produit (caméra)<a class="headerlink" href="#prendre-les-photos-d-un-produit-camera" title="Lien vers cette rubrique"></a></h2>
+<p>La caméra s’ouvre en plein écran. En haut : le <strong>nom du produit</strong> attendu et
+les <strong>5 étapes</strong> (vous pouvez en ouvrir une en la touchant). Touchez le nom du
+produit pour voir ce que dit la reprise (photos du client, marque, modèle,
+n° de série, état annoncé, dimensions…).</p>
+<p><img alt="Image 6 — La caméra et l'article attendu" src="../_images/06-camera-article-attendu.png" />
+<em>Image 6 — ① L’article attendu · ② Cadrez ici · ③ Déclencheur · ④ Liste des
+articles (ancienne interface : la liste n’est plus dans la caméra).</em></p>
+<section id="photo-de-l-etiquette">
+<h3>5.1 Photo de l’étiquette 🏷️<a class="headerlink" href="#photo-de-l-etiquette" title="Lien vers cette rubrique"></a></h3>
+<ol class="arabic simple">
+<li><p>Cadrez l”<strong>étiquette</strong> (plaque signalétique) dans le cadre rectangulaire.</p></li>
+<li><p>Touchez le <strong>déclencheur</strong> (gros rond blanc).</p></li>
+</ol>
+<p><img alt="Image 7 — Photo de l'étiquette" src="../_images/07-photo-etiquette.png" />
+<em>Image 7 — ① L’étiquette dans le cadre · ② Déclencheur · ③ Pas d’étiquette ?. (Ancienne interface.)</em></p>
+<ul class="simple">
+<li><p>Pas d’étiquette sur l’appareil ? Touchez <strong>Sans étiquette ⏭</strong>.</p></li>
+<li><p>La lecture de l’étiquette (marque, modèle, n° de série) se fait <strong>toute
+seule en arrière-plan</strong> : continuez sans attendre.</p></li>
+</ul>
+</section>
+<section id="photo-du-produit-entier">
+<h3>5.2 Photo du produit entier 📦<a class="headerlink" href="#photo-du-produit-entier" title="Lien vers cette rubrique"></a></h3>
+<ol class="arabic simple">
+<li><p>Reculez pour avoir <strong>tout l’appareil</strong> à l’écran.</p></li>
+<li><p>Touchez le déclencheur.</p></li>
+</ol>
+<p>Cette photo est <strong>obligatoire</strong> : sans elle, le bouton reste sur
+« Photographiez le produit entier pour continuer ».</p>
+<p><img alt="Image 8 — Photo de l'unité entière" src="../_images/08-photo-unite-entiere.png" />
+<em>Image 8 — ① Tout l’appareil · ② Déclencheur · ③ Ou importer une photo. (Ancienne interface.)</em></p>
+</section>
+<section id="photos-facultatives">
+<h3>5.3 Photos facultatives<a class="headerlink" href="#photos-facultatives" title="Lien vers cette rubrique"></a></h3>
+<p>Touchez <strong>+N</strong> : des pastilles apparaissent (<strong>Branchement, Dessus, Face,
+Côté gauche, Côté droit, Arrière, Intérieur, Tension, Autre</strong>). Touchez-en
+une, puis le déclencheur. Une pastille prise devient ✓.</p>
+<p><img alt="Image 9 — Photos facultatives" src="../_images/09-photos-facultatives.png" />
+<em>Image 9 — ① Photo demandée · ② Déjà prises ✓ · ③ Choisir le type de photo · ④ Déclencheur. (Ancienne interface.)</em></p>
+<blockquote>
+<div><p>💡 Prenez ce qui est utile pour l’appareil : l’intérieur d’un frigo oui,
+celui d’une pipette non. La plaque arrière aide souvent à trouver la
+référence.</p>
+</div></blockquote>
+</section>
+<section id="passer-a-la-suite">
+<h3>5.4 Passer à la suite<a class="headerlink" href="#passer-a-la-suite" title="Lien vers cette rubrique"></a></h3>
+<p>Touchez <strong>Suivant : n° de série →</strong> (bouton blanc en bas). Attendez la fin de
+« Enregistrement… » si une photo est encore en cours d’envoi.</p>
+<p><img alt="Image 10 — Boutons de fin des photos" src="../_images/10-camera-suite.png" />
+<em>Image 10 — ① Étiquette, mesures, état · ② Photos seules. (Ancienne
+interface : un seul bouton maintenant, « Suivant : n° de série ».)</em></p>
+</section>
+<section id="les-autres-boutons-de-la-camera">
+<h3>Les autres boutons de la caméra<a class="headerlink" href="#les-autres-boutons-de-la-camera" title="Lien vers cette rubrique"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Bouton</p></th>
+<th class="head"><p>Rôle</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>⬆ Importer</strong></p></td>
+<td><p>Choisir une photo déjà prise (galerie, ordinateur) au lieu de photographier.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Étiquette</strong> / <strong>Produit entier</strong></p></td>
+<td><p>Reprendre cette photo (« · reprendre » une fois prise).</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>✕ (en haut à gauche)</strong></p></td>
+<td><p>Revenir à la liste des produits.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<hr class="docutils" />
+<section id="completer-le-produit-etape-par-etape">
+<h2>6. Compléter le produit, étape par étape<a class="headerlink" href="#completer-le-produit-etape-par-etape" title="Lien vers cette rubrique"></a></h2>
+<p>Après les photos, chaque étape s’ouvre l’une après l’autre. En haut :
+<strong>le nom du produit</strong>, le compteur <strong>3/5</strong> et les <strong>5 étapes</strong> (Photos,
+N° de série, Variante, Mesures, État) : elles se cochent ✓ quand elles sont
+faites, et on peut en rouvrir une en la touchant pour corriger.</p>
+<p><img alt="Image 11 — La page d'un article" src="../_images/11-page-article.png" />
+<em>Image 11 — ① Trouvé dans… (accessoire) · ② Article précédent / suivant · ③ Les 4 étapes. (Ancienne interface.)</em></p>
+<section id="n-de-serie">
+<h3>6.1 N° de série<a class="headerlink" href="#n-de-serie" title="Lien vers cette rubrique"></a></h3>
+<p>Le numéro lu sur l’étiquette est <strong>pré-rempli</strong>. Pendant la lecture,
+« Lecture de l’étiquette… » s’affiche (<strong>Saisir sans attendre</strong> pour taper
+tout de suite). Sous le champ, une petite ligne dit d’où vient le numéro :</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mention</p></th>
+<th class="head"><p>Que faire</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Lu sur l’étiquette</strong></p></td>
+<td><p>Vérifier d’un coup d’œil.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Lu sur l’étiquette (à bien vérifier)</strong></p></td>
+<td><p>Comparer avec l’appareil, corriger si besoin.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Lu par l’IA sur les photos</strong> / <strong>Indiqué dans la reprise</strong></p></td>
+<td><p>Vérifier sur l’appareil.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>✨ L’IA lit : … — Utiliser</strong></p></td>
+<td><p>L’IA a lu un autre numéro : comparer, toucher <strong>Utiliser</strong> si c’est juste.</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p><strong>Identique à la reprise.</strong> (vert) : tout va bien. <strong>Différent de la
+reprise</strong> (orange) : vérifiez que c’est le bon produit ; le bouton devient
+<strong>Valider ce numéro quand même</strong>.</p></li>
+<li><p>Touchez <strong>Valider le n° de série</strong>. Pas de numéro du tout ? <strong>Ce produit
+n’a pas de n° de série</strong> (noté « NA »).</p></li>
+<li><p>Photo illisible ? <strong>Photo floue ? Reprendre l’étiquette</strong>. Si une nouvelle
+photo montre un autre numéro, l’étape est à valider de nouveau.</p></li>
+</ul>
+<p><img alt="Image 12 — Champs lus sur l'étiquette" src="../_images/12-champs-etiquette.png" />
+<em>Image 12 — ① Valeur venue d’Airtable · ② Lu par l’IA : Utiliser. (Ancienne interface.)</em></p>
+<blockquote>
+<div><p>💡 Le n° de série est souvent écrit <strong>SN:</strong> ou <strong>S/N</strong> sur l’étiquette.</p>
+</div></blockquote>
+</section>
+<section id="marque-et-modele-la-reference-variant">
+<h3>6.2 Marque et modèle (la Référence variant)<a class="headerlink" href="#marque-et-modele-la-reference-variant" title="Lien vers cette rubrique"></a></h3>
+<p>C’est l’étape la plus importante : elle relie l’appareil à <strong>sa fiche
+Airtable</strong>. La photo de l’étiquette et ce qui y a été lu (« Sur
+l’étiquette ») restent affichés pour comparer. Quatre cas :</p>
+<p><strong>Cas A — Déjà reliée dans Airtable</strong> (fréquent pour les reprises)
+→ Vérifiez que c’est bien l’appareil, puis touchez <strong>✓ Oui, c’est bien ce
+produit</strong> (sinon <strong>Non, ce n’est pas ce produit</strong>).</p>
+<p><img alt="Image 13 — Référence déjà liée" src="../_images/13-reference-deja-liee.png" />
+<em>Image 13 — ① Déjà liée dans Airtable · ② Confirmer. (Ancienne interface.)</em></p>
+<p><strong>Cas B — Proposé par l’IA</strong>
+→ Pendant « Recherche de la référence… », l’IA lit les photos. Les références
+qui <strong>existent dans Airtable</strong> s’affichent avec un <strong>% sûr</strong>. Touchez la bonne
+(en général la première), puis <strong>Choisir cette référence</strong>.</p>
+<p><img alt="Image 14 — Suggestions de références" src="../_images/14-suggestions-references.png" />
+<em>Image 14 — ① Confiance · ② Choisir · ③ Relancer l’IA. (Ancienne interface.)</em></p>
+<blockquote>
+<div><p>💡 <strong>Relancer</strong> redemande une proposition (par exemple après une nouvelle
+photo). L’icône <strong>✨</strong> dit quelle IA a répondu et quand. « Correspondances
+trouvées (sans IA) » : l’IA n’a pas répondu, ce sont des correspondances
+simples.</p>
+</div></blockquote>
+<p><strong>Cas C — Chercher soi-même</strong>
+→ <strong>Ce n’est pas proposé : chercher dans Airtable</strong>. Tapez un nom, un numéro
+ou les deux (ex. « rotor 2424 »), puis touchez la bonne version et <strong>Choisir
+cette référence</strong>. <strong>Autre version</strong> crée une nouvelle version d’un modèle
+existant.</p>
+<p><strong>Cas D — Créer une nouvelle référence</strong> (seulement si rien ne correspond)</p>
+<ol class="arabic simple">
+<li><p><strong>Introuvable : créer une nouvelle référence</strong> (ou touchez la proposition
+orange « Nouvelle référence : sera créée dans Airtable », puis <strong>Vérifier
+puis créer la référence</strong>).</p></li>
+<li><p>Vérifiez <strong>Marque</strong>, <strong>Modèle</strong>, <strong>Type d’équipement</strong> (les choix
+« proposé par l’IA » sont pré-remplis). Une marque ou un type absent
+d’Airtable est marqué « nouveau dans Airtable » et demande une
+confirmation : vérifiez l’orthographe !</p></li>
+<li><p><strong>Ajouter une variante</strong> : seulement si le modèle existe en plusieurs
+versions (volume, tension…).</p></li>
+<li><p>Accessoire ? Cochez <strong>C’est un accessoire</strong> et choisissez les modèles
+avec lesquels il est compatible.</p></li>
+<li><p>Relisez « Sera créé dans Airtable », puis <strong>Créer dans Airtable</strong>.</p></li>
+</ol>
+<p><img alt="Image 15 — Créer une nouvelle référence" src="../_images/15-nouvelle-reference.png" />
+<em>Image 15 — ① Marques existantes (%) · ② Cocher après vérification · ③ Créer dans Airtable. (Ancienne interface : il n’y a plus de case à cocher.)</em></p>
+<blockquote>
+<div><p>⚠️ Ne créez pas de doublon : si l’application signale que le modèle
+<strong>existe déjà dans Airtable</strong>, touchez <strong>Utiliser …</strong> plutôt que d’en créer
+un nouveau.</p>
+</div></blockquote>
+<blockquote>
+<div><p>ℹ️ La nouvelle référence est créée « À valider » ; le commercial vérifie
+ensuite sa fiche dans l’outil <strong>Revue des produits</strong> (cela ne bloque pas la
+réception).</p>
+</div></blockquote>
+<blockquote>
+<div><p>💡 La référence choisie est reportée <strong>toute seule</strong> sur les produits
+identiques (même marque et même modèle) de la réception.</p>
+</div></blockquote>
+</section>
+<section id="mesures">
+<h3>6.3 Mesures 📏<a class="headerlink" href="#mesures" title="Lien vers cette rubrique"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Champ</p></th>
+<th class="head"><p>Obligatoire ?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Longueur, Largeur, Hauteur</strong> (mm)</p></td>
+<td><p>Oui</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Poids</strong> (kg)</p></td>
+<td><p>Non, facultatif</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Valeurs en <strong>violet pointillé « connu (Airtable) »</strong> : ce sont les
+dimensions de la fiche. Mesurez rapidement pour vérifier, puis touchez
+<strong>Confirmer les valeurs connues</strong> (ou corrigez le champ).</p></li>
+<li><p><strong>Entrée</strong> sur le clavier passe au champ suivant.</p></li>
+<li><p>Appareil impossible à mesurer ? Activez <strong>Mesure impossible</strong>.</p></li>
+<li><p>Touchez <strong>Valider les mesures</strong>.</p></li>
+</ul>
+<p><img alt="Image 16 — Mesures" src="../_images/16-mesures.png" />
+<em>🖼️ Image 16 — Les 4 champs de mesure, deux en violet « connu
+(Airtable) », bouton « Confirmer les valeurs connues », bouton « Valider les
+mesures » en bas.</em></p>
+</section>
+<section id="etat">
+<h3>6.4 État 📋<a class="headerlink" href="#etat" title="Lien vers cette rubrique"></a></h3>
+<p>Une réponse par question, en touchant un gros bouton : <strong>Aspect
+(esthétique)</strong> et <strong>Fonctionnement</strong>. Par défaut, « Bon » et « Non testé »
+sont présélectionnés (« · par défaut ») : changez-les si besoin. Ajoutez un
+<strong>commentaire atelier</strong> si utile (défaut, rayure, pièce manquante…), puis
+<strong>Valider l’état</strong>.</p>
+<p><img alt="Image 17 — État" src="../_images/17-etat.png" />
+<em>Image 17 — ① État esthétique · ② État fonctionnel · ③ Commentaire atelier. (Ancienne interface.)</em></p>
+</section>
+<section id="accessoires-et-pieces-incluses-facultatif">
+<h3>6.5 Accessoires et pièces incluses (facultatif)<a class="headerlink" href="#accessoires-et-pieces-incluses-facultatif" title="Lien vers cette rubrique"></a></h3>
+<p><strong>La plupart des produits n’en ont pas</strong> : ignorez ce paragraphe dans ce cas.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Quoi</p></th>
+<th class="head"><p>Exemples</p></th>
+<th class="head"><p>Où l’ajouter</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>🧩 Accessoire</strong></p></td>
+<td><p>rotor, nacelle, adaptateur, godet</p></td>
+<td><p>Un <strong>produit à part</strong> (vendu séparément), avec ses propres photos, n° de série, référence, mesures, état.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>🔌 Pièce incluse</strong></p></td>
+<td><p>câble, spatule, plaque de calibration</p></td>
+<td><p>Juste un <strong>nom</strong>, noté sur ce produit (dans le commentaire atelier envoyé à Airtable).</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ajouter un accessoire :</strong> dans la liste des produits, touchez <strong>＋ Ajouter
+un produit imprévu</strong> → <strong>Un accessoire</strong> → choisissez le produit avec lequel
+il a été trouvé (« Avec quel produit ? »). La caméra s’ouvre : faites-le
+comme un produit normal.</p>
+<p><strong>Ajouter une pièce incluse :</strong> à l’étape <strong>État</strong>, encadré <strong>Pièces
+incluses</strong>, tapez le nom puis <strong>Ajouter</strong>.</p>
+<p><img alt="Image 18 — Accessoires et pièces incluses" src="../_images/18-accessoires-pieces.png" />
+<em>Image 18 — ① Accessoire : caméra directe · ② Pièce incluse : un nom. (Ancienne interface.)</em></p>
+<blockquote>
+<div><p>ℹ️ Le lien « cet accessoire va avec cet appareil » est ajouté <strong>tout seul</strong>
+dans Airtable (table Compatibilité) dès que les deux ont leur référence.</p>
+</div></blockquote>
+</section>
+</section>
+<hr class="docutils" />
+<section id="produit-complet-produit-suivant">
+<h2>7. Produit complet → produit suivant<a class="headerlink" href="#produit-complet-produit-suivant" title="Lien vers cette rubrique"></a></h2>
+<p>Quand les 5 étapes sont faites, l’écran <strong>Produit complet</strong> s’affiche avec
+le résumé de chaque étape (touchez une étape pour la modifier, ou <strong>Photos</strong>
+pour reprendre une photo).</p>
+<ul class="simple">
+<li><p>Touchez <strong>Produit suivant : …</strong> pour enchaîner, ou <strong>Retour à la liste</strong>.</p></li>
+<li><p>Le produit est <strong>envoyé tout seul dans Airtable</strong> : son unité est créée (ou,
+pour une unité de la reprise, complétée) avec la référence, le n° de série,
+les états, le commentaire atelier et <strong>toutes les photos</strong> (« Photos
+interne »). Dans la liste, il affiche <strong>Envoi dans Airtable…</strong> puis <strong>Dans
+Airtable</strong> (lien vers l’unité). Une modification faite ensuite est renvoyée
+automatiquement.</p></li>
+<li><p><strong>« Pas encore dans Airtable » · Réessayer</strong> : l’envoi a échoué (réseau,
+Airtable) ; touchez <strong>Réessayer</strong>. <strong>« Modifié dans Airtable
+entre-temps »</strong> : quelqu’un a changé l’unité dans Airtable ; <strong>Remplacer par
+la réception</strong> remet les valeurs de la réception.</p></li>
+</ul>
+<p><img alt="Image 19 — Article terminé" src="../_images/19-article-termine.png" />
+<em>🖼️ Image 19 — Écran « Produit complet » : coche verte, les 5 étapes
+résumées, boutons « Produit suivant : … » et « Retour à la liste ».</em></p>
+<blockquote>
+<div><p>🔁 Et on recommence : photos → n° de série → marque et modèle → mesures →
+état.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="reprendre-une-reception-plus-tard">
+<h2>8. Reprendre une réception plus tard<a class="headerlink" href="#reprendre-une-reception-plus-tard" title="Lien vers cette rubrique"></a></h2>
+<p>Pause, fin de journée, autre urgence ? <strong>Rien n’est perdu</strong> (photos, valeurs,
+suggestions sont enregistrées ; recharger la page ne perd rien).</p>
+<ol class="arabic simple">
+<li><p>Ouvrez <strong>📦 Réception produits</strong>.</p></li>
+<li><p>Onglet <strong>▶ En cours</strong> : touchez <strong>Reprendre</strong>. Vous arrivez directement
+sur le prochain produit à faire.</p></li>
+</ol>
+<p><img alt="Image 20 — Reprendre une réception" src="../_images/20-reprendre.png" />
+<em>Image 20 — ① Reçus et traités · ② Reprendre.</em></p>
+<ul class="simple">
+<li><p><strong>Reçus 5/8</strong> : 5 produits reçus sur 8 attendus (« +1 hors devis » si un
+produit imprévu a été ajouté).</p></li>
+<li><p><strong>Traités 3/5</strong> : 3 produits complets sur les 5 reçus.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="la-liste-des-produits-de-la-reception">
+<h2>9. La liste des produits de la réception<a class="headerlink" href="#la-liste-des-produits-de-la-reception" title="Lien vers cette rubrique"></a></h2>
+<p>La page de la réception (✕ depuis un produit, ou le nom de la réception dans
+l’accueil) montre tous les produits, avec en haut <strong>x/y produit(s)
+complet(s)</strong> et le pourcentage d’avancement.</p>
+<p><img alt="Image 21 — Récapitulatif" src="../_images/21-recapitulatif.png" />
+<em>Image 21 — ① Compteurs · ② Ligne attendue : reçue · ③ Article reçu et ses étapes · ④ Accessoire trouvé dedans. (Ancienne interface.)</em></p>
+<p>Chaque ligne montre la photo du produit (et la vignette <strong>client</strong> : les
+photos envoyées par le client, à toucher pour agrandir), son nom, ses
+5 étapes en petites icônes et son état dans Airtable. Touchez une ligne pour
+ouvrir le produit.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Sur la ligne</p></th>
+<th class="head"><p>Signification</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>À recevoir · touchez pour photographier</strong></p></td>
+<td><p>Attendu, pas encore reçu.</p></td>
+</tr>
+<tr class="row-odd"><td><p>✓ vert, bord vert</p></td>
+<td><p>Produit complet.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Imprévu</strong> (violet)</p></td>
+<td><p>Pas sur la reprise, ajouté à la main.</p></td>
+</tr>
+<tr class="row-odd"><td><p>🧩 violet</p></td>
+<td><p>Accessoire (trouvé dans un autre produit) ; « 🧩 2 » : 2 accessoires trouvés dedans.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Non reçu : absent de la livraison</strong> (grisé)</p></td>
+<td><p>Marqué « pas dans la livraison ».</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Menu ⋮ d’une ligne :</strong></p>
+<ul class="simple">
+<li><p><strong>Pas dans la livraison</strong> : le produit attendu n’est jamais arrivé
+(<strong>Finalement reçu</strong> pour revenir en arrière).</p></li>
+<li><p><strong>Annuler la réception</strong> : produit reçu par erreur (ses photos et
+informations sont retirées ; ce qui avait été envoyé dans Airtable est
+défait).</p></li>
+<li><p><strong>Renommer</strong> / <strong>Retirer ce produit</strong> : pour un produit imprévu.</p></li>
+</ul>
+<p><strong>＋ Ajouter un produit imprévu</strong> : <strong>Un produit</strong> (une machine, un appareil
+qui n’était pas prévu) ou <strong>Un accessoire</strong> (voir <a class="reference internal" href="#accessoires-et-pieces-incluses-facultatif">§ 6.5</a>).</p>
+</section>
+<hr class="docutils" />
+<section id="terminer-la-reception">
+<h2>10. Terminer la réception<a class="headerlink" href="#terminer-la-reception" title="Lien vers cette rubrique"></a></h2>
+<p>Quand <strong>tous les produits sont complets</strong> (« Tous les produits sont
+complets. »), touchez <strong>✓ Terminer la réception</strong> en bas de la liste, puis
+<strong>Terminer</strong>.</p>
+<ul class="simple">
+<li><p>S’il reste des produits incomplets ou non reçus, la fenêtre les liste avec
+ce qui manque : <strong>Compléter d’abord</strong>, ou <strong>Terminer quand même</strong> (les
+produits incomplets n’iront dans Airtable qu’une fois terminés).</p></li>
+<li><p>La réception est <strong>terminée</strong> tout de suite : elle passe dans
+l”<strong>Historique</strong>. Les produits complets sont déjà dans Airtable : il n’y a
+pas d’autre étape. Besoin de corriger ? Ouvrez-la et touchez <strong>Rouvrir</strong>.</p></li>
+</ul>
+<p><img alt="Image 22 — Terminer" src="../_images/22-terminer.png" />
+<em>Image 22 — ① Terminer la réception · ② Commencer / article suivant. (Ancienne interface.)</em></p>
+</section>
+<hr class="docutils" />
+<section id="astuces">
+<h2>11. Astuces<a class="headerlink" href="#astuces" title="Lien vers cette rubrique"></a></h2>
+<ul class="simple">
+<li><p>📷 <strong>Étiquette nette = moins de saisie.</strong> Approchez-vous, évitez les
+reflets (inclinez légèrement le téléphone), essuyez l’étiquette si besoin.</p></li>
+<li><p>🔢 Le n° de série est presque toujours après <strong>SN:</strong> ou <strong>S/N</strong>.</p></li>
+<li><p>🏷️ Pas d’étiquette ? <strong>Sans étiquette</strong>, puis tapez le n° de série et
+cherchez la référence à la main.</p></li>
+<li><p>🖼️ Une photo déjà prise ? <strong>Importer</strong> dans la caméra.</p></li>
+<li><p>🔄 Une photo ratée ? Écran <strong>Produit complet</strong> → <strong>Photos</strong> → touchez la
+photo : la caméra s’ouvre pour cette photo seulement.</p></li>
+<li><p>✨ Proposition bizarre ? Reprenez l’étiquette, puis <strong>Relancer</strong>.</p></li>
+<li><p>👯 Plusieurs appareils identiques ? La référence choisie pour l’un est
+reportée sur les autres.</p></li>
+<li><p>🔁 Recharger la page ne perd rien.</p></li>
+<li><p>📶 Réseau lent ? Attendez la fin de la barre de chargement en haut avant de
+toucher à nouveau.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="problemes-frequents">
+<h2>12. Problèmes fréquents<a class="headerlink" href="#problemes-frequents" title="Lien vers cette rubrique"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Problème</p></th>
+<th class="head"><p>Solution</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>« Caméra non disponible ici » / « Accès à la caméra refusé » / « Caméra indisponible »</p></td>
+<td><p>Autorisez la caméra dans les réglages du navigateur, vérifiez l’adresse en <strong>https</strong>, touchez <strong>Réessayer</strong>, ou <strong>Importer une photo</strong>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>« Lecture de l’étiquette… » ne finit pas</p></td>
+<td><p><strong>Saisir sans attendre</strong>, ou <strong>Photo floue ? Reprendre l’étiquette</strong>.</p></td>
+</tr>
+<tr class="row-even"><td><p>Le n° de série n’est pas trouvé</p></td>
+<td><p>Regardez la ligne « L’IA lit : … Utiliser », sinon tapez-le.</p></td>
+</tr>
+<tr class="row-odd"><td><p>« Proposition indisponible »</p></td>
+<td><p><strong>Réessayer</strong>, ou <strong>Ce n’est pas proposé : chercher dans Airtable</strong>.</p></td>
+</tr>
+<tr class="row-even"><td><p>Aucune référence proposée ne correspond</p></td>
+<td><p><strong>Chercher dans Airtable</strong>, puis seulement si rien n’existe : <strong>créer une nouvelle référence</strong>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Produit reçu par erreur</p></td>
+<td><p>Liste → <strong>⋮ → Annuler la réception</strong>.</p></td>
+</tr>
+<tr class="row-even"><td><p>Un produit attendu n’est jamais arrivé</p></td>
+<td><p>Liste → <strong>⋮ → Pas dans la livraison</strong>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Une étape est fausse</p></td>
+<td><p>Touchez l’étape en haut de l’écran du produit et corrigez.</p></td>
+</tr>
+<tr class="row-even"><td><p>La reprise n’est pas dans « À réceptionner »</p></td>
+<td><p>Dans Airtable, Statut logistique <strong>« Appareils reçus »</strong> ; une reprise dont la réception est terminée n’y est plus (voir <strong>Historique</strong>).</p></td>
+</tr>
+<tr class="row-odd"><td><p>« Listes d’états indisponibles »</p></td>
+<td><p>Airtable injoignable : réessayez plus tard.</p></td>
+</tr>
+<tr class="row-even"><td><p>« Reprises Airtable indisponibles »</p></td>
+<td><p>Problème de connexion avec Airtable : réessayez dans quelques minutes, prévenez l’équipe technique si cela dure.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="docutils" />
+<section id="legende-des-icones-et-couleurs">
+<h2>13. Légende des icônes et couleurs<a class="headerlink" href="#legende-des-icones-et-couleurs" title="Lien vers cette rubrique"></a></h2>
+<p><strong>Types de photo</strong> (en haut à droite des vignettes et dans la caméra)</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Icône</p></th>
+<th class="head"><p>Type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>🏷️ étiquette</p></td>
+<td><p>Étiquette</p></td>
+</tr>
+<tr class="row-odd"><td><p>📦 boîte</p></td>
+<td><p>Unité entière (produit entier)</p></td>
+</tr>
+<tr class="row-even"><td><p>🔌 prise</p></td>
+<td><p>Branchement</p></td>
+</tr>
+<tr class="row-odd"><td><p>▭ panneau haut</p></td>
+<td><p>Dessus</p></td>
+</tr>
+<tr class="row-even"><td><p>▢ carré</p></td>
+<td><p>Face</p></td>
+</tr>
+<tr class="row-odd"><td><p>▯ panneau gauche / droit</p></td>
+<td><p>Côté gauche / droit</p></td>
+</tr>
+<tr class="row-even"><td><p>↺ flèche</p></td>
+<td><p>Arrière</p></td>
+</tr>
+<tr class="row-odd"><td><p>📭 boîte ouverte</p></td>
+<td><p>Intérieur</p></td>
+</tr>
+<tr class="row-even"><td><p>⚡ éclair</p></td>
+<td><p>Tension</p></td>
+</tr>
+<tr class="row-odd"><td><p>🖼️ image</p></td>
+<td><p>Autre</p></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Image 23 — Icônes des types de photo" src="../_images/23-icones-photos.png" />
+<em>🖼️ Image 23 — Planche des 11 icônes de types de photo avec leur nom.</em></p>
+<p><strong>Étapes d’un produit</strong> : 📷 Photos · 🔢 N° de série · 🗂️ Variante (marque et
+modèle) · 📏 Mesures · 📋 État. Pleine = faite, vide = à faire.</p>
+<p><strong>Accueil</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Couleur</p></th>
+<th class="head"><p>Signification</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>🔵 bleu ▶</p></td>
+<td><p>En cours</p></td>
+</tr>
+<tr class="row-odd"><td><p>🩵 bleu clair 🕓</p></td>
+<td><p>Ouverte, rien reçu</p></td>
+</tr>
+<tr class="row-even"><td><p>🟠 orange 🚚</p></td>
+<td><p>Reprise à réceptionner</p></td>
+</tr>
+<tr class="row-odd"><td><p>🟢 vert ✓</p></td>
+<td><p>Terminée</p></td>
+</tr>
+<tr class="row-even"><td><p>⚪ gris</p></td>
+<td><p>Annulée</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
+        <a href="index.html" class="btn btn-neutral float-left" title="Manuels" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+        <a href="reception-produits-images.html" class="btn btn-neutral float-right" title="Images du manuel « Réception produits »" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Droits d'auteur Rewake.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
